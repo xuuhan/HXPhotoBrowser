@@ -14,7 +14,7 @@
 		368AFE9D211DA96300CC86D2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFE9C211DA96300CC86D2 /* main.m */; };
 		368AFEA7211DA96300CC86D2 /* HXPhotoBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEA6211DA96300CC86D2 /* HXPhotoBrowserTests.m */; };
 		368AFEB2211DA96300CC86D2 /* HXPhotoBrowserUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEB1211DA96300CC86D2 /* HXPhotoBrowserUITests.m */; };
-		368AFF0021208ADA00CC86D2 /* HXBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEFF21208ADA00CC86D2 /* HXBrowserViewController.m */; };
+		368AFF0321216CFF00CC86D2 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0221216CFF00CC86D2 /* DemoViewController.m */; };
 		F3E7CF4A1DDB434185F3E727 /* Pods_HXPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,8 +53,8 @@
 		368AFEAD211DA96300CC86D2 /* HXPhotoBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HXPhotoBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		368AFEB1211DA96300CC86D2 /* HXPhotoBrowserUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserUITests.m; sourceTree = "<group>"; };
 		368AFEB3211DA96300CC86D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		368AFEFE21208ADA00CC86D2 /* HXBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXBrowserViewController.h; sourceTree = "<group>"; };
-		368AFEFF21208ADA00CC86D2 /* HXBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXBrowserViewController.m; sourceTree = "<group>"; };
+		368AFF0121216CFF00CC86D2 /* DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
+		368AFF0221216CFF00CC86D2 /* DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
 		FF27CD8E8EF157501C49A86C /* Pods-HXPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,12 +121,12 @@
 				368AFE8E211DA96200CC86D2 /* AppDelegate.m */,
 				368AFE90211DA96200CC86D2 /* ViewController.h */,
 				368AFE91211DA96200CC86D2 /* ViewController.m */,
+				368AFF0121216CFF00CC86D2 /* DemoViewController.h */,
+				368AFF0221216CFF00CC86D2 /* DemoViewController.m */,
 				368AFE96211DA96300CC86D2 /* Assets.xcassets */,
 				368AFE98211DA96300CC86D2 /* LaunchScreen.storyboard */,
 				368AFE9B211DA96300CC86D2 /* Info.plist */,
 				368AFE9C211DA96300CC86D2 /* main.m */,
-				368AFEFE21208ADA00CC86D2 /* HXBrowserViewController.h */,
-				368AFEFF21208ADA00CC86D2 /* HXBrowserViewController.m */,
 			);
 			path = HXPhotoBrowser;
 			sourceTree = "<group>";
@@ -292,15 +292,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/YYCache/YYCache.framework",
-				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
-				"${BUILT_PRODUCTS_DIR}/YYWebImage/YYWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYCache.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -335,7 +331,7 @@
 				368AFE92211DA96200CC86D2 /* ViewController.m in Sources */,
 				368AFE9D211DA96300CC86D2 /* main.m in Sources */,
 				368AFE8F211DA96200CC86D2 /* AppDelegate.m in Sources */,
-				368AFF0021208ADA00CC86D2 /* HXBrowserViewController.m in Sources */,
+				368AFF0321216CFF00CC86D2 /* DemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,6 @@ use_frameworks!
 
 target 'HXPhotoBrowser' do
 
-pod 'YYWebImage'
+pod 'SDWebImage'
 
 end
