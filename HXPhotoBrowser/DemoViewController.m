@@ -7,7 +7,8 @@
 //
 
 #import "DemoViewController.h"
-#import <UIButton+WebCache.h>
+#import "UIImageView+SDWebImage.h"
+
 
 @interface DemoViewController ()
 @property (nonatomic, strong) UIImageView *img;
@@ -31,18 +32,21 @@
     
     _img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 200)];
     [self.view addSubview:_img];
+    _img.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
     
     if (index == 0) {///加载本地图片
         self.title = @"本地图片";
         
     } else if (index == 1){///加载网络图片
         self.title = @"网络图片";
-        
+        [_img sd_setFadeImageWithURL:[NSURL URLWithString:self.urlImgArray[0]]];
     }
 }
 
 - (void)cleanMemory{
+    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
     
+    [[SDImageCache sharedImageCache] clearMemory];
 }
 
 - (NSArray *)urlImgArray{
