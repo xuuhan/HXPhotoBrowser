@@ -9,10 +9,11 @@
 #import "DemoViewController.h"
 #import "UIImageView+SDWebImage.h"
 #import "UIButton+SDWebImage.h"
+#import "HXPhotoBrowserViewController.h"
 
 
-@interface DemoViewController ()
-@property (nonatomic, strong) UIButton *img;
+@interface DemoViewController ()<UIGestureRecognizerDelegate>
+@property (nonatomic, strong) UIButton *imgBtn;
 @property (nonatomic, strong) NSArray *urlImgArray;
 @end
 
@@ -24,31 +25,48 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"清除缓存" style:UIBarButtonItemStyleDone target:self action:@selector(cleanMemory)];
-    
     self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 
+/**
+ 加载图片
+ */
 - (void)setIndex:(NSInteger)index{
     
-    _img = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 200)];
-    [self.view addSubview:_img];
-    _img.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
+    _imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 200)];
+    [self.view addSubview:_imgBtn];
+    _imgBtn.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
+    _imgBtn.adjustsImageWhenHighlighted = NO;
+    [_imgBtn addTarget:self action:@selector(showPhotoBrows) forControlEvents:UIControlEventTouchUpInside];
     
     if (index == 0) {///加载本地图片
         self.title = @"本地图片";
         
     } else if (index == 1){///加载网络图片
         self.title = @"网络图片";
-        [_img sd_setFadeBackgroundImageWithURL:[NSURL URLWithString:self.urlImgArray[0]] forState:UIControlStateNormal];
+        [_imgBtn sd_setFadeBackgroundImageWithURL:[NSURL URLWithString:self.urlImgArray[0]] forState:UIControlStateNormal];
     }
 }
 
+/**
+ 展示photobrowser
+ */
+- (void)showPhotoBrows{
+    HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
+    pb.parentVC = self;
+    [pb show];
+}
+
+/**
+ 清除缓存
+ */
 - (void)cleanMemory{
     [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
     
     [[SDImageCache sharedImageCache] clearMemory];
 }
+
 
 - (NSArray *)urlImgArray{
     if (!_urlImgArray) {
