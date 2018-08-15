@@ -10,17 +10,17 @@
 #import <objc/runtime.h>
 
 
-const static NSString *FadeTypeKey = @"FadeTypeKey";
+const static NSString *FadeImgTypeKey = @"FadeImgTypeKey";
 
 @implementation UIImageView (SDWebImage)
 
 - (FadeType)FadeType{
-        NSNumber *numVaue = objc_getAssociatedObject(self, &FadeTypeKey);
+        NSNumber *numVaue = objc_getAssociatedObject(self, &FadeImgTypeKey);
         return [numVaue integerValue];
 }
 
 - (void)setFadeType:(FadeType)FadeType{
-    objc_setAssociatedObject(self, &FadeTypeKey, @(FadeType), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &FadeImgTypeKey, @(FadeType), OBJC_ASSOCIATION_ASSIGN);
 }
 
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url{

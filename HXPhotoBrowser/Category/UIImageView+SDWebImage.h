@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger,FadeType){
 @interface UIImageView (SDWebImage)
 
 /**
- 不设置则为FadeTypeOnce
+ 不设置则为FadeTypeFirstAfterFetch
  */
 @property (nonatomic, assign) FadeType FadeType;
 

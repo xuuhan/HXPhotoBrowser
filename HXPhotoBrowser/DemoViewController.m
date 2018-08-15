@@ -8,10 +8,11 @@
 
 #import "DemoViewController.h"
 #import "UIImageView+SDWebImage.h"
+#import "UIButton+SDWebImage.h"
 
 
 @interface DemoViewController ()
-@property (nonatomic, strong) UIImageView *img;
+@property (nonatomic, strong) UIButton *img;
 @property (nonatomic, strong) NSArray *urlImgArray;
 @end
 
@@ -30,7 +31,7 @@
 
 - (void)setIndex:(NSInteger)index{
     
-    _img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 200)];
+    _img = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 200)];
     [self.view addSubview:_img];
     _img.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
     
@@ -39,7 +40,7 @@
         
     } else if (index == 1){///加载网络图片
         self.title = @"网络图片";
-        [_img sd_setFadeImageWithURL:[NSURL URLWithString:self.urlImgArray[0]]];
+        [_img sd_setFadeBackgroundImageWithURL:[NSURL URLWithString:self.urlImgArray[0]] forState:UIControlStateNormal];
     }
 }
 
