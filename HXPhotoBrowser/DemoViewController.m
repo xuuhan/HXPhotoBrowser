@@ -61,8 +61,4 @@
     }
     return _urlImgArray;
 }
-
-
-
-
 @end

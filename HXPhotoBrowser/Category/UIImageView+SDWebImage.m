@@ -7,8 +7,21 @@
 //
 
 #import "UIImageView+SDWebImage.h"
+#import <objc/runtime.h>
+
+
+const static NSString *FadeTypeKey = @"FadeTypeKey";
 
 @implementation UIImageView (SDWebImage)
+
+- (FadeType)FadeType{
+        NSNumber *numVaue = objc_getAssociatedObject(self, &FadeTypeKey);
+        return [numVaue integerValue];
+}
+
+- (void)setFadeType:(FadeType)FadeType{
+    objc_setAssociatedObject(self, &FadeTypeKey, @(FadeType), OBJC_ASSOCIATION_ASSIGN);
+}
 
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url{
     [self sd_setFadeImageWithURL:url placeholderImage:nil options:0 progress:nil completed:nil];
@@ -51,14 +64,26 @@
     
     [self sd_setImageWithURL:url placeholderImage:placeholder options:options progress:progressBlock completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         
-        __weak __typeof(self)weakSelf = self;
+        BOOL isFirst = image && cacheType == SDImageCacheTypeNone;
+        BOOL isOnce = image && cacheType == SDImageCacheTypeDisk;
+        BOOL isEvery = image && (cacheType == SDImageCacheTypeDisk || cacheType == SDImageCacheTypeMemory);
+        BOOL result = false;
         
-        if (image && cacheType == SDImageCacheTypeNone) {
-            CATransition *animation = [CATransition animation];
-            [animation setType:kCATransitionFade];
-            [animation setDuration:0.8f];
-            animation.removedOnCompletion = YES;
-            [weakSelf.layer addAnimation:animation forKey:@"fade"];
+        if (isFirst) self.FadeType = 0;
+        
+        if (self.FadeType == FadeTypeOnceAfterAppLaunch) {
+            result = isOnce;
+        } else if (self.FadeType == FadeTypeEveryTime){
+            result = isEvery;
+        } else{
+            result = isFirst;
+        }
+        
+        if (result) {
+            self.alpha = 0.5;
+            [UIView animateWithDuration:0.5 animations:^{
+                self.alpha = 1;
+            }];
         }
         
         if (completedBlock) {
@@ -66,5 +91,6 @@
         }
     }];
 }
+
 
 @end
