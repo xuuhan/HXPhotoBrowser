@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) UIViewController *parentVC;
 
+@property (nonatomic, strong) UIView *selectedView;
 
 - (void)show;
 @end

@@ -38,7 +38,7 @@
     [self.view addSubview:_imgBtn];
     _imgBtn.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
     _imgBtn.adjustsImageWhenHighlighted = NO;
-    [_imgBtn addTarget:self action:@selector(showPhotoBrows) forControlEvents:UIControlEventTouchUpInside];
+    [_imgBtn addTarget:self action:@selector(showPhotoBrows:) forControlEvents:UIControlEventTouchUpInside];
     
     if (index == 0) {///加载本地图片
         self.title = @"本地图片";
@@ -52,9 +52,10 @@
 /**
  展示photobrowser
  */
-- (void)showPhotoBrows{
+- (void)showPhotoBrows:(UIButton *)sender{
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
+    pb.selectedView = sender;
     [pb show];
 }
 

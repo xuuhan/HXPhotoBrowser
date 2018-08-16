@@ -13,6 +13,7 @@
 
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
+@property (nonatomic, strong) UIImageView *singleImg;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -36,9 +37,6 @@
     bgTap.numberOfTouchesRequired = 1;
     [_effectView addGestureRecognizer:bgTap];
 }
-- (void)bgTappedAction{
-    [self dismissViewControllerAnimated:NO completion:nil];
-}
 
 - (void)setParentVC:(UIViewController *)parentVC{
     _parentVC = parentVC;
@@ -58,5 +56,42 @@
 
 - (void)show{
     [_parentVC presentViewController:self animated:NO completion:nil];
+    
+    [self beginTransition];
 }
+
+- (void)bgTappedAction{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.singleImg.frame = self.selectedView.frame;
+        self.effectView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.singleImg removeFromSuperview];
+        self.singleImg = nil;
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }];
+}
+
+- (void)beginTransition{
+    _singleImg = [[UIImageView alloc] initWithFrame:_selectedView.frame];
+    
+    if ([_selectedView isKindOfClass:[UIButton class]]) {
+        UIButton *selectedBtn = (UIButton *)_selectedView;
+        BOOL isImg = selectedBtn.currentImage;
+        BOOL isBackImg = selectedBtn.currentBackgroundImage;
+        if (isImg) {
+            self.singleImg.image = selectedBtn.currentImage;
+        } else if (isBackImg){
+            self.singleImg.image = selectedBtn.currentBackgroundImage;
+        } else return;
+        
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        [window addSubview:_singleImg];
+        CGRect newFrame = CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 200);
+        [UIView animateWithDuration:0.2 animations:^{
+            self.singleImg.frame = newFrame;
+        }];
+
+    }
+}
+
 @end
