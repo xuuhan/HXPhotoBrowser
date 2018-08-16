@@ -83,6 +83,14 @@
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+    
+    CGFloat centerX =  scrollView.frame.size.width / 2;
+    
+    CGFloat centerY = scrollView.frame.size.height / 2;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.currentImageView setCenter:CGPointMake(centerX, centerY)];
+    }];
 }
 
 
