@@ -13,7 +13,7 @@
 
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
-@property (nonatomic, strong) UIImageView *singleImg;
+@property (nonatomic, strong) UIImageView *singleImage;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -62,36 +62,48 @@
 
 - (void)bgTappedAction{
     [UIView animateWithDuration:0.2 animations:^{
-        self.singleImg.frame = self.selectedView.frame;
+        self.singleImage.frame = self.selectedView.frame;
         self.effectView.alpha = 0;
     } completion:^(BOOL finished) {
-        [self.singleImg removeFromSuperview];
-        self.singleImg = nil;
+        [self.singleImage removeFromSuperview];
+        self.singleImage = nil;
         [self dismissViewControllerAnimated:NO completion:nil];
     }];
 }
 
 - (void)beginTransition{
-    _singleImg = [[UIImageView alloc] initWithFrame:_selectedView.frame];
+    _singleImage = [[UIImageView alloc] initWithFrame:_selectedView.frame];
     
     if ([_selectedView isKindOfClass:[UIButton class]]) {
         UIButton *selectedBtn = (UIButton *)_selectedView;
-        BOOL isImg = selectedBtn.currentImage;
-        BOOL isBackImg = selectedBtn.currentBackgroundImage;
-        if (isImg) {
-            self.singleImg.image = selectedBtn.currentImage;
-        } else if (isBackImg){
-            self.singleImg.image = selectedBtn.currentBackgroundImage;
+        BOOL isImage = selectedBtn.currentImage;
+        BOOL isBackImage = selectedBtn.currentBackgroundImage;
+        if (isImage) {
+            _singleImage.image = selectedBtn.currentImage;
+        } else if (isBackImage){
+            _singleImage.image = selectedBtn.currentBackgroundImage;
         } else return;
         
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        [window addSubview:_singleImg];
-        CGRect newFrame = CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 200);
-        [UIView animateWithDuration:0.2 animations:^{
-            self.singleImg.frame = newFrame;
-        }];
-
+        [self transitionAnimation];
     }
+    
+    if ([_selectedView isKindOfClass:[UIImageView class]]) {
+        UIImageView *selectedImage = (UIImageView *)_selectedView;
+        if (selectedImage.image) {
+            _singleImage.image = selectedImage.image;
+        } else return;
+        
+        [self transitionAnimation];
+    }
+}
+
+- (void)transitionAnimation{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    [window addSubview:_singleImage];
+    CGRect newFrame = CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 200);
+    [UIView animateWithDuration:0.2 animations:^{
+        self.singleImage.frame = newFrame;
+    }];
 }
 
 @end
