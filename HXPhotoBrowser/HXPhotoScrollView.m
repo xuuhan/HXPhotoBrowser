@@ -10,9 +10,9 @@
 
 @implementation HXPhotoScrollView
 
-- (instancetype)init{
-    if (self = [super init]) {
-        
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }

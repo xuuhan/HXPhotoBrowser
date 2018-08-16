@@ -11,8 +11,8 @@
 @interface HXPhotoBrowserViewController : UIViewController
 
 @property (nonatomic, strong) UIViewController *parentVC;
-
 @property (nonatomic, strong) UIView *selectedView;
+@property (nonatomic, strong) NSArray <NSString *>*urlStrArray;
 
 - (void)show;
 @end

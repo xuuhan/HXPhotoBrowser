@@ -19,6 +19,7 @@
 		368AFF0F2122CEA400CC86D2 /* UIImageView+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0E2122CEA400CC86D2 /* UIImageView+SDWebImage.m */; };
 		368AFF122122CEBB00CC86D2 /* UIButton+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF112122CEBB00CC86D2 /* UIButton+SDWebImage.m */; };
 		368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */; };
+		368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF172125738200CC86D2 /* HXPhotoImageView.m */; };
 		F3E7CF4A1DDB434185F3E727 /* Pods_HXPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,8 @@
 		368AFF112122CEBB00CC86D2 /* UIButton+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SDWebImage.m"; sourceTree = "<group>"; };
 		368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserViewController.h; sourceTree = "<group>"; };
 		368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; };
+		368AFF162125738200CC86D2 /* HXPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoImageView.h; sourceTree = "<group>"; };
+		368AFF172125738200CC86D2 /* HXPhotoImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoImageView.m; sourceTree = "<group>"; };
 		FF27CD8E8EF157501C49A86C /* Pods-HXPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +147,8 @@
 				368AFF0721228CF200CC86D2 /* HXPhotoScrollView.m */,
 				368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */,
 				368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */,
+				368AFF162125738200CC86D2 /* HXPhotoImageView.h */,
+				368AFF172125738200CC86D2 /* HXPhotoImageView.m */,
 			);
 			path = HXPhotoBrowser;
 			sourceTree = "<group>";
@@ -357,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				368AFE92211DA96200CC86D2 /* ViewController.m in Sources */,
+				368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */,
 				368AFF0F2122CEA400CC86D2 /* UIImageView+SDWebImage.m in Sources */,
 				368AFF122122CEBB00CC86D2 /* UIButton+SDWebImage.m in Sources */,
 				368AFF0821228CF200CC86D2 /* HXPhotoScrollView.m in Sources */,

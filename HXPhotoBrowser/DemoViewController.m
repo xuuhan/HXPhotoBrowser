@@ -34,7 +34,7 @@
  */
 - (void)setIndex:(NSInteger)index{
     
-    _imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 200)];
+    _imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, 200, 200)];
     [self.view addSubview:_imgBtn];
     _imgBtn.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
     _imgBtn.adjustsImageWhenHighlighted = NO;
@@ -56,6 +56,7 @@
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
     pb.selectedView = sender;
+    pb.urlStrArray = @[self.urlImgArray[0]];
     [pb show];
 }
 
