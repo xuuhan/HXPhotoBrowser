@@ -14,7 +14,7 @@
 #define kWIDTH [UIScreen mainScreen].bounds.size.width
 #define kHEIGHT [UIScreen mainScreen].bounds.size.height
 
-@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate>
+@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
@@ -42,7 +42,8 @@
     
     _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, kWIDTH, kHEIGHT)];
     [window addSubview:_photoScrollView];
-    _photoScrollView.contentSize = CGSizeMake(kWIDTH * _urlArray.count, 0);
+    _photoScrollView.delegate = self;
+    _photoScrollView.contentSize = CGSizeMake(kWIDTH * _urlArray.count, kHEIGHT);
     for (int i = 0; i < _urlArray.count; i ++) {
         if (i == 0) {
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:_selectedView.frame];
@@ -60,7 +61,30 @@
     bgTap.numberOfTapsRequired = 1;
     bgTap.numberOfTouchesRequired = 1;
     [_photoScrollView addGestureRecognizer:bgTap];
+    
+    UITapGestureRecognizer *zoomTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
+    zoomTap.delegate = self;
+    zoomTap.numberOfTapsRequired = 2;
+    zoomTap.numberOfTouchesRequired = 1;
+    [_photoScrollView addGestureRecognizer:zoomTap];
+    
+    [bgTap requireGestureRecognizerToFail:zoomTap];
 }
+
+- (void)zoom:(UITapGestureRecognizer *)recognizer{
+    CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
+    NSLog(@"%f-----%f",touchPoint.x,touchPoint.y);
+}
+
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return _currentImageView;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+}
+
 
 - (void)setParentVC:(UIViewController *)parentVC{
     _parentVC = parentVC;
