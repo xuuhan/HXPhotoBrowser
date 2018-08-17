@@ -43,6 +43,7 @@
 /* Begin PBXFileReference section */
 		1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HXPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A9144684B97E31192FA38E4 /* Pods-HXPhotoBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.release.xcconfig"; sourceTree = "<group>"; };
+		361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserMacro.h; sourceTree = "<group>"; };
 		368AFE8A211DA96200CC86D2 /* HXPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HXPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		368AFE8D211DA96200CC86D2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		368AFE8E211DA96200CC86D2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -149,6 +150,7 @@
 				368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */,
 				368AFF162125738200CC86D2 /* HXPhotoImageView.h */,
 				368AFF172125738200CC86D2 /* HXPhotoImageView.m */,
+				361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */,
 			);
 			path = HXPhotoBrowser;
 			sourceTree = "<group>";

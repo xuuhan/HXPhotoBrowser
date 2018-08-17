@@ -10,9 +10,7 @@
 #import "HXPhotoScrollView.h"
 #import "HXPhotoImageView.h"
 #import "UIImageView+SDWebImage.h"
-
-#define kWIDTH [UIScreen mainScreen].bounds.size.width
-#define kHEIGHT [UIScreen mainScreen].bounds.size.height
+#import "HXPhotoBrowserMacro.h"
 
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
@@ -26,24 +24,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self setEffectView];
 }
 
 - (void)setEffectView{
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
-    _effectView.frame = CGRectMake(0, 0, kWIDTH, kHEIGHT);
+    _effectView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     [self.view addSubview:_effectView];
 }
 
 - (void)setPhotoScrollView{
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
-    _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, kWIDTH, kHEIGHT)];
+    _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
     [window addSubview:_photoScrollView];
     _photoScrollView.delegate = self;
-    _photoScrollView.contentSize = CGSizeMake(kWIDTH * _urlArray.count, kHEIGHT);
+    _photoScrollView.contentSize = CGSizeMake(SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
     for (int i = 0; i < _urlArray.count; i ++) {
         if (i == 0) {
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:_selectedView.frame];
@@ -51,7 +48,7 @@
             _currentImageView = currentImageView;
             [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
         } else{
-            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * kWIDTH, 150, kWIDTH, kHEIGHT - 300)];
+            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
         }
     }
@@ -73,11 +70,11 @@
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
     CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
-    if (_photoScrollView.zoomScale <= 1.0) {
-        _photoScrollView.maximumZoomScale = 2.0f;
+    if (_photoScrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
+        _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
         [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
     } else {
-        [_photoScrollView setZoomScale:1.0 animated:YES]; //还原
+        [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES]; //还原
     }
 }
 
@@ -97,14 +94,14 @@
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
-    _photoScrollView.maximumZoomScale = 3.0f;
+    _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMax;
     _currentImageView.center = [self centerOfScrollViewContent:scrollView];
 }
 
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
 
-    if (scale <= 1.0 || self.currentImageView.frame.size.height <= kHEIGHT) {
+    if (scale <= kHXPhotoBrowserZoomMin || self.currentImageView.frame.size.height <= SCREEN_HEIGHT) {
         [UIView animateWithDuration:0.3 animations:^{
             [self.currentImageView setCenter:CGPointMake(self.currentImageView.center.x,scrollView.center.y)];
         }];
