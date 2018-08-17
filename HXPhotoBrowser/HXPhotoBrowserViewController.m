@@ -73,10 +73,13 @@
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
     CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
-    NSLog(@"%f-----%f",touchPoint.x,touchPoint.y);
+    if (_photoScrollView.zoomScale <= 1.0) {
+        _photoScrollView.maximumZoomScale = 2.0f;
+        [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
+    } else {
+        [_photoScrollView setZoomScale:1.0 animated:YES]; //还原
+    }
 }
-
-
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
 {
@@ -94,6 +97,7 @@
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
+    _photoScrollView.maximumZoomScale = 3.0f;
     _currentImageView.center = [self centerOfScrollViewContent:scrollView];
 }
 
@@ -105,10 +109,6 @@
             [self.currentImageView setCenter:CGPointMake(self.currentImageView.center.x,scrollView.center.y)];
         }];
     }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
 }
 
 - (void)setParentVC:(UIViewController *)parentVC{
