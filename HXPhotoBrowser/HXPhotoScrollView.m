@@ -20,8 +20,9 @@
         self.showsVerticalScrollIndicator = NO;
         self.showsHorizontalScrollIndicator = NO;
         self.minimumZoomScale = 1.0f;
-        self.maximumZoomScale = 2.0f;
+        self.maximumZoomScale = 3.0f;
         self.zoomScale = 1.0f;
+        self.bounces = NO;
     }
     return self;
 }

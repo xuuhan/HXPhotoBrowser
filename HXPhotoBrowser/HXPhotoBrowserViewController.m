@@ -77,22 +77,39 @@
 }
 
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+
+- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
 {
+    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
+    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+    CGPoint center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                                       scrollView.contentSize.height * 0.5 + offsetY);
+    return center;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return _currentImageView;
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
-    
-    CGFloat centerX =  scrollView.frame.size.width / 2;
-    
-    CGFloat centerY = scrollView.frame.size.height / 2;
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        [self.currentImageView setCenter:CGPointMake(centerX, centerY)];
-    }];
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView{
+    _currentImageView.center = [self centerOfScrollViewContent:scrollView];
 }
 
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+
+    if (scale <= 1.0 || self.currentImageView.frame.size.height <= kHEIGHT) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.currentImageView setCenter:CGPointMake(self.currentImageView.center.x,scrollView.center.y)];
+        }];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+}
 
 - (void)setParentVC:(UIViewController *)parentVC{
     _parentVC = parentVC;
