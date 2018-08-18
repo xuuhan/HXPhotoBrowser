@@ -7,6 +7,7 @@
 //
 
 #import "HXPhotoScrollView.h"
+#import "HXPhotoBrowserMacro.h"
 
 @interface HXPhotoScrollView()
 
@@ -19,9 +20,9 @@
         self.backgroundColor = [UIColor clearColor];
         self.showsVerticalScrollIndicator = NO;
         self.showsHorizontalScrollIndicator = NO;
-        self.minimumZoomScale = 1.0f;
-        self.maximumZoomScale = 3.0f;
-        self.zoomScale = 1.0f;
+        self.minimumZoomScale = kHXPhotoBrowserZoomMin;
+        self.maximumZoomScale = kHXPhotoBrowserZoomMax;
+        self.zoomScale = kHXPhotoBrowserZoomMin;
     }
     return self;
 }

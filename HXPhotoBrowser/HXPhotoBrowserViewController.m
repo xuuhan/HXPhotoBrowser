@@ -65,7 +65,16 @@
     zoomTap.numberOfTouchesRequired = 1;
     [_photoScrollView addGestureRecognizer:zoomTap];
     
+    UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
+    [recognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
+    [_photoScrollView addGestureRecognizer:recognizer];
+    
+    
     [bgTap requireGestureRecognizerToFail:zoomTap];
+}
+
+- (void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer{
+    
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
