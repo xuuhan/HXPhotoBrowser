@@ -74,7 +74,11 @@
 }
 
 - (void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer{
-    
+    NSLog(@"-----%ld----",recognizer.numberOfTouchesRequired);
+    //点相对于上一个点的位置
+//    CGPoint moviePoint = [recognizer translationInView:recognizer.view];
+    //点的速度(正负可判断滑动趋势)
+//    CGPoint velocity = [pan velocityInView:pan.view];
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
