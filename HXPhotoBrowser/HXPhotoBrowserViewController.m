@@ -17,6 +17,7 @@
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray *urlArray;
+@property (nonatomic, assign) BOOL isCanPan;
 @property (nonatomic, assign) CGFloat PanStartY;
 @property (nonatomic, assign) CGFloat PanEndY;
 @property (nonatomic, assign) CGFloat PanMoveY;
@@ -97,7 +98,12 @@
     [recognizer setTranslation:CGPointMake(0, 0) inView:_photoScrollView];
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
-        _effectView.alpha = 1 - _PanMoveY / (_PanEndY - _PanStartY);
+        _effectView.alpha = 1 - _PanMoveY / (_PanEndY - _PanStartY) * 1.5;
+        if (pt.y > 0) {
+            _currentImageView.transform = CGAffineTransformScale(_currentImageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
+        } else if (pt.y < 0 && _PanMoveY > 0){
+            _currentImageView.transform = CGAffineTransformScale(_currentImageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
+        }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * 0.65) {
             [UIView animateWithDuration:0.2 animations:^{

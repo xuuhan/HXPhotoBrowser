@@ -14,3 +14,7 @@
 #define kHXPhotoBrowserZoomMin 1.0
 #define kHXPhotoBrowserZoomMid 2.0
 #define kHXPhotoBrowserZoomMax 3.0
+
+///transform
+#define kHXPhotoBrowserTransformShrink 0.998
+#define kHXPhotoBrowserTransformAmplify 1.002
