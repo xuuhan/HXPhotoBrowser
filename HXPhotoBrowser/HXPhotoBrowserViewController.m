@@ -17,6 +17,9 @@
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray *urlArray;
+@property (nonatomic, assign) CGFloat PanStartY;
+@property (nonatomic, assign) CGFloat PanEndY;
+@property (nonatomic, assign) CGFloat PanMoveY;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -53,32 +56,63 @@
         }
     }
     
+    [self addGesture];
+}
+
+- (void)addGesture{
     UITapGestureRecognizer *bgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
-    bgTap.delegate = self;
     bgTap.numberOfTapsRequired = 1;
     bgTap.numberOfTouchesRequired = 1;
     [_photoScrollView addGestureRecognizer:bgTap];
     
     UITapGestureRecognizer *zoomTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
-    zoomTap.delegate = self;
     zoomTap.numberOfTapsRequired = 2;
     zoomTap.numberOfTouchesRequired = 1;
     [_photoScrollView addGestureRecognizer:zoomTap];
-    
-    UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
-    [recognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
-    [_photoScrollView addGestureRecognizer:recognizer];
-    
-    
     [bgTap requireGestureRecognizerToFail:zoomTap];
+    
+    UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(move:)];
+    [_photoScrollView addGestureRecognizer:recognizer];
+    recognizer.delegate = self;
+    _PanStartY = _currentImageView.frame.origin.y;
+    _PanEndY = SCREEN_HEIGHT;
 }
 
-- (void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer{
-    NSLog(@"-----%ld----",recognizer.numberOfTouchesRequired);
-    //点相对于上一个点的位置
-//    CGPoint moviePoint = [recognizer translationInView:recognizer.view];
-    //点的速度(正负可判断滑动趋势)
-//    CGPoint velocity = [pan velocityInView:pan.view];
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
+    CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+        if (translation.y <= 0) {
+            return NO;
+        }
+    return YES;
+}
+
+
+- (void)move:(UIPanGestureRecognizer *)recognizer{
+    CGPoint pt = [recognizer translationInView:_photoScrollView];
+    
+    _currentImageView.frame = CGRectMake(_currentImageView.frame.origin.x + pt.x, _currentImageView.frame.origin.y + pt.y, _currentImageView.frame.size.width, _currentImageView.frame.size.height);
+    
+    _PanMoveY += pt.y;
+    
+    [recognizer setTranslation:CGPointMake(0, 0) inView:_photoScrollView];
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        NSLog(@"开始");
+    } else if (recognizer.state == UIGestureRecognizerStateChanged){
+        NSLog(@"拖动");
+        NSLog(@"-----%f",_PanMoveY);
+        _effectView.alpha = 1 - _PanMoveY / (_PanEndY - _PanStartY);
+    } else if (recognizer.state == UIGestureRecognizerStateEnded){
+        if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * 0.65) {
+            [UIView animateWithDuration:0.2 animations:^{
+                self.currentImageView.frame = CGRectMake(0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
+            }];
+            _effectView.alpha = 1;
+            _PanMoveY = 0;
+        } else{
+            [self dismiss];
+        }
+    }
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
@@ -87,7 +121,7 @@
         _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
         [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
     } else {
-        [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES]; //还原
+        [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
     }
 }
 
