@@ -96,18 +96,14 @@
     
     [recognizer setTranslation:CGPointMake(0, 0) inView:_photoScrollView];
     
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"开始");
-    } else if (recognizer.state == UIGestureRecognizerStateChanged){
-        NSLog(@"拖动");
-        NSLog(@"-----%f",_PanMoveY);
+    if (recognizer.state == UIGestureRecognizerStateChanged){
         _effectView.alpha = 1 - _PanMoveY / (_PanEndY - _PanStartY);
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * 0.65) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.frame = CGRectMake(0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
+                self.effectView.alpha = 1;
             }];
-            _effectView.alpha = 1;
             _PanMoveY = 0;
         } else{
             [self dismiss];
