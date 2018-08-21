@@ -21,6 +21,7 @@
 @property (nonatomic, assign) CGFloat PanStartY;
 @property (nonatomic, assign) CGFloat PanEndY;
 @property (nonatomic, assign) CGFloat PanMoveY;
+@property (nonatomic, assign) CGRect newFrame;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -29,6 +30,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setEffectView];
+    
+    _isCanPan = YES;
 }
 
 - (void)setEffectView{
@@ -80,8 +83,9 @@
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
+
     CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-        if (translation.y <= 0) {
+        if (translation.y <= 0 || _isCanPan == NO) {
             return NO;
         }
     return YES;
@@ -89,6 +93,8 @@
 
 
 - (void)move:(UIPanGestureRecognizer *)recognizer{
+    if(_isCanPan == NO) return;
+
     CGPoint pt = [recognizer translationInView:_photoScrollView];
     
     _currentImageView.frame = CGRectMake(_currentImageView.frame.origin.x + pt.x, _currentImageView.frame.origin.y + pt.y, _currentImageView.frame.size.width, _currentImageView.frame.size.height);
@@ -107,7 +113,7 @@
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
-                self.currentImageView.frame = CGRectMake(0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
+                self.currentImageView.frame = self.newFrame;
                 self.effectView.alpha = 1;
             }];
             _PanMoveY = 0;
@@ -122,8 +128,10 @@
     if (_photoScrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
         _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
         [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
+        _isCanPan = NO;
     } else {
         [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
+        _isCanPan = YES;
     }
 }
 
@@ -142,18 +150,25 @@
     return _currentImageView;
 }
 
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
+    _isCanPan = NO;
+}
+
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
     _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMax;
     _currentImageView.center = [self centerOfScrollViewContent:scrollView];
+    
 }
 
-
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
-
     if (scale <= kHXPhotoBrowserZoomMin || self.currentImageView.frame.size.height <= SCREEN_HEIGHT) {
         [UIView animateWithDuration:0.3 animations:^{
             [self.currentImageView setCenter:CGPointMake(self.currentImageView.center.x,scrollView.center.y)];
         }];
+    }
+    
+    if (scale <= kHXPhotoBrowserZoomMin) {
+        _isCanPan = YES;
     }
 }
 
@@ -208,6 +223,7 @@
     self.currentImageView.frame = [self getStartRect];
     
     CGRect newFrame = CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300);
+    _newFrame = newFrame;
     [UIView animateWithDuration:0.25 animations:^{
         self.currentImageView.frame = newFrame;
     }];
