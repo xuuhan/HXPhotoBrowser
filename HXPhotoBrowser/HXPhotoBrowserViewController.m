@@ -105,7 +105,7 @@
             _currentImageView.transform = CGAffineTransformScale(_currentImageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
-        if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * 0.65) {
+        if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.frame = CGRectMake(0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
                 self.effectView.alpha = 1;
@@ -192,8 +192,8 @@
 }
 
 - (void)dismiss{
-    [UIView animateWithDuration:0.25 animations:^{
-        self.currentImageView.frame = self.selectedView.frame;
+    [UIView animateWithDuration:0.15 animations:^{
+        self.currentImageView.frame = [self getStartRect];
         self.effectView.alpha = 0;
         
     } completion:^(BOOL finished) {
@@ -204,10 +204,21 @@
 }
 
 - (void)transitionAnimation{
+    
+    self.currentImageView.frame = [self getStartRect];
+    
     CGRect newFrame = CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300);
     [UIView animateWithDuration:0.25 animations:^{
         self.currentImageView.frame = newFrame;
     }];
+}
+
+- (CGRect)getStartRect{
+    UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
+    CGRect startRact = [self.selectedView convertRect:self.selectedView.bounds toView:window];
+    startRact.origin.y += StatusBarHeight;
+    
+    return startRact;
 }
 
 @end
