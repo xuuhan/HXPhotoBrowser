@@ -73,7 +73,7 @@
 
 - (NSArray *)urlImgArray{
     if (!_urlImgArray) {
-        _urlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534935138056&di=6a8cda92b48116983002d2e928939d7f&imgtype=0&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201212%2F14%2F20121214224632_AYcmk.jpeg",
+        _urlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1534929451&di=6f276b751845c1ba151ceb53dab9d297&src=http://pic.feeyo.com/pic/20140918/201409180520174500.jpg",
                          @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
                          @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534159043230&di=1f22dfb9c7e235cbc5275a5f7601aa2c&imgtype=0&src=http%3A%2F%2Fbpic.ooopic.com%2F16%2F27%2F08%2F16270869-23884bc31e8305a7b162782d699071b5-1.jpg",
                          @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534159043229&di=2ad51c6773a4ae5fbe6c5ddb87dc40f7&imgtype=0&src=http%3A%2F%2Fimg02.tooopen.com%2Fimages%2F20150626%2Ftooopen_sy_131975725283.jpg",
@@ -86,7 +86,7 @@
 
 - (NSArray *)thumbUrlImgArray{
     if (!_thumbUrlImgArray) {
-        _thumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b999_1000&sec=1534935138056&di=6a8cda92b48116983002d2e928939d7f&imgtype=0&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201212%2F14%2F20121214224632_AYcmk.jpeg",
+        _thumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b999_1000&sec=1534929451&di=6f276b751845c1ba151ceb53dab9d297&src=http://pic.feeyo.com/pic/20140918/201409180520174500.jpg",
                               @"https://timgsa.baidu.com/timg?image&quality=80&size=b999_1000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
                               @"https://timgsa.baidu.com/timg?image&quality=80&size=b999_1000&sec=1534159043230&di=1f22dfb9c7e235cbc5275a5f7601aa2c&imgtype=0&src=http%3A%2F%2Fbpic.ooopic.com%2F16%2F27%2F08%2F16270869-23884bc31e8305a7b162782d699071b5-1.jpg",
                               @"https://timgsa.baidu.com/timg?image&quality=80&size=b999_1000&sec=1534159043229&di=2ad51c6773a4ae5fbe6c5ddb87dc40f7&imgtype=0&src=http%3A%2F%2Fimg02.tooopen.com%2Fimages%2F20150626%2Ftooopen_sy_131975725283.jpg",

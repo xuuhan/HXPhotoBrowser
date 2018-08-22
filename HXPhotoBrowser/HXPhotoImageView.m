@@ -18,6 +18,7 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         [self setShade];
+        self.layer.masksToBounds = YES;
     }
     return self;
 }
@@ -25,8 +26,6 @@
 - (void)setShade{
     _shade = [[HXShadeView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [self addSubview:_shade];
-    _shade.backgroundColor = [UIColor blackColor];
-    _shade.alpha = 0.5;
 }
 
 @end

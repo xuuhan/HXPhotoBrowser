@@ -31,6 +31,9 @@
     [super viewDidLoad];
     [self setEffectView];
     
+    CGRect newFrame = CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300);
+    _newFrame = newFrame;
+    
     _isCanPan = YES;
 }
 
@@ -56,11 +59,11 @@
 - (void)creatPhotoImageView{
     for (int i = 0; i < _urlArray.count; i ++) {
         if (i == 0) {
-            HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:_selectedView.frame];
+            HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300)];
             [_photoScrollView addSubview:currentImageView];
             _currentImageView = currentImageView;
             _currentImageView.image = [self getSelectedImg];
-//            [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
+            [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
         } else{
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
@@ -226,12 +229,10 @@
 
 - (void)transitionAnimation{
     
-    self.currentImageView.frame = [self getStartRect];
+//    self.currentImageView.frame = [self getStartRect];
     
-    CGRect newFrame = CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300);
-    _newFrame = newFrame;
     [UIView animateWithDuration:0.25 animations:^{
-        self.currentImageView.frame = newFrame;
+        self.currentImageView.frame = self.newFrame;
     }];
 }
 
