@@ -48,19 +48,24 @@
     [window addSubview:_photoScrollView];
     _photoScrollView.delegate = self;
     _photoScrollView.contentSize = CGSizeMake(SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
+    
+    [self addGesture];
+    [self creatPhotoImageView];
+}
+
+- (void)creatPhotoImageView{
     for (int i = 0; i < _urlArray.count; i ++) {
         if (i == 0) {
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:_selectedView.frame];
             [_photoScrollView addSubview:currentImageView];
             _currentImageView = currentImageView;
+            
             [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
         } else{
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
         }
     }
-    
-    [self addGesture];
 }
 
 - (void)addGesture{
@@ -196,11 +201,12 @@
     }
     
     _urlArray = urlArray.copy;
-    
-    [self setPhotoScrollView];
 }
 
+
 - (void)show{
+    [self setPhotoScrollView];
+    
     [_parentVC presentViewController:self animated:NO completion:nil];
     
     [self transitionAnimation];
