@@ -63,8 +63,9 @@
             [_photoScrollView addSubview:currentImageView];
             _currentImageView = currentImageView;
             [_currentImageView sd_setImageWithURL:_urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                currentImageView.expectedSize = expectedSize;
-                currentImageView.receivedSize = receivedSize;
+                
+                currentImageView.expectedSize = (CGFloat)expectedSize;
+                currentImageView.receivedSize = (CGFloat)receivedSize;
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 NSLog(@"完成");
                 [currentImageView finishProcess];

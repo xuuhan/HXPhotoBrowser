@@ -10,8 +10,8 @@
 #import "UIImageView+SDWebImage.h"
 @interface HXPhotoImageView : UIImageView
 
-@property (nonatomic, assign) NSInteger receivedSize;
-@property (nonatomic, assign) NSInteger expectedSize;
+@property (nonatomic, assign) CGFloat receivedSize;
+@property (nonatomic, assign) CGFloat expectedSize;
 
 - (void)finishProcess;
 @end
