@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "UIImageView+SDWebImage.h"
 @interface HXPhotoImageView : UIImageView
 
+@property (nonatomic, assign) NSInteger receivedSize;
+@property (nonatomic, assign) NSInteger expectedSize;
+
+- (void)finishProcess;
 @end

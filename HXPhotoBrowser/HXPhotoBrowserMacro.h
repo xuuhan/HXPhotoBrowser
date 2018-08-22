@@ -24,3 +24,6 @@
 #define kHXPhotoBrowserTransformShrink 0.995
 #define kHXPhotoBrowserTransformAmplify 1.005
 #define kHXPhotoBrowserDisMissValue 0.35
+
+///process
+#define kHXPhotoBrowserProcessHeight 4

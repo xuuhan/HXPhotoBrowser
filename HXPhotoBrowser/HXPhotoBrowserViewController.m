@@ -62,8 +62,14 @@
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300)];
             [_photoScrollView addSubview:currentImageView];
             _currentImageView = currentImageView;
-            _currentImageView.image = [self getSelectedImg];
-            [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
+            [_currentImageView sd_setImageWithURL:_urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                currentImageView.expectedSize = expectedSize;
+                currentImageView.receivedSize = receivedSize;
+            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                NSLog(@"完成");
+                [currentImageView finishProcess];
+            }];
+
         } else{
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
