@@ -15,8 +15,8 @@
 
 @implementation HXShadeView
 
-- (instancetype)initWithFrame:(CGRect)frame{
-    if(self = [super initWithFrame:frame]){
+- (instancetype)init{
+    if(self = [super init]){
         [self setEffectView];
     }
     return self;
