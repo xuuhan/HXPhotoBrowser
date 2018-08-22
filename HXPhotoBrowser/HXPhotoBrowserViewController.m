@@ -59,8 +59,8 @@
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:_selectedView.frame];
             [_photoScrollView addSubview:currentImageView];
             _currentImageView = currentImageView;
-            
-            [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
+            _currentImageView.image = [self getSelectedImg];
+//            [_currentImageView sd_setFadeImageWithURL:_urlArray[i]];
         } else{
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
@@ -233,6 +233,21 @@
     [UIView animateWithDuration:0.25 animations:^{
         self.currentImageView.frame = newFrame;
     }];
+}
+
+- (UIImage *)getSelectedImg{
+    UIImage *image = [UIImage new];
+    if ([_selectedView isKindOfClass:[UIImageView class]] ) {
+        UIImageView *img = (UIImageView *)_selectedView;
+        image = img.image;
+    }
+    
+    if ([_selectedView isKindOfClass:[UIButton class]]) {
+        UIButton *btn = (UIButton *)_selectedView;
+        image = btn.currentImage ? btn.currentImage : btn.currentBackgroundImage;
+    }
+    
+    return image;
 }
 
 - (CGRect)getStartRect{
