@@ -135,12 +135,13 @@
         _effectView.alpha = 1 - _PanMoveY / (_PanEndY - _PanStartY) * 1.5;
         if (pt.y > 0) {
             _currentImageView.transform = CGAffineTransformScale(_currentImageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
-        } else if (pt.y < 0 && _PanMoveY > 0){
+        } else if (pt.y < 0 && _photoScrollView.zoomScale < kHXPhotoBrowserZoomMin){
             _currentImageView.transform = CGAffineTransformScale(_currentImageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
+                self.currentImageView.transform = CGAffineTransformIdentity;
                 self.currentImageView.frame = self.newFrame;
                 self.effectView.alpha = 1;
             }];
