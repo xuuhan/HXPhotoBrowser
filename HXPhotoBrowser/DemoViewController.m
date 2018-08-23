@@ -14,6 +14,8 @@
 
 @interface DemoViewController ()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIButton *imgBtn;
+@property (nonatomic, strong) NSArray *singleUrlImgArray;
+@property (nonatomic, strong) NSArray *singleThumbUrlImgArray;
 @property (nonatomic, strong) NSArray *urlImgArray;
 @property (nonatomic, strong) NSArray *thumbUrlImgArray;
 @end
@@ -53,7 +55,7 @@
         
     } else if (index == 1){///加载网络图片
         self.title = @"网络图片";
-        [_imgBtn sd_setFadeBackgroundImageWithURL:[NSURL URLWithString:self.thumbUrlImgArray[0]] forState:UIControlStateNormal];
+        [_imgBtn sd_setFadeBackgroundImageWithURL:[NSURL URLWithString:self.singleThumbUrlImgArray[0]] forState:UIControlStateNormal];
         
         for (int i = 0 ; i < 8; i ++) {
             int indexX = i % 4;
@@ -61,9 +63,9 @@
             UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(x + indexX  * (wh + margin), 314 + indexY * (wh + 15), wh, wh)];
             [self.view addSubview:btn];
             btn.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
-            btn.tag = i + 1;
-            [btn sd_setFadeImageWithURL:[NSURL URLWithString:self.thumbUrlImgArray[i + 1]] forState:UIControlStateNormal];
-            [btn addTarget:self action:@selector(showPhotoBrows:) forControlEvents:UIControlEventTouchUpInside];
+            btn.tag = i;
+            [btn sd_setFadeImageWithURL:[NSURL URLWithString:self.thumbUrlImgArray[i]] forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(showMultiplePhotoBrows:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
 }
@@ -71,11 +73,23 @@
 /**
  展示photobrowser
  */
+
+///单图
 - (void)showPhotoBrows:(UIButton *)sender{
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
     pb.selectedView = sender;
-    pb.urlStrArray = @[self.urlImgArray[sender.tag]];
+    pb.urlStrArray = @[self.singleUrlImgArray[0]];
+    [pb show];
+}
+
+///多图
+- (void)showMultiplePhotoBrows:(UIButton *)sender{
+    HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
+    pb.parentVC = self;
+    pb.selectedView = sender;
+    pb.currentIndex = sender.tag;
+    pb.urlStrArray = self.urlImgArray;
     [pb show];
 }
 
@@ -98,11 +112,17 @@
 }
 
 
+- (NSArray *)singleUrlImgArray{
+    if (!_singleUrlImgArray) {
+        _singleUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg"];
+    }
+    return _singleUrlImgArray;
+}
+
 - (NSArray *)urlImgArray{
     if (!_urlImgArray) {
-        _urlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg",
-                         @"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
-                         @"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534159043230&di=1f22dfb9c7e235cbc5275a5f7601aa2c&imgtype=0&src=http%3A%2F%2Fbpic.ooopic.com%2F16%2F27%2F08%2F16270869-23884bc31e8305a7b162782d699071b5-1.jpg",
+        _urlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
+                         @"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1535027780357&di=b92d5c61c2d47fc74c1fde73b26e0e0f&imgtype=0&src=http%3A%2F%2Fi5.3conline.com%2Fimages%2Fpiclib%2F201403%2F20%2Fbatch%2F1%2F218704%2F1395300904690g4dm91ubtq.jpg",
                          @"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534159043229&di=2ad51c6773a4ae5fbe6c5ddb87dc40f7&imgtype=0&src=http%3A%2F%2Fimg02.tooopen.com%2Fimages%2F20150626%2Ftooopen_sy_131975725283.jpg",
                          @"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534159043229&di=05d913fbe11fbe3386fcb39b90874fa3&imgtype=0&src=http%3A%2F%2Fpic17.photophoto.cn%2F20101126%2F0040039332126348_b.jpg",
                          @"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534159043229&di=597328e29d41331e0b98dddc761f5e3e&imgtype=0&src=http%3A%2F%2Fpic8.nipic.com%2F20100810%2F3320946_213230051035_2.jpg",
@@ -113,11 +133,17 @@
     return _urlImgArray;
 }
 
+- (NSArray *)singleThumbUrlImgArray{
+    if (!_singleThumbUrlImgArray) {
+        _singleThumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg"];
+    }
+    return _singleThumbUrlImgArray;
+}
+
 - (NSArray *)thumbUrlImgArray{
     if (!_thumbUrlImgArray) {
-        _thumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043230&di=1f22dfb9c7e235cbc5275a5f7601aa2c&imgtype=0&src=http%3A%2F%2Fbpic.ooopic.com%2F16%2F27%2F08%2F16270869-23884bc31e8305a7b162782d699071b5-1.jpg",
+        _thumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1535027780357&di=b92d5c61c2d47fc74c1fde73b26e0e0f&imgtype=0&src=http%3A%2F%2Fi5.3conline.com%2Fimages%2Fpiclib%2F201403%2F20%2Fbatch%2F1%2F218704%2F1395300904690g4dm91ubtq.jpg",
                               @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043229&di=2ad51c6773a4ae5fbe6c5ddb87dc40f7&imgtype=0&src=http%3A%2F%2Fimg02.tooopen.com%2Fimages%2F20150626%2Ftooopen_sy_131975725283.jpg",
                               @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043229&di=05d913fbe11fbe3386fcb39b90874fa3&imgtype=0&src=http%3A%2F%2Fpic17.photophoto.cn%2F20101126%2F0040039332126348_b.jpg",
                               @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043229&di=597328e29d41331e0b98dddc761f5e3e&imgtype=0&src=http%3A%2F%2Fpic8.nipic.com%2F20100810%2F3320946_213230051035_2.jpg",

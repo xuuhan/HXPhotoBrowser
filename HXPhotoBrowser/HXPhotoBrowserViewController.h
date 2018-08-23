@@ -13,5 +13,6 @@
 @property (nonatomic, strong) UIViewController *parentVC;
 @property (nonatomic, strong) UIView *selectedView;
 @property (nonatomic, strong) NSArray <NSString *>*urlStrArray;
+@property (nonatomic, assign) NSInteger currentIndex;
 - (void)show;
 @end

@@ -58,6 +58,9 @@
 }
 
 - (void)creatPhotoImageView{
+    
+    
+    
     for (int i = 0; i < _urlArray.count; i ++) {
         if (i == 0) {
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
@@ -86,6 +89,12 @@
         } else{
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
+            [imageView sd_setImageWithURL:self.urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                imageView.expectedSize = (CGFloat)expectedSize;
+                imageView.receivedSize = (CGFloat)receivedSize;
+            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                [imageView finishProcess];
+            }];
         }
     }
 }
