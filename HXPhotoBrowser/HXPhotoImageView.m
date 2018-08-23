@@ -25,6 +25,7 @@
     return self;
 }
 
+
 - (void)setEffectView{
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];

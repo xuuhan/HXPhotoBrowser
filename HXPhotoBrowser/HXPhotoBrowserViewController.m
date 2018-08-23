@@ -11,6 +11,7 @@
 #import "HXPhotoImageView.h"
 #import "UIImageView+SDWebImage.h"
 #import "HXPhotoBrowserMacro.h"
+#import <pthread.h>
 
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
@@ -59,24 +60,36 @@
 - (void)creatPhotoImageView{
     for (int i = 0; i < _urlArray.count; i ++) {
         if (i == 0) {
-            HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300)];
-            [_photoScrollView addSubview:currentImageView];
-            _currentImageView = currentImageView;
-            [_currentImageView sd_setImageWithURL:_urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            SDWebImageManager *manager = [SDWebImageManager sharedManager];
+            [manager diskImageExistsForURL:_urlArray[i] completion:^(BOOL isInCache) {
+                HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width * i, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300)];
+                [self.photoScrollView addSubview:currentImageView];
+                self.currentImageView = currentImageView;
                 
-                currentImageView.expectedSize = (CGFloat)expectedSize;
-                currentImageView.receivedSize = (CGFloat)receivedSize;
-            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                NSLog(@"完成");
-                [currentImageView finishProcess];
+                if (isInCache) {
+                    self.currentImageView.frame = [self getStartRect];
+                        [self.currentImageView finishProcess];
+                        [self.currentImageView sd_setImageWithURL:self.urlArray[i]];
+                        [UIView animateWithDuration:0.2 animations:^{
+                            [self transitionAnimation];
+                        }];
+                } else{
+                    
+                    [self.currentImageView sd_setImageWithURL:self.urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                        currentImageView.expectedSize = (CGFloat)expectedSize;
+                        currentImageView.receivedSize = (CGFloat)receivedSize;
+                    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                        [currentImageView finishProcess];
+                    }];
+                }
             }];
-
         } else{
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [_photoScrollView addSubview:imageView];
         }
     }
 }
+
 
 - (void)addGesture{
     UITapGestureRecognizer *bgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
@@ -219,7 +232,6 @@
     
     [_parentVC presentViewController:self animated:NO completion:nil];
     
-    [self transitionAnimation];
 }
 
 - (void)dismiss{
@@ -235,8 +247,6 @@
 }
 
 - (void)transitionAnimation{
-    
-//    self.currentImageView.frame = [self getStartRect];
     
     [UIView animateWithDuration:0.25 animations:^{
         self.currentImageView.frame = self.newFrame;
