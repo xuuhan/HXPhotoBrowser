@@ -13,16 +13,22 @@
 #import "HXPhotoBrowserMacro.h"
 #import <pthread.h>
 
+typedef NS_ENUM(NSInteger,PhotoCount){
+    PhotoCountSingle,
+    PhotoCountMultiple
+};
+
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray *urlArray;
 @property (nonatomic, assign) BOOL isCanPan;
-@property (nonatomic, assign) CGFloat PanStartY;
-@property (nonatomic, assign) CGFloat PanEndY;
-@property (nonatomic, assign) CGFloat PanMoveY;
-@property (nonatomic, assign) CGRect newFrame;
+@property (nonatomic, assign) CGFloat panStartY;
+@property (nonatomic, assign) CGFloat panEndY;
+@property (nonatomic, assign) CGFloat panMoveY;
+@property (nonatomic, assign) PhotoCount photoCount;
+@property (nonatomic, assign) CGFloat pageWidth;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -31,9 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setEffectView];
-    
-    CGRect newFrame = CGRectMake(0, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300);
-    _newFrame = newFrame;
     
     _isCanPan = YES;
 }
@@ -48,10 +51,10 @@
 - (void)setPhotoScrollView{
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
-    _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH + kHXPhotoBrowserPageMargin, SCREEN_HEIGHT)];
     [window addSubview:_photoScrollView];
     _photoScrollView.delegate = self;
-    _photoScrollView.contentSize = CGSizeMake(SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
+    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (SCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count : SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
     
     [self addGesture];
     [self creatPhotoImageView];
@@ -59,26 +62,22 @@
 
 - (void)creatPhotoImageView{
     
+    self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
-    
-    for (int i = 0; i < _urlArray.count; i ++) {
-        if (i == 0) {
+    [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == self.currentIndex ? : 0) {
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
-            [manager diskImageExistsForURL:_urlArray[i] completion:^(BOOL isInCache) {
-                HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width * i, 150, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 300)];
+            [manager diskImageExistsForURL:self.urlArray[idx] completion:^(BOOL isInCache) {
+                HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
                 [self.photoScrollView addSubview:currentImageView];
                 self.currentImageView = currentImageView;
-                
                 if (isInCache) {
                     self.currentImageView.frame = [self getStartRect];
-                        [self.currentImageView finishProcess];
-                        [self.currentImageView sd_setImageWithURL:self.urlArray[i]];
-                        [UIView animateWithDuration:0.2 animations:^{
-                            [self transitionAnimation];
-                        }];
+                    [self.currentImageView finishProcess];
+                    [self.currentImageView sd_setImageWithURL:self.urlArray[idx]];
+                    [self transitionAnimation];
                 } else{
-                    
-                    [self.currentImageView sd_setImageWithURL:self.urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                    [self.currentImageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                         currentImageView.expectedSize = (CGFloat)expectedSize;
                         currentImageView.receivedSize = (CGFloat)receivedSize;
                     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
@@ -87,16 +86,16 @@
                 }
             }];
         } else{
-            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * SCREEN_WIDTH, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
-            [_photoScrollView addSubview:imageView];
-            [imageView sd_setImageWithURL:self.urlArray[i] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
+            [self.photoScrollView addSubview:imageView];
+            [imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 imageView.expectedSize = (CGFloat)expectedSize;
                 imageView.receivedSize = (CGFloat)receivedSize;
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [imageView finishProcess];
             }];
         }
-    }
+    }];
 }
 
 
@@ -115,8 +114,8 @@
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(move:)];
     [_photoScrollView addGestureRecognizer:recognizer];
     recognizer.delegate = self;
-    _PanStartY = _currentImageView.frame.origin.y;
-    _PanEndY = SCREEN_HEIGHT;
+    _panStartY = _currentImageView.frame.origin.y;
+    _panEndY = SCREEN_HEIGHT;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -136,12 +135,12 @@
     
     _currentImageView.frame = CGRectMake(_currentImageView.frame.origin.x + pt.x, _currentImageView.frame.origin.y + pt.y, _currentImageView.frame.size.width, _currentImageView.frame.size.height);
     
-    _PanMoveY += pt.y;
+    _panMoveY += pt.y;
     
     [recognizer setTranslation:CGPointMake(0, 0) inView:_photoScrollView];
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
-        _effectView.alpha = 1 - _PanMoveY / (_PanEndY - _PanStartY) * 1.5;
+        _effectView.alpha = 1 - _panMoveY / (_panEndY - _panStartY) * 1.5;
         if (pt.y > 0) {
             _currentImageView.transform = CGAffineTransformScale(_currentImageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
         } else if (pt.y < 0 && _photoScrollView.zoomScale < kHXPhotoBrowserZoomMin){
@@ -151,10 +150,10 @@
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.transform = CGAffineTransformIdentity;
-                self.currentImageView.frame = self.newFrame;
+                self.currentImageView.frame = [self getNewRect];
                 self.effectView.alpha = 1;
             }];
-            _PanMoveY = 0;
+            _panMoveY = 0;
         } else{
             [self dismiss];
         }
@@ -233,6 +232,9 @@
         [urlArray addObject:[NSURL URLWithString:str]];
     }
     
+    self.photoCount = urlStrArray.count > 1 ? PhotoCountMultiple : PhotoCountSingle;
+    self.pageWidth = self.photoCount ? SCREEN_WIDTH + kHXPhotoBrowserPageMargin : SCREEN_WIDTH;
+    
     _urlArray = urlArray.copy;
 }
 
@@ -259,7 +261,7 @@
 - (void)transitionAnimation{
     
     [UIView animateWithDuration:0.25 animations:^{
-        self.currentImageView.frame = self.newFrame;
+        self.currentImageView.frame = [self getNewRect];
     }];
 }
 
@@ -282,8 +284,15 @@
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
     CGRect startRact = [self.selectedView convertRect:self.selectedView.bounds toView:window];
     startRact.origin.y += StatusBarHeight;
+    startRact.origin.x += _currentIndex ? _currentIndex * _pageWidth : 0;
     
     return startRact;
+}
+
+- (CGRect)getNewRect{
+    CGRect newFrame = CGRectMake(_currentIndex ?_currentIndex * _pageWidth : 0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
+    
+    return newFrame;
 }
 
 @end

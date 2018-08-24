@@ -56,8 +56,6 @@
 
 - (void)setReceivedSize:(CGFloat)receivedSize{
     _receivedSize = receivedSize;
-    
-    NSLog(@"%f----%f----%f----%f",receivedSize / _expectedSize * SCREEN_WIDTH,receivedSize,_expectedSize,SCREEN_WIDTH);
     CGRect frame = CGRectMake(0, 0, receivedSize / _expectedSize * SCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
     dispatch_async(dispatch_get_main_queue(), ^{

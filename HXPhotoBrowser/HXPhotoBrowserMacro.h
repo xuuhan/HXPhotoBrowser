@@ -27,3 +27,6 @@
 
 ///process
 #define kHXPhotoBrowserProcessHeight 4
+
+///margin
+#define kHXPhotoBrowserPageMargin 15
