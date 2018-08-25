@@ -85,7 +85,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
                     }];
                 }
             }];
-        } else{
+        }
+        else{
+            NSLog(@"%ld-----",idx);
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [self.photoScrollView addSubview:imageView];
             [imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
@@ -162,6 +164,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
     CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
+    
+    NSLog(@"%f------%f",touchPoint.x,touchPoint.y);
     if (_photoScrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
         _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
         [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
