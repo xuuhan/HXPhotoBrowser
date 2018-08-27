@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     zoomTap.numberOfTouchesRequired = 1;
     [_photoScrollView addGestureRecognizer:zoomTap];
     [bgTap requireGestureRecognizerToFail:zoomTap];
-    
+
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(move:)];
     [_photoScrollView addGestureRecognizer:recognizer];
     recognizer.delegate = self;
@@ -285,6 +285,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (CGRect)getStartRect{
+    
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
     CGRect startRact = [self.selectedView convertRect:self.selectedView.bounds toView:window];
     startRact.origin.y += StatusBarHeight;
@@ -294,6 +295,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (CGRect)getNewRect{
+    
     CGRect newFrame = CGRectMake(_currentIndex ?_currentIndex * _pageWidth : 0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
     
     return newFrame;
