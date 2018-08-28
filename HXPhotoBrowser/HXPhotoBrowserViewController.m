@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray *urlArray;
+@property (nonatomic, strong) NSArray *imageViewArray;
 @property (nonatomic, assign) BOOL isCanPan;
 @property (nonatomic, assign) CGFloat panStartY;
 @property (nonatomic, assign) CGFloat panEndY;
@@ -64,6 +65,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
+    NSMutableArray *imgViewM = [NSMutableArray arrayWithCapacity:_urlArray.count];
     [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx == self.currentIndex ? : 0) {
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
@@ -87,7 +89,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             }];
         }
         else{
-            NSLog(@"%ld-----",idx);
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300)];
             [self.photoScrollView addSubview:imageView];
             [imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
@@ -98,6 +99,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             }];
         }
     }];
+    
+    _imageViewArray = imgViewM.copy;
 }
 
 
@@ -163,6 +166,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
+    /*
     CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
     
     NSLog(@"%f------%f",touchPoint.x,touchPoint.y);
@@ -174,6 +178,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
         _isCanPan = YES;
     }
+    */
 }
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
@@ -211,6 +216,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     if (scale <= kHXPhotoBrowserZoomMin) {
         _isCanPan = YES;
     }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    int currentNum = scrollView.contentOffset.x / _pageWidth;
+    
+    NSLog(@"%@",self.imageViewArray);
 }
 
 - (void)setParentVC:(UIViewController *)parentVC{
