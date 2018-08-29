@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSArray *singleThumbUrlImgArray;
 @property (nonatomic, strong) NSArray *urlImgArray;
 @property (nonatomic, strong) NSArray *thumbUrlImgArray;
+@property (nonatomic, strong) NSMutableArray <UIView *>*selectedViewArray;
 @end
 
 @implementation DemoViewController
@@ -50,6 +51,8 @@
     CGFloat x =  15;
     CGFloat margin = ([UIScreen mainScreen].bounds.size.width - 4 * 80 - x * 2) / 3;
     
+    _selectedViewArray = [NSMutableArray array];
+    
     if (index == 0) {///加载本地图片
         self.title = @"本地图片";
         
@@ -66,6 +69,7 @@
             btn.tag = i;
             [btn sd_setFadeImageWithURL:[NSURL URLWithString:self.thumbUrlImgArray[i]] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(showMultiplePhotoBrows:) forControlEvents:UIControlEventTouchUpInside];
+            [_selectedViewArray addObject:btn];
         }
     }
 }
@@ -78,7 +82,7 @@
 - (void)showPhotoBrows:(UIButton *)sender{
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
-    pb.selectedView = sender;
+    pb.selectedViewArray = @[sender];
     pb.urlStrArray = @[self.singleUrlImgArray[0]];
     [pb show];
 }
@@ -87,7 +91,7 @@
 - (void)showMultiplePhotoBrows:(UIButton *)sender{
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
-    pb.selectedView = sender;
+    pb.selectedViewArray = _selectedViewArray.copy;
     pb.currentIndex = sender.tag;
     pb.urlStrArray = self.urlImgArray;
     [pb show];

@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
+@property (nonatomic, assign) CGRect currentFrame;
 @property (nonatomic, strong) NSArray *urlArray;
 @property (nonatomic, strong) NSArray *imageViewArray;
 @property (nonatomic, assign) BOOL isCanPan;
@@ -37,8 +38,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setEffectView];
     
+    [self setEffectView];
     _isCanPan = YES;
 }
 
@@ -66,6 +67,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
     NSMutableArray *imgViewM = [NSMutableArray arrayWithCapacity:_urlArray.count];
+    
+    for (int i = 0; i < _urlArray.count; i ++) {
+        [imgViewM addObject:[NSObject new]];
+    }
+    
     [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx == self.currentIndex ? : 0) {
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
@@ -86,6 +92,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
                         [currentImageView finishProcess];
                     }];
                 }
+                imgViewM[idx] = currentImageView;
             }];
         }
         else{
@@ -97,6 +104,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [imageView finishProcess];
             }];
+            imgViewM[idx] = imageView;
         }
     }];
     
@@ -219,7 +227,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//    int currentNum = scrollView.contentOffset.x / _pageWidth;
+    NSInteger currentNum = scrollView.contentOffset.x / _pageWidth;
+    _currentImageView = _imageViewArray[currentNum];
+    _currentIndex = currentNum;
     
     NSLog(@"%@",self.imageViewArray);
 }
@@ -281,26 +291,30 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (UIImage *)getSelectedImg{
+    
     UIImage *image = [UIImage new];
-    if ([_selectedView isKindOfClass:[UIImageView class]] ) {
-        UIImageView *img = (UIImageView *)_selectedView;
+    if ([_selectedViewArray[_currentIndex] isKindOfClass:[UIImageView class]] ) {
+        UIImageView *img = (UIImageView *)_selectedViewArray[_currentIndex];
         image = img.image;
     }
     
-    if ([_selectedView isKindOfClass:[UIButton class]]) {
-        UIButton *btn = (UIButton *)_selectedView;
+    if ([_selectedViewArray[_currentIndex] isKindOfClass:[UIButton class]]) {
+        UIButton *btn = (UIButton *)_selectedViewArray[_currentIndex];
         image = btn.currentImage ? btn.currentImage : btn.currentBackgroundImage;
     }
     
     return image;
 }
 
+
 - (CGRect)getStartRect{
     
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
-    CGRect startRact = [self.selectedView convertRect:self.selectedView.bounds toView:window];
+    CGRect startRact = [_selectedViewArray[_currentIndex] convertRect:_selectedViewArray[_currentIndex].bounds toView:window];
+
     startRact.origin.y += StatusBarHeight;
     startRact.origin.x += _currentIndex ? _currentIndex * _pageWidth : 0;
+    _currentFrame = startRact;
     
     return startRact;
 }
@@ -308,7 +322,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (CGRect)getNewRect{
     
     CGRect newFrame = CGRectMake(_currentIndex ?_currentIndex * _pageWidth : 0, 150, SCREEN_WIDTH, SCREEN_HEIGHT - 300);
-    
+
     return newFrame;
 }
 
