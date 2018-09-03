@@ -161,7 +161,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.frame = [self getNewRect];
-                self.currentImageView.transform = CGAffineTransformIdentity;
                 self.effectView.alpha = 1;
             }];
             _panMoveY = 0;
