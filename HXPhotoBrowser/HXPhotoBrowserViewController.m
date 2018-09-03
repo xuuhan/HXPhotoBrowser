@@ -24,8 +24,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, strong) HXPhotoScrollView *photoScrollView;
 @property (nonatomic, assign) CGRect currentFrame;
 @property (nonatomic, strong) NSArray *urlArray;
-@property (nonatomic, strong) NSArray *imageViewArray;
+@property (nonatomic, strong) NSMutableArray *imageViewArray;
 @property (nonatomic, assign) BOOL isCanPan;
+@property (nonatomic, assign) BOOL isPan;
 @property (nonatomic, assign) CGFloat panStartY;
 @property (nonatomic, assign) CGFloat panEndY;
 @property (nonatomic, assign) CGFloat panMoveY;
@@ -66,10 +67,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
-    NSMutableArray *imgViewM = [NSMutableArray arrayWithCapacity:_urlArray.count];
-    
+    _imageViewArray = [NSMutableArray arrayWithCapacity:_urlArray.count];
     for (int i = 0; i < _urlArray.count; i ++) {
-        [imgViewM addObject:[UIView new]];
+        [_imageViewArray addObject:[UIView new]];
     }
     
     [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
                         [currentImageView finishProcess];
                     }];
                 }
-                imgViewM[idx] = currentImageView;
+                self.imageViewArray[idx] = currentImageView;
             }];
         }
         else{
@@ -104,11 +104,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [imageView finishProcess];
             }];
-            imgViewM[idx] = imageView;
+            self.imageViewArray[idx] = imageView;
         }
     }];
-    
-    _imageViewArray = imgViewM.copy;
 }
 
 
@@ -146,9 +144,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
     CGPoint pt = [recognizer translationInView:_photoScrollView];
     
-    NSLog(@"----%@",_selectedViewArray[_currentIndex]);
-    NSLog(@"----currentImage:%@",_currentImageView);
-    
     _currentImageView.frame = CGRectMake(_currentImageView.frame.origin.x + pt.x, _currentImageView.frame.origin.y + pt.y, _currentImageView.frame.size.width, _currentImageView.frame.size.height);
     
     _panMoveY += pt.y;
@@ -165,8 +160,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         if (_currentImageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
-                self.currentImageView.transform = CGAffineTransformIdentity;
                 self.currentImageView.frame = [self getNewRect];
+                self.currentImageView.transform = CGAffineTransformIdentity;
                 self.effectView.alpha = 1;
             }];
             _panMoveY = 0;
@@ -231,9 +226,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     NSInteger currentNum = scrollView.contentOffset.x / _pageWidth;
-    _currentImageView = _imageViewArray[currentNum];
+    if (_imageViewArray) {
+        _currentImageView = _imageViewArray[currentNum];
+    }
     _currentIndex = currentNum;
 }
+
 
 - (void)setParentVC:(UIViewController *)parentVC{
     _parentVC = parentVC;
@@ -273,9 +271,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)dismiss{
+    
     [UIView animateWithDuration:0.15 animations:^{
-        
-        NSLog(@"currentImageView:----%@",self.currentImageView);
         self.currentImageView.frame = [self getStartRect];
         self.effectView.alpha = 0;
         

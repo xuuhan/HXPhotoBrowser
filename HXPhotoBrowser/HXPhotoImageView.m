@@ -42,7 +42,6 @@
 
 - (void)finishProcess{
     
-    
     [UIView animateWithDuration:0.2 animations:^{
         self.effectView.alpha = 0;
         self.processView.alpha = 0;
