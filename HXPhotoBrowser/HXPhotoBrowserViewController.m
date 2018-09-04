@@ -26,7 +26,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, strong) NSArray *urlArray;
 @property (nonatomic, strong) NSMutableArray *imageViewArray;
 @property (nonatomic, assign) BOOL isCanPan;
-@property (nonatomic, assign) BOOL isPan;
 @property (nonatomic, assign) CGFloat panStartY;
 @property (nonatomic, assign) CGFloat panEndY;
 @property (nonatomic, assign) CGFloat panMoveY;
@@ -171,19 +170,27 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
-    /*
     CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
     
     NSLog(@"%f------%f",touchPoint.x,touchPoint.y);
     if (_photoScrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
         _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
-        [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
+        [_photoScrollView zoomToRect:CGRectMake(touchPoint.x, touchPoint.y, 5, 5) animated:YES];
         _isCanPan = NO;
     } else {
         [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
         _isCanPan = YES;
     }
-    */
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    NSLog(@"%@",_currentImageView);
+    
+    return _currentImageView;
+}
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
+    _isCanPan = NO;
 }
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
@@ -197,18 +204,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     return center;
 }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return _currentImageView;
-}
-
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
-    _isCanPan = NO;
-}
-
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
     _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMax;
     _currentImageView.center = [self centerOfScrollViewContent:scrollView];
-    
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
@@ -224,11 +222,13 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSInteger currentNum = scrollView.contentOffset.x / _pageWidth;
-    if (_imageViewArray) {
-        _currentImageView = _imageViewArray[currentNum];
+    if (_isCanPan) {
+        NSInteger currentNum = scrollView.contentOffset.x / _pageWidth;
+        if (_imageViewArray) {
+            _currentImageView = _imageViewArray[currentNum];
+        }
+        _currentIndex = currentNum;
     }
-    _currentIndex = currentNum;
 }
 
 
