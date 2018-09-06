@@ -23,7 +23,6 @@
         self.minimumZoomScale = kHXPhotoBrowserZoomMin;
         self.maximumZoomScale = kHXPhotoBrowserZoomMax;
         self.zoomScale = kHXPhotoBrowserZoomMin;
-        self.pagingEnabled = YES;
     }
     return self;
 }
