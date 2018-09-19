@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)setPhotoScrollView{
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
-    _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH + kHXPhotoBrowserPageMargin, SCREEN_HEIGHT)];
     [window addSubview:_photoScrollView];
     _photoScrollView.delegate = self;
     _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (SCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count - kHXPhotoBrowserPageMargin : SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
@@ -170,24 +170,22 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
-    CGPoint touchPoint = [recognizer locationInView:_photoScrollView];
-    
-    NSLog(@"%f------%f",touchPoint.x,touchPoint.y);
-    if (_photoScrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
-        _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
-        [_photoScrollView zoomToRect:CGRectMake(touchPoint.x + _photoScrollView.contentOffset.x, touchPoint.y + _photoScrollView.contentOffset.y, 5, 5) animated:YES];
-        _isCanPan = NO;
-    } else {
-        [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
-        [_photoScrollView setContentOffset:CGPointMake(_currentIndex * SCREEN_WIDTH, 0)];
-        _isCanPan = YES;
-    }
+//    CGPoint touchPoint = [recognizer locationInView:[self viewForZoomingInScrollView:_photoScrollView]];
+//
+//    if (_photoScrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
+////        _photoScrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
+//        [_photoScrollView zoomToRect:CGRectMake(touchPoint.x, touchPoint.y, 1, 1) animated:YES];
+//        _isCanPan = NO;
+//    } else {
+//        [_photoScrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
+//        _isCanPan = YES;
+//    }
 }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    
-    return _currentImageView;
-}
+//- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+//    
+//    return _currentImageView;
+//}
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
     _isCanPan = NO;
@@ -230,7 +228,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         _currentIndex = currentNum;
     }
 }
-
 
 - (void)setParentVC:(UIViewController *)parentVC{
     _parentVC = parentVC;
