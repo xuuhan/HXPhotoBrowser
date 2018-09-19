@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _photoScrollView = [[HXPhotoScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH + kHXPhotoBrowserPageMargin, SCREEN_HEIGHT)];
     [window addSubview:_photoScrollView];
     _photoScrollView.delegate = self;
-    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (SCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count - kHXPhotoBrowserPageMargin : SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
+    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (SCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count : SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
     
     [self addGesture];
     [self creatPhotoImageView];
