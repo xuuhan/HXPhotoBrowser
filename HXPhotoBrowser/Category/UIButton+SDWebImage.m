@@ -95,9 +95,11 @@ const static NSString *FadeButtonTypeKey = @"FadeButtonTypeKey";
                                  options:(SDWebImageOptions)options
                                completed:(nullable SDExternalCompletionBlock)completedBlock{
     
+    __weak __typeof(self)weakSelf = self;
     [self sd_setBackgroundImageWithURL:url forState:state placeholderImage:placeholder options:options completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
         
-        [self fadeAnimationWith:image error:error cacheType:cacheType imageURL:imageURL completed:completedBlock];
+        [strongSelf fadeAnimationWith:image error:error cacheType:cacheType imageURL:imageURL completed:completedBlock];
     }];
 }
 

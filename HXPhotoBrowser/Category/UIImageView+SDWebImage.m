@@ -62,27 +62,29 @@ const static NSString *FadeImgTypeKey = @"FadeImgTypeKey";
                       progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
                      completed:(nullable SDExternalCompletionBlock)completedBlock{
     
+    __weak __typeof(self)weakSelf = self;
     [self sd_setImageWithURL:url placeholderImage:placeholder options:options progress:progressBlock completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    __strong __typeof(weakSelf)strongSelf = weakSelf;
         
         BOOL isFirst = image && cacheType == SDImageCacheTypeNone;
         BOOL isOnce = image && cacheType == SDImageCacheTypeDisk;
         BOOL isEvery = image && (cacheType == SDImageCacheTypeDisk || cacheType == SDImageCacheTypeMemory);
         BOOL result = false;
         
-        if (isFirst) self.FadeType = 0;
+        if (isFirst) strongSelf.FadeType = 0;
         
-        if (self.FadeType == FadeTypeOnceAfterAppLaunch) {
+        if (strongSelf.FadeType == FadeTypeOnceAfterAppLaunch) {
             result = isOnce;
-        } else if (self.FadeType == FadeTypeEveryTime){
+        } else if (strongSelf.FadeType == FadeTypeEveryTime){
             result = isEvery;
         } else{
             result = isFirst;
         }
         
         if (result) {
-            self.alpha = 0.5;
+            strongSelf.alpha = 0.5;
             [UIView animateWithDuration:0.5 animations:^{
-                self.alpha = 1;
+                strongSelf.alpha = 1;
             }];
         }
         
