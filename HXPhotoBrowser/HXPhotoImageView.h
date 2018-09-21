@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "UIImageView+SDWebImage.h"
-@interface HXPhotoImageView : UIImageView
+@interface HXPhotoImageView : UIView
 
 @property (nonatomic, assign) CGFloat receivedSize;
 @property (nonatomic, assign) CGFloat expectedSize;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 - (void)finishProcess;
+
 @end
