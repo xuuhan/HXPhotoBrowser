@@ -85,14 +85,14 @@
 - (void)setEffectView{
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
-    _effectView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    [self addSubview:_effectView];
+    _effectView.frame = CGRectMake(0, 0, self.imageView.frame.size.width, self.imageView.frame.size.height);
+    [self.imageView addSubview:_effectView];
     _effectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
 }
 
 - (void)setProcessView{
     _processView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kHXPhotoBrowserProcessHeight)];
-    [self addSubview:_processView];
+    [_imageView addSubview:_processView];
     _processView.backgroundColor = [UIColor whiteColor];
 }
 
