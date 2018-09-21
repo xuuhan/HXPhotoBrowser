@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     NSInteger currentNum = scrollView.contentOffset.x / _pageWidth;
     
-    if (_currentIndex != currentNum) {
+    if (_currentIndex != currentNum && ((NSInteger)scrollView.contentOffset.x % (NSInteger)_pageWidth == 0)) {
         [_currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin];
         _isCanPan = YES;
     }
