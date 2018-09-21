@@ -65,7 +65,7 @@
 		368AFF102122CEBB00CC86D2 /* UIButton+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+SDWebImage.h"; sourceTree = "<group>"; };
 		368AFF112122CEBB00CC86D2 /* UIButton+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SDWebImage.m"; sourceTree = "<group>"; };
 		368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserViewController.h; sourceTree = "<group>"; };
-		368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; wrapsLines = 0; };
+		368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
 		368AFF162125738200CC86D2 /* HXPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoImageView.h; sourceTree = "<group>"; };
 		368AFF172125738200CC86D2 /* HXPhotoImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoImageView.m; sourceTree = "<group>"; };
 		FF27CD8E8EF157501C49A86C /* Pods-HXPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };

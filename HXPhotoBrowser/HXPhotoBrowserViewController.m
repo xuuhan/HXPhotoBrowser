@@ -322,8 +322,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
     CGRect startRact = [_selectedViewArray[_currentIndex] convertRect:_selectedViewArray[_currentIndex].bounds toView:window];
 
-    startRact.origin.y += StatusBarHeight;
-
     return startRact;
 }
 
