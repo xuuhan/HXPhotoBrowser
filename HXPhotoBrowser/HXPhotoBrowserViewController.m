@@ -73,13 +73,16 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         [_imageViewArray addObject:[UIView new]];
     }
     
-    NSInteger firstIndex = self.currentIndex ? : 0;
-    
+    NSInteger firstIndex = _currentIndex ? : 0;
+
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager diskImageExistsForURL:self.urlArray[firstIndex] completion:^(BOOL isInCache) {
         HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         [self.photoScrollView addSubview:currentImageView];
         self.currentImageView = currentImageView;
+        if (self.imageViewArray.count > 1) {
+            [self setIndexTitleWithImgView:self.currentImageView withIndex:self.currentIndex];
+        }
         if (isInCache) {
             self.currentImageView.imageView.frame = [self getStartRect];
             [self.currentImageView finishProcess];
@@ -116,6 +119,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
                 [imageView finishProcess];
             }];
             self.imageViewArray[idx] = imageView;
+            
+            if (self.imageViewArray.count > 1) {
+                [self setIndexTitleWithImgView:imageView withIndex:idx];
+            }
         }
     }];
 }
@@ -280,6 +287,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         self.photoScrollView = nil;
         [self dismissViewControllerAnimated:NO completion:nil];
     }];
+}
+
+- (void)setIndexTitleWithImgView:(HXPhotoImageView *)imgView withIndex:(NSInteger)index{
+    imgView.indexTitle = [NSString stringWithFormat:@"%ld / %ld",index + 1,_imageViewArray.count];
 }
 
 - (void)transitionAnimation{

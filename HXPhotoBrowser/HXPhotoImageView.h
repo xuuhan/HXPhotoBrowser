@@ -14,6 +14,7 @@
 @property (nonatomic, assign) CGFloat expectedSize;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, copy) NSString *indexTitle;
 
 - (void)finishProcess;
 
