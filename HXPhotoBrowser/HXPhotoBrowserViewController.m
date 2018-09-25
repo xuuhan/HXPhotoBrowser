@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     PhotoCountMultiple
 };
 
-@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
+@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate,HXPhotoImageViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) UIScrollView *photoScrollView;
@@ -80,6 +80,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         [self.photoScrollView addSubview:currentImageView];
         self.currentImageView = currentImageView;
+        currentImageView.delegate = self;
         if (self.imageViewArray.count > 1) {
             [self setIndexTitleWithImgView:self.currentImageView withIndex:self.currentIndex];
         }
@@ -112,6 +113,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         if (idx != self.currentIndex ? : 0) {
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
             [self.photoScrollView addSubview:imageView];
+            imageView.delegate = self;
             [imageView.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 imageView.expectedSize = (CGFloat)expectedSize;
                 imageView.receivedSize = (CGFloat)receivedSize;
@@ -203,10 +205,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 
-
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
-    _isCanPan = NO;
+- (void)changePanState:(BOOL)isCanPan{
+    _isCanPan = isCanPan;
 }
+
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
     if (scale <= kHXPhotoBrowserZoomMin || self.currentImageView.frame.size.height <= SCREEN_HEIGHT) {

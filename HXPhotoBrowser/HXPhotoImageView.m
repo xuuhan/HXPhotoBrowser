@@ -46,6 +46,17 @@
     return _imageView;
 }
 
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+    BOOL isCanPan = NO;
+    if (self.scrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
+        isCanPan = YES;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(changePanState:)]) {
+        [self.delegate changePanState:isCanPan];    
+    }
+}
+
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
 {
     CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?

@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "UIImageView+SDWebImage.h"
+@class HXPhotoImageView;
+
+@protocol HXPhotoImageViewDelegate <NSObject>
+
+- (void)changePanState:(BOOL)isCanPan;
+
+@end
 @interface HXPhotoImageView : UIView
 
 @property (nonatomic, assign) CGFloat receivedSize;
@@ -15,6 +22,7 @@
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, copy) NSString *indexTitle;
+@property (nonatomic, weak) id <HXPhotoImageViewDelegate>delegate;
 
 - (void)finishProcess;
 
