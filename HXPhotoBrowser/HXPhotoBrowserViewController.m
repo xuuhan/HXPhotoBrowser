@@ -88,6 +88,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             self.currentImageView.imageView.frame = [self getStartRect];
             [self.currentImageView finishProcess];
             [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[firstIndex]];
+            
+            CGSize size = [self imageCompressForWidth:self.currentImageView.imageView.image];
+            
+            NSLog(@"%f-----%f",size.width,size.height);
             [self transitionAnimation];
             [self fetchOtherPhotos];
         } else{
@@ -119,6 +123,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
                 imageView.receivedSize = (CGFloat)receivedSize;
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [imageView finishProcess];
+                
             }];
             self.imageViewArray[idx] = imageView;
             
@@ -127,6 +132,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             }
         }
     }];
+    
 }
 
 
@@ -208,7 +214,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)changePanState:(BOOL)isCanPan{
     _isCanPan = isCanPan;
 }
-
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
     if (scale <= kHXPhotoBrowserZoomMin || self.currentImageView.frame.size.height <= SCREEN_HEIGHT) {
@@ -335,6 +340,42 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     CGRect newFrame = CGRectMake(0, (SCREEN_HEIGHT - height) / 2, width, height);
     
     return newFrame;
+}
+
+- (CGSize) imageCompressForWidth:(UIImage *)sourceImage{
+    
+    CGSize imageSize = sourceImage.size;
+    NSLog(@"%@",sourceImage);
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat targetWidth = SCREEN_WIDTH;
+    CGFloat targetHeight = height / (width / targetWidth);
+    CGSize size = CGSizeMake(targetWidth, targetHeight);
+    CGFloat scaleFactor = 0.0;
+    CGFloat scaledWidth = targetWidth;
+    CGFloat scaledHeight = targetHeight;
+    
+    if(CGSizeEqualToSize(imageSize, size) == NO){
+        
+        CGFloat widthFactor = targetWidth / width;
+        CGFloat heightFactor = targetHeight / height;
+        
+        if(widthFactor > heightFactor){
+            scaleFactor = widthFactor;
+        }
+        else{
+            scaleFactor = heightFactor;
+        }
+        scaledWidth = width * scaleFactor;
+        scaledHeight = height * scaleFactor;
+    }
+    
+    CGSize imgSize = CGSizeZero;
+    NSLog(@"%f---------%f",scaledWidth,scaledHeight);
+    imgSize.width = scaledWidth;
+    imgSize.height = scaledHeight;
+
+    return imgSize;
 }
 
 @end
