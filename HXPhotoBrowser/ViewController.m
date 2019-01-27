@@ -53,7 +53,7 @@
 
 - (NSArray *)demoArray{
     if (!_demoArray) {
-        _demoArray = @[@"本地图片",@"网络图片"];
+        _demoArray = @[@"图片列表"];
     }
     return _demoArray;
 }

@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     PhotoCountMultiple
 };
 
-@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate,HXPhotoImageViewDelegate>
+@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) UIScrollView *photoScrollView;
@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)setPhotoScrollView{
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
     
     _photoScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH + kHXPhotoBrowserPageMargin, SCREEN_HEIGHT)];
     [window addSubview:_photoScrollView];
@@ -65,7 +65,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)creatPhotoImageView{
-    
     self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
     _imageViewArray = [NSMutableArray arrayWithCapacity:_urlArray.count];
@@ -73,42 +72,45 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         [_imageViewArray addObject:[UIView new]];
     }
     
-    NSInteger firstIndex = _currentIndex ? : 0;
-
+    _currentIndex = _currentIndex ? : 0;
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
-    [manager diskImageExistsForURL:self.urlArray[firstIndex] completion:^(BOOL isInCache) {
+    [manager diskImageExistsForURL:self.urlArray[_currentIndex] completion:^(BOOL isInCache) {
         HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         [self.photoScrollView addSubview:currentImageView];
         self.currentImageView = currentImageView;
-        currentImageView.delegate = self;
         if (self.imageViewArray.count > 1) {
             [self setIndexTitleWithImgView:self.currentImageView withIndex:self.currentIndex];
         }
         if (isInCache) {
-            self.currentImageView.imageView.frame = [self getStartRect];
-            [self.currentImageView finishProcess];
-            [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[firstIndex]];
-            
-            CGSize size = [self imageCompressForWidth:self.currentImageView.imageView.image];
-            
-            NSLog(@"%f-----%f",size.width,size.height);
-            [self transitionAnimation];
-            [self fetchOtherPhotos];
+            [self photoInCache];
         } else{
-            __weak __typeof(self)weakSelf = self;
-            [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[firstIndex] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                currentImageView.expectedSize = (CGFloat)expectedSize;
-                currentImageView.receivedSize = (CGFloat)receivedSize;
-            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                __strong __typeof(weakSelf)strongSelf = weakSelf;
-                
-                [currentImageView finishProcess];
-                
-                [strongSelf fetchOtherPhotos];
-            }];
+            [self photoNotInCache];
         }
-        self.imageViewArray[firstIndex] = currentImageView;
+        self.imageViewArray[self.currentIndex] = currentImageView;
     }];
+}
+
+- (void)photoNotInCache{
+    __weak __typeof(self)weakSelf = self;
+    [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        strongSelf.currentImageView.expectedSize = (CGFloat)expectedSize;
+        strongSelf.currentImageView.receivedSize = (CGFloat)receivedSize;
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        
+        [strongSelf.currentImageView finishProcess];
+        
+        [strongSelf fetchOtherPhotos];
+    }];
+}
+
+- (void)photoInCache{
+    self.currentImageView.imageView.frame = [self getStartRect];
+    [self.currentImageView finishProcess];
+    [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed];
+    [self transitionAnimation];
+    [self fetchOtherPhotos];
 }
 
 - (void)fetchOtherPhotos{
@@ -117,13 +119,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         if (idx != self.currentIndex ? : 0) {
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
             [self.photoScrollView addSubview:imageView];
-            imageView.delegate = self;
-            [imageView.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            [imageView.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 imageView.expectedSize = (CGFloat)expectedSize;
                 imageView.receivedSize = (CGFloat)receivedSize;
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [imageView finishProcess];
-                
             }];
             self.imageViewArray[idx] = imageView;
             
@@ -132,7 +132,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             }
         }
     }];
-    
 }
 
 
@@ -147,7 +146,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     zoomTap.numberOfTouchesRequired = 1;
     [_photoScrollView addGestureRecognizer:zoomTap];
     [bgTap requireGestureRecognizerToFail:zoomTap];
-
+    
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(move:)];
     [_photoScrollView addGestureRecognizer:recognizer];
     recognizer.delegate = self;
@@ -156,18 +155,18 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
-
+    
     CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-        if (translation.y <= 0 || _isCanPan == NO) {
-            return NO;
-        }
+    if (translation.y <= 0 || _isCanPan == NO) {
+        return NO;
+    }
     return YES;
 }
 
 
 - (void)move:(UIPanGestureRecognizer *)recognizer{
     if(_isCanPan == NO) return;
-
+    
     CGPoint pt = [recognizer translationInView:_currentImageView];
     
     _currentImageView.imageView.frame = CGRectMake(_currentImageView.imageView.frame.origin.x + pt.x, _currentImageView.imageView.frame.origin.y + pt.y, _currentImageView.imageView.frame.size.width, _currentImageView.imageView.frame.size.height);
@@ -199,7 +198,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
     
     CGPoint touchPoint = [recognizer locationInView:self.view];
-
+    
     if (_currentImageView.scrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
         _currentImageView.scrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
         [_currentImageView.scrollView zoomToRect:CGRectMake(touchPoint.x, touchPoint.y, 1, 1) animated:YES];
@@ -211,8 +210,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 
-- (void)changePanState:(BOOL)isCanPan{
-    _isCanPan = isCanPan;
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
+    _isCanPan = NO;
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
@@ -327,55 +327,20 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (CGRect)getStartRect{
     
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
+    NSLog(@"%ld````%ld",_selectedViewArray.count,_currentIndex);
     CGRect startRact = [_selectedViewArray[_currentIndex] convertRect:_selectedViewArray[_currentIndex].bounds toView:window];
-
+    
     return startRact;
 }
 
 - (CGRect)getNewRect{
     
     CGFloat width = SCREEN_WIDTH;
-    CGFloat height = width / 4 * 3;
+    CGFloat height = width / 3 * 2;
     
     CGRect newFrame = CGRectMake(0, (SCREEN_HEIGHT - height) / 2, width, height);
     
     return newFrame;
-}
-
-- (CGSize) imageCompressForWidth:(UIImage *)sourceImage{
-    
-    CGSize imageSize = sourceImage.size;
-    NSLog(@"%@",sourceImage);
-    CGFloat width = imageSize.width;
-    CGFloat height = imageSize.height;
-    CGFloat targetWidth = SCREEN_WIDTH;
-    CGFloat targetHeight = height / (width / targetWidth);
-    CGSize size = CGSizeMake(targetWidth, targetHeight);
-    CGFloat scaleFactor = 0.0;
-    CGFloat scaledWidth = targetWidth;
-    CGFloat scaledHeight = targetHeight;
-    
-    if(CGSizeEqualToSize(imageSize, size) == NO){
-        
-        CGFloat widthFactor = targetWidth / width;
-        CGFloat heightFactor = targetHeight / height;
-        
-        if(widthFactor > heightFactor){
-            scaleFactor = widthFactor;
-        }
-        else{
-            scaleFactor = heightFactor;
-        }
-        scaledWidth = width * scaleFactor;
-        scaledHeight = height * scaleFactor;
-    }
-    
-    CGSize imgSize = CGSizeZero;
-    NSLog(@"%f---------%f",scaledWidth,scaledHeight);
-    imgSize.width = scaledWidth;
-    imgSize.height = scaledHeight;
-
-    return imgSize;
 }
 
 @end
