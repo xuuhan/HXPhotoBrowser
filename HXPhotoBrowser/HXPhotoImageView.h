@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIImageView+SDWebImage.h"
+#import "HXUIImageView+SDWebImage.h"
 @interface HXPhotoImageView : UIView
 
 @property (nonatomic, assign) CGFloat receivedSize;

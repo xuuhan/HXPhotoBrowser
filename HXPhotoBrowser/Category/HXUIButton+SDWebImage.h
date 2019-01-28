@@ -1,5 +1,5 @@
 //
-//  UIButton+SDWebImage.h
+//  HXUIButton+SDWebImage.h
 //  HXPhotoBrowser
 //
 //  Created by suin on 2018/8/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <SDWebImage/UIButton+WebCache.h>
-#import "UIImageView+SDWebImage.h"
+#import "HXUIImageView+SDWebImage.h"
 
 @interface UIButton (SDWebImage)
 

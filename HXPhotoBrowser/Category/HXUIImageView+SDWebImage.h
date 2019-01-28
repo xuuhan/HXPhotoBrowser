@@ -1,5 +1,5 @@
 //
-//  UIImage+SDWebImage.h
+//  HXUIImageView+SDWebImage.h
 //  HXPhotoBrowser
 //
 //  Created by suin on 2018/8/14.

@@ -15,8 +15,8 @@
 		368AFEA7211DA96300CC86D2 /* HXPhotoBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEA6211DA96300CC86D2 /* HXPhotoBrowserTests.m */; };
 		368AFEB2211DA96300CC86D2 /* HXPhotoBrowserUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEB1211DA96300CC86D2 /* HXPhotoBrowserUITests.m */; };
 		368AFF0321216CFF00CC86D2 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0221216CFF00CC86D2 /* DemoViewController.m */; };
-		368AFF0F2122CEA400CC86D2 /* UIImageView+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0E2122CEA400CC86D2 /* UIImageView+SDWebImage.m */; };
-		368AFF122122CEBB00CC86D2 /* UIButton+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF112122CEBB00CC86D2 /* UIButton+SDWebImage.m */; };
+		368AFF0F2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0E2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m */; };
+		368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */; };
 		368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */; };
 		368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF172125738200CC86D2 /* HXPhotoImageView.m */; };
 		F3E7CF4A1DDB434185F3E727 /* Pods_HXPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */; };
@@ -60,10 +60,10 @@
 		368AFEB3211DA96300CC86D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		368AFF0121216CFF00CC86D2 /* DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
 		368AFF0221216CFF00CC86D2 /* DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
-		368AFF0D2122CEA400CC86D2 /* UIImageView+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+SDWebImage.h"; sourceTree = "<group>"; };
-		368AFF0E2122CEA400CC86D2 /* UIImageView+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+SDWebImage.m"; sourceTree = "<group>"; };
-		368AFF102122CEBB00CC86D2 /* UIButton+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+SDWebImage.h"; sourceTree = "<group>"; };
-		368AFF112122CEBB00CC86D2 /* UIButton+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SDWebImage.m"; sourceTree = "<group>"; };
+		368AFF0D2122CEA400CC86D2 /* HXUIImageView+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HXUIImageView+SDWebImage.h"; sourceTree = "<group>"; };
+		368AFF0E2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HXUIImageView+SDWebImage.m"; sourceTree = "<group>"; };
+		368AFF102122CEBB00CC86D2 /* HXUIButton+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HXUIButton+SDWebImage.h"; sourceTree = "<group>"; };
+		368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HXUIButton+SDWebImage.m"; sourceTree = "<group>"; };
 		368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserViewController.h; sourceTree = "<group>"; };
 		368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
 		368AFF162125738200CC86D2 /* HXPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoImageView.h; sourceTree = "<group>"; };
@@ -171,10 +171,10 @@
 		368AFF0C2122CE9700CC86D2 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				368AFF0D2122CEA400CC86D2 /* UIImageView+SDWebImage.h */,
-				368AFF0E2122CEA400CC86D2 /* UIImageView+SDWebImage.m */,
-				368AFF102122CEBB00CC86D2 /* UIButton+SDWebImage.h */,
-				368AFF112122CEBB00CC86D2 /* UIButton+SDWebImage.m */,
+				368AFF0D2122CEA400CC86D2 /* HXUIImageView+SDWebImage.h */,
+				368AFF0E2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m */,
+				368AFF102122CEBB00CC86D2 /* HXUIButton+SDWebImage.h */,
+				368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -360,8 +360,8 @@
 			files = (
 				368AFE92211DA96200CC86D2 /* ViewController.m in Sources */,
 				368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */,
-				368AFF0F2122CEA400CC86D2 /* UIImageView+SDWebImage.m in Sources */,
-				368AFF122122CEBB00CC86D2 /* UIButton+SDWebImage.m in Sources */,
+				368AFF0F2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m in Sources */,
+				368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */,
 				368AFE9D211DA96300CC86D2 /* main.m in Sources */,
 				368AFE8F211DA96200CC86D2 /* AppDelegate.m in Sources */,
 				368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */,

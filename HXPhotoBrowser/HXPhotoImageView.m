@@ -9,9 +9,6 @@
 #import "HXPhotoImageView.h"
 #import "HXPhotoBrowserMacro.h"
 
-#define SCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width
-#define SCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height
-
 @interface HXPhotoImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processView;
@@ -37,7 +34,7 @@
 }
 
 - (void)setIndexLabel{
-    _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 50, SCREEN_WIDTH, 20)];
+    _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 50, kHXSCREEN_WIDTH, 20)];
     [self addSubview:_indexLabel];
     _indexLabel.textColor = [UIColor whiteColor];
     _indexLabel.font = [UIFont systemFontOfSize:14];
@@ -77,10 +74,10 @@
     _scrollView.zoomScale = kHXPhotoBrowserZoomMin;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     
-    CGFloat width = SCREEN_WIDTH;
+    CGFloat width = kHXSCREEN_WIDTH;
     CGFloat height = width / 4 * 3;
     
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (SCREEN_HEIGHT - height) / 2, width, height)];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
     [_scrollView addSubview:_imageView];
 }
 
@@ -114,7 +111,7 @@
 
 - (void)setReceivedSize:(CGFloat)receivedSize{
     _receivedSize = receivedSize;
-    CGRect frame = CGRectMake(0, 0, receivedSize / _expectedSize * SCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
+    CGRect frame = CGRectMake(0, 0, receivedSize / _expectedSize * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.2 animations:^{

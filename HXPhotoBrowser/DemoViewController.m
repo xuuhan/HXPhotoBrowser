@@ -7,8 +7,8 @@
 //
 
 #import "DemoViewController.h"
-#import "UIImageView+SDWebImage.h"
-#import "UIButton+SDWebImage.h"
+#import "HXUIImageView+SDWebImage.h"
+#import "HXUIButton+SDWebImage.h"
 #import "HXPhotoBrowserViewController.h"
 
 

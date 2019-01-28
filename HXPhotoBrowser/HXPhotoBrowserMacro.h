@@ -8,6 +8,9 @@
 #ifndef HXPhotoBrowserMacro_h
 #define HXPhotoBrowserMacro_h
 
+#define kHXSCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width
+#define kHXSCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height
+
 ///zoom
 static CGFloat const kHXPhotoBrowserZoomMin = 1.0;
 static CGFloat const kHXPhotoBrowserZoomMid = 2.0;

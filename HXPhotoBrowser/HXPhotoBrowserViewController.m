@@ -8,12 +8,9 @@
 
 #import "HXPhotoBrowserViewController.h"
 #import "HXPhotoImageView.h"
-#import "UIImageView+SDWebImage.h"
+#import "HXUIImageView+SDWebImage.h"
 #import "HXPhotoBrowserMacro.h"
 #import <pthread.h>
-
-#define SCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width
-#define SCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height
 
 typedef NS_ENUM(NSInteger,PhotoCount){
     PhotoCountSingle,
@@ -48,21 +45,21 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)setEffectView{
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
-    _effectView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    _effectView.frame = CGRectMake(0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT);
     [self.view addSubview:_effectView];
 }
 
 - (void)setPhotoScrollView{
     UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
     
-    _photoScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH + kHXPhotoBrowserPageMargin, SCREEN_HEIGHT)];
+    _photoScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin, kHXSCREEN_HEIGHT)];
     [window addSubview:_photoScrollView];
     _photoScrollView.backgroundColor = [UIColor clearColor];
     _photoScrollView.showsVerticalScrollIndicator = NO;
     _photoScrollView.showsHorizontalScrollIndicator = NO;
     _photoScrollView.pagingEnabled = YES;
     _photoScrollView.delegate = self;
-    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (SCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count : SCREEN_WIDTH * _urlArray.count, SCREEN_HEIGHT);
+    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count : kHXSCREEN_WIDTH * _urlArray.count, kHXSCREEN_HEIGHT);
     
     [self addGesture];
     [self creatPhotoImageView];
@@ -79,7 +76,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _currentIndex = _currentIndex ? : 0;
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager diskImageExistsForURL:self.urlArray[_currentIndex] completion:^(BOOL isInCache) {
-        HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
         [self.photoScrollView addSubview:currentImageView];
         self.currentImageView = currentImageView;
         if (self.imageViewArray.count > 1) {
@@ -121,7 +118,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx != self.currentIndex ? : 0) {
-            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
             [self.photoScrollView addSubview:imageView];
             [imageView.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 imageView.expectedSize = (CGFloat)expectedSize;
@@ -155,7 +152,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [_photoScrollView addGestureRecognizer:recognizer];
     recognizer.delegate = self;
     _panStartY = _currentImageView.frame.origin.y;
-    _panEndY = SCREEN_HEIGHT;
+    _panEndY = kHXSCREEN_HEIGHT;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -187,7 +184,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             _currentImageView.imageView.transform = CGAffineTransformScale(_currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
-        if (_currentImageView.imageView.frame.origin.y < SCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
+        if (_currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.imageView.frame = [self getNewRect];
                 self.effectView.alpha = 1;
@@ -220,7 +217,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
-    if (scale <= kHXPhotoBrowserZoomMin || self.currentImageView.frame.size.height <= SCREEN_HEIGHT) {
+    if (scale <= kHXPhotoBrowserZoomMin || self.currentImageView.frame.size.height <= kHXSCREEN_HEIGHT) {
         [UIView animateWithDuration:0.3 animations:^{
             [self.currentImageView setCenter:CGPointMake(self.currentImageView.center.x,scrollView.center.y)];
         }];
@@ -271,7 +268,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     }
     
     self.photoCount = urlStrArray.count > 1 ? PhotoCountMultiple : PhotoCountSingle;
-    self.pageWidth = self.photoCount ? SCREEN_WIDTH + kHXPhotoBrowserPageMargin : SCREEN_WIDTH;
+    self.pageWidth = self.photoCount ? kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin : kHXSCREEN_WIDTH;
     
     _urlArray = urlArray.copy;
 }
@@ -331,7 +328,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (CGRect)getStartRect{
     
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
-    NSLog(@"%ld````%ld",_selectedViewArray.count,_currentIndex);
+    
     CGRect startRact = [_selectedViewArray[_currentIndex] convertRect:_selectedViewArray[_currentIndex].bounds toView:window];
     
     return startRact;
@@ -339,10 +336,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (CGRect)getNewRect{
     
-    CGFloat width = SCREEN_WIDTH;
-    CGFloat height = width / 3 * 2;
+    CGFloat width = kHXSCREEN_WIDTH;
+    CGFloat height = width / 4 * 3;
     
-    CGRect newFrame = CGRectMake(0, (SCREEN_HEIGHT - height) / 2, width, height);
+    CGRect newFrame = CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height);
     
     return newFrame;
 }
