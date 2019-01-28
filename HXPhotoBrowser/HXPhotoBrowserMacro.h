@@ -5,28 +5,23 @@
 //  Created by suin on 2018/8/17.
 //  Copyright © 2018年 韩旭. All rights reserved.
 //
+#ifndef HXPhotoBrowserMacro_h
+#define HXPhotoBrowserMacro_h
 
-// UIScreenSize
-#define SCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width
-#define SCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height
-
-#define iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
-
-// UIStatusBar
-#define StatusBarHeight (iPhoneX ? 24.0f : 0.0f)
-
-// zoom
-#define kHXPhotoBrowserZoomMin 1.0
-#define kHXPhotoBrowserZoomMid 2.0
-#define kHXPhotoBrowserZoomMax 3.0
+///zoom
+static CGFloat const kHXPhotoBrowserZoomMin = 1.0;
+static CGFloat const kHXPhotoBrowserZoomMid = 2.0;
+static CGFloat const kHXPhotoBrowserZoomMax = 3.0;
 
 ///transform
-#define kHXPhotoBrowserTransformShrink 0.995
-#define kHXPhotoBrowserTransformAmplify 1.005
-#define kHXPhotoBrowserDisMissValue 0.5
+static CGFloat const kHXPhotoBrowserTransformShrink = 0.995;
+static CGFloat const kHXPhotoBrowserTransformAmplify = 1.005;
+static CGFloat const kHXPhotoBrowserDisMissValue = 0.5;
 
 ///process
-#define kHXPhotoBrowserProcessHeight 3.5
+static CGFloat const kHXPhotoBrowserProcessHeight = 3.5;
 
 ///margin
-#define kHXPhotoBrowserPageMargin 15
+static CGFloat const kHXPhotoBrowserPageMargin = 15;
+
+#endif

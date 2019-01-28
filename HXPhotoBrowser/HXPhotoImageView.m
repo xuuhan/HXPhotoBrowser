@@ -9,6 +9,9 @@
 #import "HXPhotoImageView.h"
 #import "HXPhotoBrowserMacro.h"
 
+#define SCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width
+#define SCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height
+
 @interface HXPhotoImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processView;

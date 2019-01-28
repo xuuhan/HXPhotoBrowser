@@ -12,6 +12,9 @@
 #import "HXPhotoBrowserMacro.h"
 #import <pthread.h>
 
+#define SCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width
+#define SCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height
+
 typedef NS_ENUM(NSInteger,PhotoCount){
     PhotoCountSingle,
     PhotoCountMultiple
@@ -21,7 +24,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) UIScrollView *photoScrollView;
-@property (nonatomic, strong) NSArray *urlArray;
+@property (nonatomic, strong) NSArray <NSURL *>*urlArray;
+@property (nonatomic, strong) NSArray *heightArray;
 @property (nonatomic, strong) NSMutableArray *imageViewArray;
 @property (nonatomic, assign) BOOL isCanPan;
 @property (nonatomic, assign) CGFloat panStartY;
