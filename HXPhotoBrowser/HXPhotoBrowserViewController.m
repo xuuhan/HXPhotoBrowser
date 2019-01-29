@@ -10,6 +10,7 @@
 #import "HXPhotoImageView.h"
 #import "HXUIImageView+SDWebImage.h"
 #import "HXPhotoBrowserMacro.h"
+#import "HXPhotoHelper.h"
 #import <pthread.h>
 
 typedef NS_ENUM(NSInteger,PhotoCount){
@@ -115,7 +116,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)fetchOtherPhotos{
-    
     [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx != self.currentIndex ? : 0) {
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
@@ -302,16 +302,43 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)transitionAnimation{
-    
     [UIView animateWithDuration:0.25 animations:^{
         self.currentImageView.imageView.frame = [self getNewRect];
     }];
 }
 
-- (UIImage *)getSelectedImg{
+- (void)setSelectedViewArray:(NSArray<UIView *> *)selectedViewArray{
+    _selectedViewArray = selectedViewArray;
     
+    NSMutableArray *arrayM = [NSMutableArray array];
+    
+    for (UIView *view in selectedViewArray) {
+        UIImage *image = [UIImage new];
+        
+        if ([view isKindOfClass:[UIImageView class]]){
+            UIImageView *img = (UIImageView *)view;
+            image = img.image;
+        }
+        
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton *)view;
+            image = btn.currentImage ? btn.currentImage : btn.currentBackgroundImage;
+        }
+        
+        if (image) {
+            CGSize size = [HXPhotoHelper uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
+            [arrayM addObject:[NSNumber numberWithFloat:size.height]];
+        } else{
+            
+        }
+    }
+    
+    _heightArray = arrayM;
+}
+
+- (UIImage *)getSelectedImg{
     UIImage *image = [UIImage new];
-    if ([_selectedViewArray[_currentIndex] isKindOfClass:[UIImageView class]] ) {
+    if ([_selectedViewArray[_currentIndex] isKindOfClass:[UIImageView class]]){
         UIImageView *img = (UIImageView *)_selectedViewArray[_currentIndex];
         image = img.image;
     }
@@ -326,19 +353,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 
 - (CGRect)getStartRect{
-    
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
-    
     CGRect startRact = [_selectedViewArray[_currentIndex] convertRect:_selectedViewArray[_currentIndex].bounds toView:window];
     
     return startRact;
 }
 
 - (CGRect)getNewRect{
-    
     CGFloat width = kHXSCREEN_WIDTH;
-    CGFloat height = width / 4 * 3;
-    
+    CGFloat height = width / 3 * 2;
     CGRect newFrame = CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height);
     
     return newFrame;

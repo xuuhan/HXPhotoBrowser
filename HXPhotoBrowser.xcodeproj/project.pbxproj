@@ -19,6 +19,7 @@
 		368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */; };
 		368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */; };
 		368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF172125738200CC86D2 /* HXPhotoImageView.m */; };
+		36B2031A2200106B00728A0A /* HXPhotoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36B203192200106B00728A0A /* HXPhotoHelper.m */; };
 		F3E7CF4A1DDB434185F3E727 /* Pods_HXPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,8 @@
 		368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
 		368AFF162125738200CC86D2 /* HXPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoImageView.h; sourceTree = "<group>"; };
 		368AFF172125738200CC86D2 /* HXPhotoImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoImageView.m; sourceTree = "<group>"; };
+		36B203182200106B00728A0A /* HXPhotoHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoHelper.h; sourceTree = "<group>"; };
+		36B203192200106B00728A0A /* HXPhotoHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoHelper.m; sourceTree = "<group>"; };
 		FF27CD8E8EF157501C49A86C /* Pods-HXPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +148,8 @@
 				368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */,
 				368AFF162125738200CC86D2 /* HXPhotoImageView.h */,
 				368AFF172125738200CC86D2 /* HXPhotoImageView.m */,
+				36B203182200106B00728A0A /* HXPhotoHelper.h */,
+				36B203192200106B00728A0A /* HXPhotoHelper.m */,
 				361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */,
 			);
 			path = HXPhotoBrowser;
@@ -359,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				368AFE92211DA96200CC86D2 /* ViewController.m in Sources */,
+				36B2031A2200106B00728A0A /* HXPhotoHelper.m in Sources */,
 				368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */,
 				368AFF0F2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m in Sources */,
 				368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */,
