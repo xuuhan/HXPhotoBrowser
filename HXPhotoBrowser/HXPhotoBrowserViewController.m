@@ -120,6 +120,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         if (idx != self.currentIndex ? : 0) {
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
             [self.photoScrollView addSubview:imageView];
+            imageView.imageView.frame = [self getNewRectWithIndex:idx];
             [imageView.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 imageView.expectedSize = (CGFloat)expectedSize;
                 imageView.receivedSize = (CGFloat)receivedSize;
@@ -186,7 +187,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         if (_currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
-                self.currentImageView.imageView.frame = [self getNewRect];
+                self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
                 self.effectView.alpha = 1;
             }];
             _panMoveY = 0;
@@ -303,7 +304,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)transitionAnimation{
     [UIView animateWithDuration:0.25 animations:^{
-        self.currentImageView.imageView.frame = [self getNewRect];
+        self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
     }];
 }
 
@@ -359,10 +360,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     return startRact;
 }
 
-- (CGRect)getNewRect{
+- (CGRect)getNewRectWithIndex:(NSInteger)index{
     CGFloat width = kHXSCREEN_WIDTH;
-    CGFloat height = width / 3 * 2;
-    CGRect newFrame = CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height);
+    NSNumber *currentHeight = self.heightArray[index];
+    CGFloat height = currentHeight.floatValue;
+    CGRect newFrame = CGRectMake(0, kHXSCREEN_HEIGHT >= height ? (kHXSCREEN_HEIGHT - height) / 2 : 0, width, height);
     
     return newFrame;
 }
