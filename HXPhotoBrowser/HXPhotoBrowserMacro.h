@@ -19,7 +19,7 @@ static CGFloat const kHXPhotoBrowserZoomMax = 3.0;
 ///transform
 static CGFloat const kHXPhotoBrowserTransformShrink = 0.995;
 static CGFloat const kHXPhotoBrowserTransformAmplify = 1.005;
-static CGFloat const kHXPhotoBrowserDisMissValue = 0.5;
+static CGFloat const kHXPhotoBrowserDisMissValue = 50;
 
 ///process
 static CGFloat const kHXPhotoBrowserProcessHeight = 3.5;

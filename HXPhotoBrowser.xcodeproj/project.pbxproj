@@ -133,7 +133,6 @@
 		368AFE8C211DA96200CC86D2 /* HXPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				368AFF0C2122CE9700CC86D2 /* Category */,
 				368AFE8D211DA96200CC86D2 /* AppDelegate.h */,
 				368AFE8E211DA96200CC86D2 /* AppDelegate.m */,
 				368AFE90211DA96200CC86D2 /* ViewController.h */,
@@ -144,6 +143,7 @@
 				368AFE98211DA96300CC86D2 /* LaunchScreen.storyboard */,
 				368AFE9B211DA96300CC86D2 /* Info.plist */,
 				368AFE9C211DA96300CC86D2 /* main.m */,
+				368AFF0C2122CE9700CC86D2 /* Category */,
 				368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */,
 				368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */,
 				368AFF162125738200CC86D2 /* HXPhotoImageView.h */,

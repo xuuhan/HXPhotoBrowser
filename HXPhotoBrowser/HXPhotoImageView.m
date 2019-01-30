@@ -69,16 +69,25 @@
     _scrollView.backgroundColor = [UIColor clearColor];
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
+    _scrollView.bounces = NO;
     _scrollView.minimumZoomScale = kHXPhotoBrowserZoomMin;
     _scrollView.maximumZoomScale = kHXPhotoBrowserZoomMax;
     _scrollView.zoomScale = kHXPhotoBrowserZoomMin;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     
     CGFloat width = kHXSCREEN_WIDTH;
-    CGFloat height = width / 4 * 3;
+    CGFloat height = width;
     
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
     [_scrollView addSubview:_imageView];
+    [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    CGRect rect = [[change objectForKey:@"new"] CGRectValue];
+    NSLog(@"%f----%f",rect.origin.y,rect.size.height);
+    _scrollView.contentSize = rect.size;
 }
 
 

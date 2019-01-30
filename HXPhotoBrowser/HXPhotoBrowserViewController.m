@@ -185,7 +185,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             _currentImageView.imageView.transform = CGAffineTransformScale(_currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
-        if (_currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT * kHXPhotoBrowserDisMissValue) {
+        if (_currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT / 2 - _currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
                 self.effectView.alpha = 1;
