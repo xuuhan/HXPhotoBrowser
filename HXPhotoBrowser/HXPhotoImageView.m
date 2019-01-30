@@ -86,7 +86,6 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     CGRect rect = [[change objectForKey:@"new"] CGRectValue];
-    NSLog(@"%f----%f",rect.origin.y,rect.size.height);
     _scrollView.contentSize = rect.size;
 }
 

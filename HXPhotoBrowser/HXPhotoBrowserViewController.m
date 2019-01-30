@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, strong) UIScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray <NSURL *>*urlArray;
 @property (nonatomic, strong) NSArray *heightArray;
-@property (nonatomic, strong) NSMutableArray *imageViewArray;
+@property (nonatomic, strong) NSArray <HXPhotoImageView *>*imageViewArray;
 @property (nonatomic, assign) BOOL isCanPan;
 @property (nonatomic, assign) CGFloat panStartY;
 @property (nonatomic, assign) CGFloat panEndY;
@@ -69,17 +69,13 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)creatPhotoImageView{
     self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
-    _imageViewArray = [NSMutableArray arrayWithCapacity:_urlArray.count];
-    for (int i = 0; i < _urlArray.count; i ++) {
-        [_imageViewArray addObject:[UIView new]];
-    }
+    [self setImageViewArray];
     
     _currentIndex = _currentIndex ? : 0;
+    
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager diskImageExistsForURL:self.urlArray[_currentIndex] completion:^(BOOL isInCache) {
-        HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
-        [self.photoScrollView addSubview:currentImageView];
-        self.currentImageView = currentImageView;
+        [self.photoScrollView addSubview:self.currentImageView];
         if (self.imageViewArray.count > 1) {
             [self setIndexTitleWithImgView:self.currentImageView withIndex:self.currentIndex];
         }
@@ -88,24 +84,40 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         } else{
             [self photoNotInCache];
         }
-        self.imageViewArray[self.currentIndex] = currentImageView;
     }];
+}
+
+- (void)setImageViewArray{
+    NSMutableArray *arrayM = [NSMutableArray array];
+    for (int i = 0; i < _urlArray.count; i ++) {
+        if (i != self.currentIndex ? : 0) {
+            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
+            [self.photoScrollView addSubview:imageView];
+            imageView.imageView.frame = [self getNewRectWithIndex:i];
+            [arrayM addObject:imageView];
+        } else{
+            HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
+            self.currentImageView = currentImageView;
+            [arrayM addObject:currentImageView];
+        }
+    }
+    _imageViewArray = arrayM.copy;
 }
 
 - (void)photoNotInCache{
     self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
     
+    HXPhotoImageView *currentImageView = self.currentImageView;
     __weak __typeof(self)weakSelf = self;
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
-        strongSelf.currentImageView.expectedSize = (CGFloat)expectedSize;
-        strongSelf.currentImageView.receivedSize = (CGFloat)receivedSize;
+        currentImageView.expectedSize = (CGFloat)expectedSize;
+        currentImageView.receivedSize = (CGFloat)receivedSize;
+        
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        
         [strongSelf.currentImageView finishProcess];
-        
         [strongSelf fetchOtherPhotos];
+        [strongSelf updateRectWithIndex:strongSelf.currentIndex withImage:image];
     }];
 }
 
@@ -118,21 +130,19 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)fetchOtherPhotos{
-    [_urlArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx != self.currentIndex ? : 0) {
-            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(idx * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
-            [self.photoScrollView addSubview:imageView];
-            imageView.imageView.frame = [self getNewRectWithIndex:idx];
-            [imageView.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                imageView.expectedSize = (CGFloat)expectedSize;
-                imageView.receivedSize = (CGFloat)receivedSize;
+            [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                obj.expectedSize = (CGFloat)expectedSize;
+                obj.receivedSize = (CGFloat)receivedSize;
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                [imageView finishProcess];
+                [obj finishProcess];
+                [self updateRectWithIndex:idx withImage:image];
             }];
-            self.imageViewArray[idx] = imageView;
             
             if (self.imageViewArray.count > 1) {
-                [self setIndexTitleWithImgView:imageView withIndex:idx];
+                [self setIndexTitleWithImgView:obj withIndex:idx];
             }
         }
     }];
@@ -332,7 +342,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             CGSize size = [HXPhotoHelper uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
             [arrayM addObject:[NSNumber numberWithFloat:size.height]];
         } else{
-            
+            [arrayM addObject:[NSNumber numberWithFloat:kHXSCREEN_WIDTH]];
         }
     }
     
@@ -371,4 +381,14 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     return newFrame;
 }
 
+- (void)updateRectWithIndex:(NSInteger)index withImage:(UIImage *)image{
+    NSMutableArray *arrayM = self.heightArray.mutableCopy;
+    CGSize size = [HXPhotoHelper uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
+    arrayM[index] = [NSNumber numberWithFloat:size.height];
+    self.heightArray = arrayM.copy;
+    HXPhotoImageView *photoImageView = _imageViewArray[index];
+    photoImageView.imageView.frame = [self getNewRectWithIndex:index];
+}
+
 @end
+
