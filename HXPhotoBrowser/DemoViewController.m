@@ -115,7 +115,7 @@
 
 - (NSArray *)singleUrlImgArray{
     if (!_singleUrlImgArray) {
-        _singleUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1548831044308&di=8ceae70ff5bec835e6b356dcd9d781c5&imgtype=0&src=http%3A%2F%2Fwx3.sinaimg.cn%2Forj360%2F007iuNxXly1fx4dlblfzxj31c94boqv5.jpg"];
+        _singleUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b99999_100000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg"];
     }
     return _singleUrlImgArray;
 }
@@ -137,7 +137,7 @@
 
 - (NSArray *)singleThumbUrlImgArray{
     if (!_singleThumbUrlImgArray) {
-        _singleThumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1548831044308&di=8ceae70ff5bec835e6b356dcd9d781c5&imgtype=0&src=http%3A%2F%2Fwx3.sinaimg.cn%2Forj360%2F007iuNxXly1fx4dlblfzxj31c94boqv5.jpg"];
+        _singleThumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg"];
     }
     return _singleThumbUrlImgArray;
 }

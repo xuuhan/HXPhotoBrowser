@@ -93,6 +93,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)photoNotInCache{
+    self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
+    
     __weak __typeof(self)weakSelf = self;
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
