@@ -53,7 +53,7 @@
     
     _selectedViewArray = [NSMutableArray array];
     
-    if (index == 0) {///加载本地图片
+    if (index == 0) {
         self.title = @"网络图片";
         [_imgBtn sd_setFadeBackgroundImageWithURL:[NSURL URLWithString:self.singleThumbUrlImgArray[0]] forState:UIControlStateNormal];
         

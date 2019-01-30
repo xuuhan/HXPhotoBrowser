@@ -10,12 +10,16 @@
 
 @interface HXPhotoBrowserViewController : UIViewController
 
+///Parent ViewController
 @property (nonatomic, strong) UIViewController *parentVC;
-
+///Image URL (NSString)
 @property (nonatomic, strong) NSArray <NSString *>*urlStrArray;
-///多图的话按顺序传入
+///UIButton or UIImageView
 @property (nonatomic, strong) NSArray <UIView *>*selectedViewArray;
-///默认为第一张
+///Default 0
 @property (nonatomic, assign) NSInteger currentIndex;
+
+///Go
 - (void)show;
+
 @end
