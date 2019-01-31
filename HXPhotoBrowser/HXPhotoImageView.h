@@ -16,5 +16,5 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 
 - (void)finishProcess;
-
+- (void)setMaskHidden:(BOOL)hidden;
 @end

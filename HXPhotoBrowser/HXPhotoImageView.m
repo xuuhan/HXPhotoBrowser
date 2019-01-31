@@ -21,10 +21,21 @@
         [self setScrollView];
         [self setEffectView];
         [self setProcessView];
-        
         self.layer.masksToBounds = YES;
     }
     return self;
+}
+
+- (void)setMaskHidden:(BOOL)hidden{
+    if (self.processView && self.effectView) {
+        if (hidden) {
+            self.processView.hidden = YES;
+            self.effectView.hidden = YES;
+        } else{
+            self.processView.hidden = NO;
+            self.effectView.hidden = NO;
+        }
+    }
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
@@ -65,6 +76,7 @@
     CGFloat height = width;
     
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
+    _imageView.backgroundColor = [UIColor grayColor];
     [_scrollView addSubview:_imageView];
     [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 }
@@ -80,12 +92,14 @@
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
     _effectView.frame = CGRectMake(0, 0, self.imageView.frame.size.width, self.imageView.frame.size.height);
+    _effectView.hidden = YES;
     [self.imageView addSubview:_effectView];
     _effectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
 }
 
 - (void)setProcessView{
     _processView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kHXPhotoBrowserProcessHeight)];
+    _processView.hidden = YES;
     [_imageView addSubview:_processView];
     _processView.backgroundColor = [UIColor whiteColor];
 }
@@ -108,7 +122,7 @@
     CGRect frame = CGRectMake(0, 0, receivedSize / _expectedSize * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.1 animations:^{
             self.processView.frame = frame;
         }];
     });
