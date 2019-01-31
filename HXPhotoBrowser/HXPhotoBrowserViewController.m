@@ -124,14 +124,13 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     self.firstImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
     __weak __typeof(self)weakSelf = self;
     [self.currentImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        self.firstImageView.expectedSize = (CGFloat)expectedSize;
-        self.firstImageView.receivedSize = (CGFloat)receivedSize;
+        [weakSelf updateProgressWithPhotoImage:weakSelf.firstImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
         
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        [strongSelf.firstImageView finishProcess];
-        [strongSelf fetchOtherPhotos];
-        [strongSelf updateRectWithIndex:strongSelf.firstIndex withImage:image];
+        [weakSelf.firstImageView finishProcess];
+        [weakSelf fetchOtherPhotos];
+        [weakSelf updateRectWithIndex:strongSelf.firstIndex withImage:image];
     }];
 }
 
@@ -145,20 +144,28 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)fetchOtherPhotos{
+    __weak __typeof(self)weakSelf = self;
     [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx != self.firstIndex ? : 0) {
             [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getPlaceholderImageWithIndex:idx] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                obj.expectedSize = (CGFloat)expectedSize;
-                obj.receivedSize = (CGFloat)receivedSize;
+                [weakSelf updateProgressWithPhotoImage:obj expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [obj finishProcess];
-                [self updateRectWithIndex:idx withImage:image];
+                [weakSelf updateRectWithIndex:idx withImage:image];
             }];
         }
     }];
     
 }
 
+- (void)updateProgressWithPhotoImage:(HXPhotoImageView *)photoImage expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize{
+    if (photoImage != self.currentImageView) {
+        return;
+    }
+    
+    photoImage.expectedSize = (CGFloat)expectedSize;
+    photoImage.receivedSize = (CGFloat)receivedSize;
+}
 
 - (void)addGesture{
     UITapGestureRecognizer *bgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
@@ -396,6 +403,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     arrayM[index] = [NSNumber numberWithFloat:size.height];
     self.heightArray = arrayM.copy;
     HXPhotoImageView *photoImageView = _imageViewArray[index];
+    NSLog(@"------------%ld------%@",index,photoImageView);
     photoImageView.imageView.frame = [self getNewRectWithIndex:index];
 }
 
