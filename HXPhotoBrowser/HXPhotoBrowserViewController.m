@@ -137,11 +137,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)photoInCache{
-    [self.currentImageView setMaskHidden:YES];
-    self.currentImageView.imageView.frame = [self getStartRect];
     __weak __typeof(self)weakSelf = self;
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (weakSelf.currentImageView.imageView.image) {
+            weakSelf.currentImageView.imageView.frame = [self getStartRect];
             [weakSelf.currentImageView finishProcess];
             [weakSelf transitionAnimation];
             [weakSelf fetchOtherPhotos];
@@ -412,7 +411,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     arrayM[index] = [NSNumber numberWithFloat:size.height];
     self.heightArray = arrayM.copy;
     HXPhotoImageView *photoImageView = _imageViewArray[index];
-    NSLog(@"------------%ld------%@",index,photoImageView);
     photoImageView.imageView.frame = [self getNewRectWithIndex:index];
 }
 
@@ -427,6 +425,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)dealloc{
     [_indexLabel removeFromSuperview];
     _indexLabel = nil;
+    
 }
 @end
-
