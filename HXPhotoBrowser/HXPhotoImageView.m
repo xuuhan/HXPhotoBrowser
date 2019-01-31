@@ -119,7 +119,9 @@
 
 - (void)setReceivedSize:(CGFloat)receivedSize{
     _receivedSize = receivedSize;
-    CGRect frame = CGRectMake(0, 0, receivedSize / _expectedSize * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
+    
+    CGFloat scale = receivedSize / _expectedSize;
+    CGRect frame = CGRectMake(0, 0, scale * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.1 animations:^{

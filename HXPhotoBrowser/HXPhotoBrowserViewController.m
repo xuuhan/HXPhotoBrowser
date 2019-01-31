@@ -121,19 +121,23 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)photoNotInCache{
-    
-    [self.firstImageView setMaskHidden:NO];
     self.firstImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
     __weak __typeof(self)weakSelf = self;
     [self.currentImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        [weakSelf setMaskHidden];
         [weakSelf updateProgressWithPhotoImage:weakSelf.firstImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
         
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
         [weakSelf.firstImageView finishProcess];
         [weakSelf fetchOtherPhotos];
-        [weakSelf updateRectWithIndex:strongSelf.firstIndex withImage:image];
+        [weakSelf updateRectWithIndex:weakSelf.firstIndex withImage:image];
     }];
+}
+
+- (void)setMaskHidden{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.firstImageView setMaskHidden:NO];
+    });
 }
 
 - (void)photoInCache{
