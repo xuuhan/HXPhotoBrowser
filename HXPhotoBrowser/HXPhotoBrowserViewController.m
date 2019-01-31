@@ -80,6 +80,23 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [self creatPhotoImageView];
 }
 
+- (void)setImageViewArray{
+    NSMutableArray *arrayM = [NSMutableArray array];
+    for (int i = 0; i < _urlArray.count; i ++) {
+        if (i != self.currentIndex ? : 0) {
+            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
+            [self.photoScrollView addSubview:imageView];
+            imageView.imageView.frame = [self getNewRectWithIndex:i];
+            [arrayM addObject:imageView];
+        } else{
+            HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
+            self.currentImageView = currentImageView;
+            [arrayM addObject:currentImageView];
+        }
+    }
+    _imageViewArray = arrayM.copy;
+}
+
 - (void)creatPhotoImageView{
     self.photoScrollView.contentOffset = CGPointMake(_currentIndex ? _currentIndex * self.pageWidth : 0, 0);
     
@@ -103,23 +120,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     }
 }
 
-- (void)setImageViewArray{
-    NSMutableArray *arrayM = [NSMutableArray array];
-    for (int i = 0; i < _urlArray.count; i ++) {
-        if (i != self.currentIndex ? : 0) {
-            HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
-            [self.photoScrollView addSubview:imageView];
-            imageView.imageView.frame = [self getNewRectWithIndex:i];
-            [arrayM addObject:imageView];
-        } else{
-            HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
-            self.currentImageView = currentImageView;
-            [arrayM addObject:currentImageView];
-        }
-    }
-    _imageViewArray = arrayM.copy;
-}
-
 - (void)photoNotInCache{
     self.firstImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
     __weak __typeof(self)weakSelf = self;
@@ -136,7 +136,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)setMaskHidden{
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.currentImageView.imageView.image) {
         [self.firstImageView setMaskHidden:NO];
+        }
     });
 }
 

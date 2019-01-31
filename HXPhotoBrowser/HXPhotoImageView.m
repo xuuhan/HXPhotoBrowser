@@ -27,14 +27,8 @@
 }
 
 - (void)setMaskHidden:(BOOL)hidden{
-    if (self.processView && self.effectView) {
-        if (hidden) {
-            self.processView.hidden = YES;
-            self.effectView.hidden = YES;
-        } else{
-            self.processView.hidden = NO;
-            self.effectView.hidden = NO;
-        }
+    if (self.effectView) {
+        self.effectView.hidden = hidden;
     }
 }
 
@@ -99,7 +93,6 @@
 
 - (void)setProcessView{
     _processView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kHXPhotoBrowserProcessHeight)];
-    _processView.hidden = YES;
     [_imageView addSubview:_processView];
     _processView.backgroundColor = [UIColor whiteColor];
 }
