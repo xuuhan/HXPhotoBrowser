@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
+@property (nonatomic, strong) HXPhotoImageView *firstImageView;
 @property (nonatomic, strong) UIScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray <NSURL *>*urlArray;
 @property (nonatomic, strong) NSArray *heightArray;
@@ -31,6 +32,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, assign) CGFloat panMoveY;
 @property (nonatomic, assign) PhotoCount photoCount;
 @property (nonatomic, assign) CGFloat pageWidth;
+@property (nonatomic, assign) NSInteger firstIndex;
+@property (nonatomic, strong) UILabel *indexLabel;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -48,6 +51,17 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
     _effectView.frame = CGRectMake(0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT);
     [self.view addSubview:_effectView];
+}
+
+- (void)setIndexLabel{
+    if (!_indexLabel) {
+        _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 50, kHXSCREEN_WIDTH, 20)];
+        [[[UIApplication sharedApplication].windows lastObject] addSubview:_indexLabel];
+        _indexLabel.textColor = [UIColor whiteColor];
+        _indexLabel.font = [UIFont systemFontOfSize:14];
+        _indexLabel.textAlignment = NSTextAlignmentCenter;
+        [self setIndexTitleWithIndex:_currentIndex];
+    }
 }
 
 - (void)setPhotoScrollView{
@@ -72,19 +86,21 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [self setImageViewArray];
     
     _currentIndex = _currentIndex ? : 0;
+    _firstIndex = _currentIndex;
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager diskImageExistsForURL:self.urlArray[_currentIndex] completion:^(BOOL isInCache) {
         [self.photoScrollView addSubview:self.currentImageView];
-        if (self.imageViewArray.count > 1) {
-            [self setIndexTitleWithImgView:self.currentImageView withIndex:self.currentIndex];
-        }
         if (isInCache) {
             [self photoInCache];
         } else{
             [self photoNotInCache];
         }
     }];
+    
+    if (_photoViewArray.count > 1) {
+        [self setIndexLabel];
+    }
 }
 
 - (void)setImageViewArray{
@@ -105,23 +121,22 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)photoNotInCache{
-    self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
-    
-    HXPhotoImageView *currentImageView = self.currentImageView;
+    self.firstImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
     __weak __typeof(self)weakSelf = self;
-    [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        currentImageView.expectedSize = (CGFloat)expectedSize;
-        currentImageView.receivedSize = (CGFloat)receivedSize;
+    [self.currentImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        self.firstImageView.expectedSize = (CGFloat)expectedSize;
+        self.firstImageView.receivedSize = (CGFloat)receivedSize;
         
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        [strongSelf.currentImageView finishProcess];
+        [strongSelf.firstImageView finishProcess];
         [strongSelf fetchOtherPhotos];
-        [strongSelf updateRectWithIndex:strongSelf.currentIndex withImage:image];
+        [strongSelf updateRectWithIndex:strongSelf.firstIndex withImage:image];
     }];
 }
 
 - (void)photoInCache{
+    
     self.currentImageView.imageView.frame = [self getStartRect];
     [self.currentImageView finishProcess];
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed];
@@ -130,22 +145,18 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)fetchOtherPhotos{
-    
     [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (idx != self.currentIndex ? : 0) {
-            [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getSelectedImg] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        if (idx != self.firstIndex ? : 0) {
+            [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getPlaceholderImageWithIndex:idx] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 obj.expectedSize = (CGFloat)expectedSize;
                 obj.receivedSize = (CGFloat)receivedSize;
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 [obj finishProcess];
                 [self updateRectWithIndex:idx withImage:image];
             }];
-            
-            if (self.imageViewArray.count > 1) {
-                [self setIndexTitleWithImgView:obj withIndex:idx];
-            }
         }
     }];
+    
 }
 
 
@@ -164,7 +175,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(move:)];
     [_photoScrollView addGestureRecognizer:recognizer];
     recognizer.delegate = self;
-    _panStartY = _currentImageView.frame.origin.y;
+    _panStartY = self.currentImageView.frame.origin.y;
     _panEndY = kHXSCREEN_HEIGHT;
 }
 
@@ -181,23 +192,23 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)move:(UIPanGestureRecognizer *)recognizer{
     if(_isCanPan == NO) return;
     
-    CGPoint pt = [recognizer translationInView:_currentImageView];
+    CGPoint pt = [recognizer translationInView:self.currentImageView];
     
-    _currentImageView.imageView.frame = CGRectMake(_currentImageView.imageView.frame.origin.x + pt.x, _currentImageView.imageView.frame.origin.y + pt.y, _currentImageView.imageView.frame.size.width, _currentImageView.imageView.frame.size.height);
+    self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
     
     _panMoveY += pt.y;
     
-    [recognizer setTranslation:CGPointMake(0, 0) inView:_currentImageView.scrollView];
+    [recognizer setTranslation:CGPointMake(0, 0) inView:self.currentImageView.scrollView];
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
         _effectView.alpha = 1 - _panMoveY / (_panEndY - _panStartY) * 1.5;
         if (pt.y > 0) {
-            _currentImageView.imageView.transform = CGAffineTransformScale(_currentImageView.imageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
-        } else if (pt.y < 0 && _currentImageView.scrollView.zoomScale < kHXPhotoBrowserZoomMin){
-            _currentImageView.imageView.transform = CGAffineTransformScale(_currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
+            self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
+        } else if (pt.y < 0 && self.currentImageView.scrollView.zoomScale < kHXPhotoBrowserZoomMin){
+            self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
-        if (_currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT / 2 - _currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue) {
+        if (self.currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT / 2 - self.currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
                 self.effectView.alpha = 1;
@@ -213,12 +224,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     CGPoint touchPoint = [recognizer locationInView:self.view];
     
-    if (_currentImageView.scrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
-        _currentImageView.scrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
-        [_currentImageView.scrollView zoomToRect:CGRectMake(touchPoint.x, touchPoint.y, 1, 1) animated:YES];
+    if (self.currentImageView.scrollView.zoomScale <= kHXPhotoBrowserZoomMin) {
+        self.currentImageView.scrollView.maximumZoomScale = kHXPhotoBrowserZoomMid;
+        [self.currentImageView.scrollView zoomToRect:CGRectMake(touchPoint.x, touchPoint.y, 1, 1) animated:YES];
         _isCanPan = NO;
     } else {
-        [_currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
+        [self.currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin animated:YES];
         _isCanPan = YES;
     }
 }
@@ -245,16 +256,14 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     NSInteger currentNum = scrollView.contentOffset.x / _pageWidth;
     
     if (_currentIndex != currentNum && ((NSInteger)scrollView.contentOffset.x % (NSInteger)_pageWidth == 0)) {
-        [_currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin];
+        [self.currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin];
         _isCanPan = YES;
     }
     
     if (_isCanPan) {
-        if (_imageViewArray) {
-            _currentImageView = _imageViewArray[currentNum];
-        }
         _currentIndex = currentNum;
     }
+    [self setIndexTitleWithIndex:currentNum];
 }
 
 - (void)setParentVC:(UIViewController *)parentVC{
@@ -295,8 +304,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)dismiss{
-    if (_currentImageView.scrollView.zoomScale > kHXPhotoBrowserZoomMin) {
-        [_currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin];
+    if (self.currentImageView.scrollView.zoomScale > kHXPhotoBrowserZoomMin) {
+        [self.currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin];
     }
     
     [UIView animateWithDuration:0.15 animations:^{
@@ -310,8 +319,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     }];
 }
 
-- (void)setIndexTitleWithImgView:(HXPhotoImageView *)imgView withIndex:(NSInteger)index{
-    imgView.indexTitle = [NSString stringWithFormat:@"%ld / %ld",index + 1,_imageViewArray.count];
+- (void)setIndexTitleWithIndex:(NSInteger)index{
+    _indexLabel.text = [NSString stringWithFormat:@"%ld / %ld",index + 1,_imageViewArray.count];
 }
 
 - (void)transitionAnimation{
@@ -320,12 +329,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     }];
 }
 
-- (void)setSelectedViewArray:(NSArray<UIView *> *)selectedViewArray{
-    _selectedViewArray = selectedViewArray;
+- (void)setPhotoViewArray:(NSArray<UIView *> *)photoViewArray{
+    _photoViewArray = photoViewArray;
     
     NSMutableArray *arrayM = [NSMutableArray array];
     
-    for (UIView *view in selectedViewArray) {
+    for (UIView *view in photoViewArray) {
         UIImage *image = [UIImage new];
         
         if ([view isKindOfClass:[UIImageView class]]){
@@ -349,15 +358,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _heightArray = arrayM;
 }
 
-- (UIImage *)getSelectedImg{
+- (UIImage *)getPlaceholderImageWithIndex:(NSInteger)index{
     UIImage *image = [UIImage new];
-    if ([_selectedViewArray[_currentIndex] isKindOfClass:[UIImageView class]]){
-        UIImageView *img = (UIImageView *)_selectedViewArray[_currentIndex];
+    if ([_photoViewArray[index] isKindOfClass:[UIImageView class]]){
+        UIImageView *img = (UIImageView *)_photoViewArray[index];
         image = img.image;
     }
     
-    if ([_selectedViewArray[_currentIndex] isKindOfClass:[UIButton class]]) {
-        UIButton *btn = (UIButton *)_selectedViewArray[_currentIndex];
+    if ([_photoViewArray[index] isKindOfClass:[UIButton class]]) {
+        UIButton *btn = (UIButton *)_photoViewArray[index];
         image = btn.currentImage ? btn.currentImage : btn.currentBackgroundImage;
     }
     
@@ -367,7 +376,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (CGRect)getStartRect{
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
-    CGRect startRact = [_selectedViewArray[_currentIndex] convertRect:_selectedViewArray[_currentIndex].bounds toView:window];
+    CGRect startRact = [_photoViewArray[_currentIndex] convertRect:_photoViewArray[_currentIndex].bounds toView:window];
     
     return startRact;
 }
@@ -390,5 +399,17 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     photoImageView.imageView.frame = [self getNewRectWithIndex:index];
 }
 
+- (HXPhotoImageView *)currentImageView{
+    return self.imageViewArray[self.currentIndex];
+}
+
+- (HXPhotoImageView *)firstImageView{
+    return self.imageViewArray[self.firstIndex];
+}
+
+- (void)dealloc{
+    [_indexLabel removeFromSuperview];
+    _indexLabel = nil;
+}
 @end
 

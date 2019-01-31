@@ -79,7 +79,7 @@
 - (void)showPhotoBrows:(UIButton *)sender{
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
-    pb.selectedViewArray = @[sender];
+    pb.photoViewArray = @[sender];
     pb.urlStrArray = @[self.singleUrlImgArray[0]];
     [pb show];
 }
@@ -88,7 +88,7 @@
 - (void)showMultiplePhotoBrows:(UIButton *)sender{
     HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
     pb.parentVC = self;
-    pb.selectedViewArray = _selectedViewArray.copy;
+    pb.photoViewArray = _selectedViewArray.copy;
     pb.currentIndex = sender.tag;
     pb.urlStrArray = self.urlImgArray;
     [pb show];

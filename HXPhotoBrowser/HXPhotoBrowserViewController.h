@@ -15,7 +15,7 @@
 ///Image URL (NSString)
 @property (nonatomic, strong) NSArray <NSString *>*urlStrArray;
 ///UIButton or UIImageView
-@property (nonatomic, strong) NSArray <UIView *>*selectedViewArray;
+@property (nonatomic, strong) NSArray <UIView *>*photoViewArray;
 ///Default 0
 @property (nonatomic, assign) NSInteger currentIndex;
 

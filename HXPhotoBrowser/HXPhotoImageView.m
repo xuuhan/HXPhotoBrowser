@@ -12,7 +12,6 @@
 @interface HXPhotoImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processView;
-@property (nonatomic, strong) UILabel *indexLabel;
 @end
 
 @implementation HXPhotoImageView
@@ -22,23 +21,10 @@
         [self setScrollView];
         [self setEffectView];
         [self setProcessView];
-        [self setIndexLabel];
         
         self.layer.masksToBounds = YES;
     }
     return self;
-}
-
-- (void)setIndexTitle:(NSString *)indexTitle{
-    _indexLabel.text = indexTitle;
-}
-
-- (void)setIndexLabel{
-    _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 50, kHXSCREEN_WIDTH, 20)];
-    [self addSubview:_indexLabel];
-    _indexLabel.textColor = [UIColor whiteColor];
-    _indexLabel.font = [UIFont systemFontOfSize:14];
-    _indexLabel.textAlignment = NSTextAlignmentCenter;
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
