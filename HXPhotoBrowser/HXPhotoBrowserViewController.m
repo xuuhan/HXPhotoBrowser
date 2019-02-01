@@ -65,10 +65,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)setPhotoScrollView{
-    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
-    
     _photoScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin, kHXSCREEN_HEIGHT)];
-    [window addSubview:_photoScrollView];
+    [[self mainWindow] addSubview:_photoScrollView];
     _photoScrollView.backgroundColor = [UIColor clearColor];
     _photoScrollView.showsVerticalScrollIndicator = NO;
     _photoScrollView.showsHorizontalScrollIndicator = NO;
@@ -437,6 +435,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     return self.imageViewArray[self.firstIndex];
 }
 
+
+- (UIWindow *)mainWindow{
+    UIApplication *app = [UIApplication sharedApplication];
+    if ([app.delegate respondsToSelector:@selector(window)]){
+        return [app.delegate window];
+    } else{
+        return [app keyWindow];
+    }
+}
 - (void)dealloc{
     [_indexLabel removeFromSuperview];
     _indexLabel = nil;
