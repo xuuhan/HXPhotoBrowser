@@ -8,10 +8,12 @@
 
 #import "HXPhotoImageView.h"
 #import "HXPhotoBrowserMacro.h"
+#import "HXPhotoHelper.h"
 
 @interface HXPhotoImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processView;
+@property (nonatomic, strong) UIImage *blurImage;
 @end
 
 @implementation HXPhotoImageView
@@ -19,7 +21,7 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         [self setScrollView];
-        [self setEffectView];
+//        [self setEffectView];
         [self setProcessView];
         self.layer.masksToBounds = YES;
     }
@@ -72,12 +74,22 @@
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
     [_scrollView addSubview:_imageView];
     [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+    [_imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
-    CGRect rect = [[change objectForKey:@"new"] CGRectValue];
-    _scrollView.contentSize = rect.size;
+    
+    if ([keyPath isEqualToString:@"frame"]) {
+        CGRect rect = [[change objectForKey:@"new"] CGRectValue];
+        _scrollView.contentSize = rect.size;
+    }
+    
+    if ([keyPath isEqualToString:@"image"]) {
+        if (!self.blurImage && [[change objectForKey:@"new"] isKindOfClass:[UIImage class]]) {
+            self.blurImage = [change objectForKey:@"new"];
+        }
+    }
 }
 
 
@@ -115,12 +127,19 @@
     CGFloat scale = receivedSize / _expectedSize;
     CGRect frame = CGRectMake(0, 0, scale * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
+    NSLog(@"------%f",scale);
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.1 animations:^{
             self.processView.frame = frame;
+            if (self.blurImage) {
+                self.imageView.image = [[HXPhotoHelper shared] blurryImage:self.blurImage withBlurLevel: 1 - scale];
+            }
         }];
     });
-    
+}
+
+- (void)dealloc{
+    [_imageView removeObserver:self forKeyPath:@"frame"];
 }
 
 

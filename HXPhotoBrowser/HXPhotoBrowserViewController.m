@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)setIndexLabel{
     if (!_indexLabel) {
-        _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 50, kHXSCREEN_WIDTH, 20)];
+        _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 70, kHXSCREEN_WIDTH, 20)];
         [[[UIApplication sharedApplication].windows lastObject] addSubview:_indexLabel];
         _indexLabel.textColor = [UIColor whiteColor];
         _indexLabel.font = [UIFont systemFontOfSize:14];
@@ -377,7 +377,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         }
         
         if (image) {
-            CGSize size = [HXPhotoHelper uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
+            CGSize size = [[HXPhotoHelper shared] uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
             [arrayM addObject:[NSNumber numberWithFloat:size.height]];
         } else{
             [arrayM addObject:[NSNumber numberWithFloat:kHXSCREEN_WIDTH]];
@@ -420,7 +420,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)updateRectWithIndex:(NSInteger)index withImage:(UIImage *)image{
     NSMutableArray *arrayM = self.heightArray.mutableCopy;
-    CGSize size = [HXPhotoHelper uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
+    CGSize size = [[HXPhotoHelper shared] uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
     arrayM[index] = [NSNumber numberWithFloat:size.height];
     self.heightArray = arrayM.copy;
     HXPhotoImageView *photoImageView = _imageViewArray[index];

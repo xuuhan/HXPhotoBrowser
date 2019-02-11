@@ -11,7 +11,17 @@
 
 @implementation HXPhotoHelper
 
-+ (CGSize)uniformScaleWithImage:(UIImage *)sourceImage withPhotoLevel:(HXPhotoLevel)photoLevel float:(CGFloat)levelFloat{
++ (instancetype)shared {
+    static dispatch_once_t onceToken;
+    static HXPhotoHelper *photoHelper = nil;
+    dispatch_once(&onceToken, ^{
+        photoHelper = [HXPhotoHelper new];
+    });
+    
+    return photoHelper;
+}
+
+- (CGSize)uniformScaleWithImage:(UIImage *)sourceImage withPhotoLevel:(HXPhotoLevel)photoLevel float:(CGFloat)levelFloat{
     CGSize imageSize = sourceImage.size;
     CGFloat width = imageSize.width;
     CGFloat height = imageSize.height;
@@ -63,7 +73,9 @@
     int boxSize = (int)(blur * 100);
     boxSize = boxSize - (boxSize % 2) + 1;
     
-    CGImageRef img = image.CGImage;
+    UIImage *newImage = image.copy;
+    
+    CGImageRef img = newImage.CGImage;
     
     vImage_Buffer inBuffer, outBuffer;
     vImage_Error error;

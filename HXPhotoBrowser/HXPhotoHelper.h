@@ -17,9 +17,11 @@ typedef NS_ENUM(NSUInteger, HXPhotoLevel) {
 
 @interface HXPhotoHelper : NSObject
 
++ (instancetype)shared;
 
+- (CGSize)uniformScaleWithImage:(UIImage *)sourceImage withPhotoLevel:(HXPhotoLevel)photoLevel float:(CGFloat)levelFloat;
 
-+ (CGSize)uniformScaleWithImage:(UIImage *)sourceImage withPhotoLevel:(HXPhotoLevel)photoLevel float:(CGFloat)levelFloat;
+- (UIImage *)blurryImage:(UIImage *)image withBlurLevel:(CGFloat)blur;
 @end
 
 NS_ASSUME_NONNULL_END
