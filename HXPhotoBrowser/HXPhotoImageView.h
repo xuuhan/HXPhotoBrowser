@@ -14,6 +14,7 @@
 @property (nonatomic, assign) CGFloat expectedSize;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, assign) BOOL isfinish;
 
 - (void)finishProcess;
 - (void)setMaskHidden:(BOOL)hidden;

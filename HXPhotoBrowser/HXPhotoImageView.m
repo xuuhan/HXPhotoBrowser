@@ -88,6 +88,9 @@
     if ([keyPath isEqualToString:@"image"]) {
         if (!self.blurImage && [[change objectForKey:@"new"] isKindOfClass:[UIImage class]]) {
             self.blurImage = [change objectForKey:@"new"];
+            if (!self.isfinish) {
+                self.imageView.image = [[HXPhotoHelper shared] blurryImage:self.blurImage withBlurLevel: 1];
+            }
         }
     }
 }
@@ -127,7 +130,6 @@
     CGFloat scale = receivedSize / _expectedSize;
     CGRect frame = CGRectMake(0, 0, scale * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
-    NSLog(@"------%f",scale);
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.1 animations:^{
             self.processView.frame = frame;

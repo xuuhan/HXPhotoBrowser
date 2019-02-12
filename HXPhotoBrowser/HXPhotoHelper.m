@@ -73,9 +73,7 @@
     int boxSize = (int)(blur * 100);
     boxSize = boxSize - (boxSize % 2) + 1;
     
-    UIImage *newImage = image.copy;
-    
-    CGImageRef img = newImage.CGImage;
+    CGImageRef img = image.CGImage;
     
     vImage_Buffer inBuffer, outBuffer;
     vImage_Error error;
