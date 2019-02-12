@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXPhotoConfig.h"
 
 @interface HXPhotoBrowserViewController : UIViewController
 
@@ -16,8 +17,11 @@
 @property (nonatomic, strong) NSArray <NSString *>*urlStrArray;
 ///UIButton or UIImageView
 @property (nonatomic, strong) NSArray <UIView *>*photoViewArray;
-///Default 0
+///Default is 0
 @property (nonatomic, assign) NSInteger currentIndex;
+///Defalut is HXPhotoLoadTypeNormal with HXPhotoProgressTypeRing
+@property (nonatomic, strong) HXPhotoConfig *config;
+
 
 ///Go
 - (void)show;

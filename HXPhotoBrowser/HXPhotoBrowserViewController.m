@@ -46,6 +46,14 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _isCanPan = YES;
 }
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        _config = [HXPhotoConfig new];
+    }
+    return self;
+}
+
 - (void)setEffectView{
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
@@ -86,10 +94,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             [self.photoScrollView addSubview:imageView];
             imageView.imageView.frame = [self getNewRectWithIndex:i];
             [arrayM addObject:imageView];
+            imageView.config = self.config;
         } else{
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
             self.currentImageView = currentImageView;
             [arrayM addObject:currentImageView];
+            currentImageView.config = self.config;
         }
     }
     _imageViewArray = arrayM.copy;

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXPhotoConfig.h"
 #import "HXUIImageView+SDWebImage.h"
 @interface HXPhotoImageView : UIView
 
@@ -14,6 +15,7 @@
 @property (nonatomic, assign) CGFloat expectedSize;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) HXPhotoConfig *config;
 @property (nonatomic, assign) BOOL isfinish;
 
 - (void)finishProcess;

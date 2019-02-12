@@ -12,7 +12,7 @@
 
 @interface HXPhotoImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
-@property (nonatomic, strong) UIView *processView;
+@property (nonatomic, strong) UIView *processBar;
 @property (nonatomic, strong) UIImage *blurImage;
 @end
 
@@ -21,11 +21,23 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         [self setScrollView];
-//        [self setEffectView];
-        [self setProcessView];
         self.layer.masksToBounds = YES;
     }
     return self;
+}
+
+- (void)setConfig:(HXPhotoConfig *)config{
+    _config = config;
+    
+    NSLog(@"%ld------%ld",config.photoLoadType,config.photoProgressType);
+    
+    if (config.photoLoadType == HXPhotoLoadTypeMask) {
+        [self setEffectView];
+    }
+    
+    if (config.photoProgressType == HXPhotoProgressTypeBar) {
+        [self setProcessBar];
+    }
 }
 
 - (void)setMaskHidden:(BOOL)hidden{
@@ -105,22 +117,22 @@
     _effectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
 }
 
-- (void)setProcessView{
-    _processView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kHXPhotoBrowserProcessHeight)];
-    [_imageView addSubview:_processView];
-    _processView.backgroundColor = [UIColor whiteColor];
+- (void)setProcessBar{
+    _processBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kHXPhotoBrowserProcessHeight)];
+    [_imageView addSubview:_processBar];
+    _processBar.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)finishProcess{
     
     [UIView animateWithDuration:0.2 animations:^{
         self.effectView.alpha = 0;
-        self.processView.alpha = 0;
+        self.processBar.alpha = 0;
     } completion:^(BOOL finished) {
         [self.effectView removeFromSuperview];
         self.effectView = nil;
-        [self.processView removeFromSuperview];
-        self.processView = nil;
+        [self.processBar removeFromSuperview];
+        self.processBar = nil;
     }];
 }
 
@@ -132,7 +144,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.1 animations:^{
-            self.processView.frame = frame;
+            self.processBar.frame = frame;
             if (self.blurImage) {
                 self.imageView.image = [[HXPhotoHelper shared] blurryImage:self.blurImage withBlurLevel: 1 - scale];
             }

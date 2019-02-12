@@ -81,6 +81,8 @@
     pb.parentVC = self;
     pb.photoViewArray = @[sender];
     pb.urlStrArray = @[self.singleUrlImgArray[0]];
+    pb.config.photoLoadType = HXPhotoLoadTypeProgressive;
+    pb.config.photoProgressType = HXPhotoProgressTypeBar;
     [pb show];
 }
 
@@ -91,6 +93,8 @@
     pb.photoViewArray = _selectedViewArray.copy;
     pb.currentIndex = sender.tag;
     pb.urlStrArray = self.urlImgArray;
+    pb.config.photoLoadType = HXPhotoLoadTypeMask;
+    pb.config.photoProgressType = HXPhotoProgressTypeBar;
     [pb show];
 }
 

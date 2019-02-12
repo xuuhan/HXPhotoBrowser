@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3654CCAB2212BAC000B1EC4C /* HXPhotoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3654CCAA2212BAC000B1EC4C /* HXPhotoConfig.m */; };
 		368AFE8F211DA96200CC86D2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFE8E211DA96200CC86D2 /* AppDelegate.m */; };
 		368AFE92211DA96200CC86D2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFE91211DA96200CC86D2 /* ViewController.m */; };
 		368AFE97211DA96300CC86D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 368AFE96211DA96300CC86D2 /* Assets.xcassets */; };
@@ -44,6 +45,8 @@
 		1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HXPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A9144684B97E31192FA38E4 /* Pods-HXPhotoBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.release.xcconfig"; sourceTree = "<group>"; };
 		361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserMacro.h; sourceTree = "<group>"; };
+		3654CCA92212BAC000B1EC4C /* HXPhotoConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoConfig.h; sourceTree = "<group>"; };
+		3654CCAA2212BAC000B1EC4C /* HXPhotoConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoConfig.m; sourceTree = "<group>"; };
 		368AFE8A211DA96200CC86D2 /* HXPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HXPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		368AFE8D211DA96200CC86D2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		368AFE8E211DA96200CC86D2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -150,6 +153,8 @@
 				368AFF172125738200CC86D2 /* HXPhotoImageView.m */,
 				36B203182200106B00728A0A /* HXPhotoHelper.h */,
 				36B203192200106B00728A0A /* HXPhotoHelper.m */,
+				3654CCA92212BAC000B1EC4C /* HXPhotoConfig.h */,
+				3654CCAA2212BAC000B1EC4C /* HXPhotoConfig.m */,
 				361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */,
 			);
 			path = HXPhotoBrowser;
@@ -369,6 +374,7 @@
 				368AFF0F2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m in Sources */,
 				368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */,
 				368AFE9D211DA96300CC86D2 /* main.m in Sources */,
+				3654CCAB2212BAC000B1EC4C /* HXPhotoConfig.m in Sources */,
 				368AFE8F211DA96200CC86D2 /* AppDelegate.m in Sources */,
 				368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */,
 				368AFF0321216CFF00CC86D2 /* DemoViewController.m in Sources */,
