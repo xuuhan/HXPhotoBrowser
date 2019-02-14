@@ -10,6 +10,9 @@
 #import "HXPhotoBrowserMacro.h"
 #import "HXPhotoHelper.h"
 
+static const CGFloat sAngle = - M_PI_2;
+static const CGFloat eAngle = M_PI * 2;
+
 @interface HXPhotoImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processBar;
@@ -29,14 +32,16 @@
 - (void)setConfig:(HXPhotoConfig *)config{
     _config = config;
     
-    NSLog(@"%ld------%ld",config.photoLoadType,config.photoProgressType);
-    
     if (config.photoLoadType == HXPhotoLoadTypeMask) {
         [self setEffectView];
+    } else if (config.photoLoadType == HXPhotoLoadTypeProgressive){
+        [_imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
     }
     
     if (config.photoProgressType == HXPhotoProgressTypeBar) {
         [self setProcessBar];
+    } else if(config.photoProgressType == HXPhotoProgressTypeRing){
+        [self setProcessRing];
     }
 }
 
@@ -86,7 +91,6 @@
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
     [_scrollView addSubview:_imageView];
     [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-    [_imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 
@@ -123,6 +127,38 @@
     _processBar.backgroundColor = [UIColor whiteColor];
 }
 
+- (void)setProcessRing{
+    
+    CGPoint point = CGPointMake(kHXSCREEN_WIDTH / 2, kHXSCREEN_HEIGHT / 2);
+    CGFloat radius = 20;
+    CGFloat lineWidth = 4;
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:sAngle endAngle:eAngle clockwise:YES];
+    
+    CAShapeLayer *shapeLayer2 = [CAShapeLayer layer];
+    shapeLayer2.strokeColor = [UIColor colorWithRed:191/255.0f green:191.0f/255.0f blue:191/255.0f alpha:1].CGColor;
+    shapeLayer2.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer2.path = path.CGPath;
+    shapeLayer2.lineWidth = lineWidth;
+    [self.layer addSublayer:shapeLayer2];
+    
+    
+//    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:YES];
+//    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+//    shapeLayer.frame = CGRectMake(kHXSCREEN_WIDTH / 2 - 50, kHXSCREEN_HEIGHT / 2 - 50, 100, 100);
+//    shapeLayer.strokeColor = [UIColor colorWithRed:131/255.0f green:131/255.0f blue:131/255.0f alpha:1].CGColor;
+//    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+//    shapeLayer.path = path.CGPath;
+//    shapeLayer.lineWidth = lineWidth;
+//    [_imageView.layer addSublayer:shapeLayer];
+//
+//    CABasicAnimation *animate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+//    animate.byValue = @(M_PI*2);
+//    animate.duration = 1;
+//    animate.repeatCount = MAXFLOAT;
+//    [shapeLayer addAnimation:animate forKey:@"animate"];
+}
+
 - (void)finishProcess{
     
     [UIView animateWithDuration:0.2 animations:^{
@@ -145,7 +181,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.1 animations:^{
             self.processBar.frame = frame;
-            if (self.blurImage) {
+            if (self.blurImage && self.config.photoLoadType == HXPhotoLoadTypeProgressive) {
                 self.imageView.image = [[HXPhotoHelper shared] blurryImage:self.blurImage withBlurLevel: 1 - scale];
             }
         }];

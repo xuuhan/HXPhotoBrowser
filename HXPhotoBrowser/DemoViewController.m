@@ -81,8 +81,8 @@
     pb.parentVC = self;
     pb.photoViewArray = @[sender];
     pb.urlStrArray = @[self.singleUrlImgArray[0]];
-    pb.config.photoLoadType = HXPhotoLoadTypeProgressive;
-    pb.config.photoProgressType = HXPhotoProgressTypeBar;
+//    pb.config.photoLoadType = HXPhotoLoadTypeProgressive;
+    pb.config.photoProgressType = HXPhotoProgressTypeRing;
     [pb show];
 }
 
@@ -93,8 +93,8 @@
     pb.photoViewArray = _selectedViewArray.copy;
     pb.currentIndex = sender.tag;
     pb.urlStrArray = self.urlImgArray;
-    pb.config.photoLoadType = HXPhotoLoadTypeMask;
-    pb.config.photoProgressType = HXPhotoProgressTypeBar;
+//    pb.config.photoLoadType = HXPhotoLoadTypeMask;
+    pb.config.photoProgressType = HXPhotoProgressTypeRing;
     [pb show];
 }
 
@@ -141,22 +141,22 @@
 
 - (NSArray *)singleThumbUrlImgArray{
     if (!_singleThumbUrlImgArray) {
-        _singleThumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg"];
+        _singleThumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1534944618413&di=c23d3fb9220505e401dc01c5e77e58ce&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201311%2F20%2F210652i7055pz2cpgptgqu.jpg"];
     }
     return _singleThumbUrlImgArray;
 }
 
 - (NSArray *)thumbUrlImgArray{
     if (!_thumbUrlImgArray) {
-        _thumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1535027780357&di=b92d5c61c2d47fc74c1fde73b26e0e0f&imgtype=0&src=http%3A%2F%2Fi5.3conline.com%2Fimages%2Fpiclib%2F201403%2F20%2Fbatch%2F1%2F218704%2F1395300904690g4dm91ubtq.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043229&di=2ad51c6773a4ae5fbe6c5ddb87dc40f7&imgtype=0&src=http%3A%2F%2Fimg02.tooopen.com%2Fimages%2F20150626%2Ftooopen_sy_131975725283.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043229&di=05d913fbe11fbe3386fcb39b90874fa3&imgtype=0&src=http%3A%2F%2Fpic17.photophoto.cn%2F20101126%2F0040039332126348_b.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043229&di=597328e29d41331e0b98dddc761f5e3e&imgtype=0&src=http%3A%2F%2Fpic8.nipic.com%2F20100810%2F3320946_213230051035_2.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1534159043227&di=898b792c625ed46e3de40cc10a9befbb&imgtype=0&src=http%3A%2F%2Fimg005.hc360.cn%2Fy5%2FM00%2F74%2F9F%2FwKhQUVXK_4iEKhW1AAAAAOfwJvQ190.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1535026488310&di=5dc2efdd8236d44695e5e25c585680ed&imgtype=jpg&src=http%3A%2F%2Fimg1.imgtn.bdimg.com%2Fit%2Fu%3D2130241891%2C1316613733%26fm%3D214%26gp%3D0.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1535026643213&di=c5f021b3b024e4fb51822f1666caf7be&imgtype=0&src=http%3A%2F%2Fww1.sinaimg.cn%2Fmw690%2F0065nkS7jw1eziwwjz5jwj30c80lqgo0.jpg",
-                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b1999_2000&sec=1548831044308&di=8ceae70ff5bec835e6b356dcd9d781c5&imgtype=0&src=http%3A%2F%2Fwx3.sinaimg.cn%2Forj360%2F007iuNxXly1fx4dlblfzxj31c94boqv5.jpg"];
+        _thumbUrlImgArray = @[@"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1534159043230&di=29291766eb7a26fc35101c4c70576f1b&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6f061d950a7b020894413af561d9f2d3572cc81e.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1535027780357&di=b92d5c61c2d47fc74c1fde73b26e0e0f&imgtype=0&src=http%3A%2F%2Fi5.3conline.com%2Fimages%2Fpiclib%2F201403%2F20%2Fbatch%2F1%2F218704%2F1395300904690g4dm91ubtq.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1534159043229&di=2ad51c6773a4ae5fbe6c5ddb87dc40f7&imgtype=0&src=http%3A%2F%2Fimg02.tooopen.com%2Fimages%2F20150626%2Ftooopen_sy_131975725283.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1534159043229&di=05d913fbe11fbe3386fcb39b90874fa3&imgtype=0&src=http%3A%2F%2Fpic17.photophoto.cn%2F20101126%2F0040039332126348_b.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1534159043229&di=597328e29d41331e0b98dddc761f5e3e&imgtype=0&src=http%3A%2F%2Fpic8.nipic.com%2F20100810%2F3320946_213230051035_2.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1534159043227&di=898b792c625ed46e3de40cc10a9befbb&imgtype=0&src=http%3A%2F%2Fimg005.hc360.cn%2Fy5%2FM00%2F74%2F9F%2FwKhQUVXK_4iEKhW1AAAAAOfwJvQ190.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1535026488310&di=5dc2efdd8236d44695e5e25c585680ed&imgtype=jpg&src=http%3A%2F%2Fimg1.imgtn.bdimg.com%2Fit%2Fu%3D2130241891%2C1316613733%26fm%3D214%26gp%3D0.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1535026643213&di=c5f021b3b024e4fb51822f1666caf7be&imgtype=0&src=http%3A%2F%2Fww1.sinaimg.cn%2Fmw690%2F0065nkS7jw1eziwwjz5jwj30c80lqgo0.jpg",
+                              @"https://timgsa.baidu.com/timg?image&quality=80&size=b239_240&sec=1548831044308&di=8ceae70ff5bec835e6b356dcd9d781c5&imgtype=0&src=http%3A%2F%2Fwx3.sinaimg.cn%2Forj360%2F007iuNxXly1fx4dlblfzxj31c94boqv5.jpg"];
     }
     return _thumbUrlImgArray;
 }
