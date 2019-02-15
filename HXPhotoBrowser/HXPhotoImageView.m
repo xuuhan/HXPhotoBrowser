@@ -17,6 +17,7 @@ static const CGFloat eAngle = M_PI * 2;
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processBar;
 @property (nonatomic, strong) UIImage *blurImage;
+@property (nonatomic, strong) CAShapeLayer *circleLayer;
 @end
 
 @implementation HXPhotoImageView
@@ -42,6 +43,9 @@ static const CGFloat eAngle = M_PI * 2;
         [self setProcessBar];
     } else if(config.photoProgressType == HXPhotoProgressTypeRing){
         [self setProcessRing];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ringShow) name:kHXPhotoBrowserRingShow object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ringDismiss) name:kHXPhotoBrowserRingDismiss object:nil];
     }
 }
 
@@ -135,12 +139,12 @@ static const CGFloat eAngle = M_PI * 2;
     
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:sAngle endAngle:eAngle clockwise:YES];
     
-    CAShapeLayer *shapeLayer2 = [CAShapeLayer layer];
-    shapeLayer2.strokeColor = [UIColor colorWithRed:191/255.0f green:191.0f/255.0f blue:191/255.0f alpha:1].CGColor;
-    shapeLayer2.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer2.path = path.CGPath;
-    shapeLayer2.lineWidth = lineWidth;
-    [self.layer addSublayer:shapeLayer2];
+    _circleLayer = [CAShapeLayer layer];
+    _circleLayer.strokeColor = [UIColor colorWithRed:192.0/255.0f green:192.0/255.0f blue:192.0/255.0f alpha:0.8].CGColor;
+    _circleLayer.fillColor = [UIColor clearColor].CGColor;
+    _circleLayer.path = path.CGPath;
+    _circleLayer.lineWidth = lineWidth;
+    [self.layer addSublayer:_circleLayer];
     
     
 //    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:YES];
@@ -157,6 +161,14 @@ static const CGFloat eAngle = M_PI * 2;
 //    animate.duration = 1;
 //    animate.repeatCount = MAXFLOAT;
 //    [shapeLayer addAnimation:animate forKey:@"animate"];
+}
+
+- (void)ringDismiss{
+    [_circleLayer removeFromSuperlayer];
+}
+
+- (void)ringShow{
+    [self.layer addSublayer:_circleLayer];
 }
 
 - (void)finishProcess{
@@ -190,6 +202,7 @@ static const CGFloat eAngle = M_PI * 2;
 
 - (void)dealloc{
     [_imageView removeObserver:self forKeyPath:@"frame"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

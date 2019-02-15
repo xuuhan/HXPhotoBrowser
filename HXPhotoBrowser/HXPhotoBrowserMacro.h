@@ -27,4 +27,7 @@ static CGFloat const kHXPhotoBrowserProcessHeight = 3.5;
 ///margin
 static CGFloat const kHXPhotoBrowserPageMargin = 15;
 
+static NSString * const kHXPhotoBrowserRingShow = @"kHXPhotoBrowserRingShow";
+static NSString * const kHXPhotoBrowserRingDismiss = @"kHXPhotoBrowserRingDismiss";
+
 #endif

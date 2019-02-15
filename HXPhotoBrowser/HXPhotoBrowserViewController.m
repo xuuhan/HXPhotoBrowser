@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)setEffectView{
     UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    _effectView =[[UIVisualEffectView alloc]initWithEffect:blurEffect];
+    _effectView = [[UIVisualEffectView alloc]initWithEffect:blurEffect];
     _effectView.frame = CGRectMake(0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT);
     [self.view addSubview:_effectView];
 }
@@ -232,6 +232,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)move:(UIPanGestureRecognizer *)recognizer{
     if(_isCanPan == NO) return;
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingDismiss object:nil];
+    
     CGPoint pt = [recognizer translationInView:self.currentImageView];
     
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
@@ -252,6 +254,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
                 self.effectView.alpha = 1;
+            } completion:^(BOOL finished) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingShow object:nil];
             }];
             _panMoveY = 0;
         } else{
@@ -347,6 +351,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     if (self.currentImageView.scrollView.zoomScale > kHXPhotoBrowserZoomMin) {
         [self.currentImageView.scrollView setZoomScale:kHXPhotoBrowserZoomMin];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingDismiss object:nil];
     
     [UIView animateWithDuration:0.15 animations:^{
         self.currentImageView.imageView.frame = [self getStartRect];
