@@ -147,20 +147,29 @@ static const CGFloat eAngle = M_PI * 2;
     [self.layer addSublayer:_circleLayer];
     
     
-//    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:YES];
-//    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-//    shapeLayer.frame = CGRectMake(kHXSCREEN_WIDTH / 2 - 50, kHXSCREEN_HEIGHT / 2 - 50, 100, 100);
-//    shapeLayer.strokeColor = [UIColor colorWithRed:131/255.0f green:131/255.0f blue:131/255.0f alpha:1].CGColor;
-//    shapeLayer.fillColor = [UIColor clearColor].CGColor;
-//    shapeLayer.path = path.CGPath;
-//    shapeLayer.lineWidth = lineWidth;
-//    [_imageView.layer addSublayer:shapeLayer];
-//
-//    CABasicAnimation *animate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-//    animate.byValue = @(M_PI*2);
-//    animate.duration = 1;
-//    animate.repeatCount = MAXFLOAT;
-//    [shapeLayer addAnimation:animate forKey:@"animate"];
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(radius, radius) radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:YES];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.contentsScale = [[UIScreen mainScreen] scale];
+    shapeLayer.strokeStart = 0;
+    shapeLayer.strokeEnd = 0.25;
+    shapeLayer.strokeColor = [UIColor whiteColor].CGColor;
+    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer.frame = CGRectMake(0, 0, 40, 40);
+    shapeLayer.path = bezierPath.CGPath;
+    shapeLayer.lineCap = kCALineCapRound;
+    shapeLayer.lineJoin = kCALineJoinBevel;
+    [self.layer addSublayer:shapeLayer];
+    
+
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    animation.fromValue = 0;
+    animation.toValue = @(2 * M_PI);
+    animation.removedOnCompletion = NO;
+    animation.repeatCount = NSIntegerMax;
+    animation.duration = 1.5;
+    [shapeLayer addAnimation:animation forKey:@"animate"];
 }
 
 - (void)ringDismiss{
