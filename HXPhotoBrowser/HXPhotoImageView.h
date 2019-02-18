@@ -18,6 +18,6 @@
 @property (nonatomic, strong) HXPhotoConfig *config;
 @property (nonatomic, assign) BOOL isfinish;
 
+- (void)beginProcess;
 - (void)finishProcess;
-- (void)setMaskHidden:(BOOL)hidden;
 @end

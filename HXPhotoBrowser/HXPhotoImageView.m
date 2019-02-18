@@ -144,9 +144,6 @@ static const CGFloat eAngle = M_PI * 2;
     _circleLayer.path = path.CGPath;
     _circleLayer.lineWidth = lineWidth;
     [self.layer addSublayer:_circleLayer];
-    
-    
-    
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(radius, radius) radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:YES];
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
@@ -155,14 +152,13 @@ static const CGFloat eAngle = M_PI * 2;
     shapeLayer.strokeEnd = 0.25;
     shapeLayer.strokeColor = [UIColor whiteColor].CGColor;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer.frame = CGRectMake(kHXSCREEN_WIDTH / 2 - 20, kHXSCREEN_HEIGHT / 2 - 20, 40, 40);
+    shapeLayer.frame = CGRectMake(kHXSCREEN_WIDTH / 2 - radius, kHXSCREEN_HEIGHT / 2 - radius, radius * 2, radius * 2);
     shapeLayer.path = bezierPath.CGPath;
     shapeLayer.lineCap = kCALineCapRound;
     shapeLayer.lineJoin = kCALineJoinBevel;
     shapeLayer.lineWidth = lineWidth;
     [_circleLayer addSublayer:shapeLayer];
     
-
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
     animation.fromValue = 0;
     animation.toValue = @(2 * M_PI);
@@ -170,6 +166,25 @@ static const CGFloat eAngle = M_PI * 2;
     animation.repeatCount = NSIntegerMax;
     animation.duration = 1;
     [shapeLayer addAnimation:animation forKey:@"animate"];
+    
+}
+
+- (void)maskDismiss{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.effectView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.effectView removeFromSuperview];
+        self.effectView = nil;
+    }];
+}
+
+- (void)barDisimiss{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.processBar.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.processBar removeFromSuperview];
+        self.processBar = nil;
+    }];
 }
 
 - (void)ringDismiss{
@@ -180,17 +195,26 @@ static const CGFloat eAngle = M_PI * 2;
     [self.layer addSublayer:_circleLayer];
 }
 
+- (void)beginProcess{
+    if (_config.photoLoadType == HXPhotoLoadTypeMask) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setMaskHidden:NO];
+        });
+    }
+}
+
 - (void)finishProcess{
+    if (_config.photoLoadType == HXPhotoLoadTypeMask) {
+        [self maskDismiss];
+    }
     
-    [UIView animateWithDuration:0.2 animations:^{
-        self.effectView.alpha = 0;
-        self.processBar.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self.effectView removeFromSuperview];
-        self.effectView = nil;
-        [self.processBar removeFromSuperview];
-        self.processBar = nil;
-    }];
+    if (_config.photoProgressType == HXPhotoProgressTypeRing){
+        [self ringDismiss];
+    }
+    
+    if (_config.photoProgressType == HXPhotoProgressTypeBar) {
+        [self barDisimiss];
+    }
 }
 
 - (void)setReceivedSize:(CGFloat)receivedSize{

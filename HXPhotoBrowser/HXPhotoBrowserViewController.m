@@ -128,14 +128,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     }
 }
 
-- (void)setMaskHidden{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.firstImageView.imageView.image) {
-            [self.firstImageView setMaskHidden:NO];
-        }
-    });
-}
-
 - (void)setImageViewBackgroundColor{
     [self.imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.imageView.backgroundColor = [UIColor grayColor];
@@ -145,12 +137,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)photoNotInCache{
     self.firstImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
     [self setImageViewBackgroundColor];
-    [self setMaskHidden];
+    [self.firstImageView beginProcess];
     
     __weak __typeof(self)weakSelf = self;
     [self.firstImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         [weakSelf updateProgressWithPhotoImage:weakSelf.firstImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
-        
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         [weakSelf.firstImageView finishProcess];
         [weakSelf fetchOtherPhotos];
@@ -179,7 +170,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     __weak __typeof(self)weakSelf = self;
     [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx != self.firstIndex ? : 0) {
-            [obj setMaskHidden:NO];
+            [obj beginProcess];
             obj.imageView.backgroundColor = [UIColor grayColor];
             [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getPlaceholderImageWithIndex:idx] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 [weakSelf updateProgressWithPhotoImage:obj expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
