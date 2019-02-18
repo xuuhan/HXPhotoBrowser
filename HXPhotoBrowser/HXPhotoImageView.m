@@ -136,7 +136,6 @@ static const CGFloat eAngle = M_PI * 2;
     CGPoint point = CGPointMake(kHXSCREEN_WIDTH / 2, kHXSCREEN_HEIGHT / 2);
     CGFloat radius = 20;
     CGFloat lineWidth = 4;
-    
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:sAngle endAngle:eAngle clockwise:YES];
     
     _circleLayer = [CAShapeLayer layer];
@@ -156,11 +155,12 @@ static const CGFloat eAngle = M_PI * 2;
     shapeLayer.strokeEnd = 0.25;
     shapeLayer.strokeColor = [UIColor whiteColor].CGColor;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer.frame = CGRectMake(0, 0, 40, 40);
+    shapeLayer.frame = CGRectMake(kHXSCREEN_WIDTH / 2 - 20, kHXSCREEN_HEIGHT / 2 - 20, 40, 40);
     shapeLayer.path = bezierPath.CGPath;
     shapeLayer.lineCap = kCALineCapRound;
     shapeLayer.lineJoin = kCALineJoinBevel;
-    [self.layer addSublayer:shapeLayer];
+    shapeLayer.lineWidth = lineWidth;
+    [_circleLayer addSublayer:shapeLayer];
     
 
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
@@ -168,7 +168,7 @@ static const CGFloat eAngle = M_PI * 2;
     animation.toValue = @(2 * M_PI);
     animation.removedOnCompletion = NO;
     animation.repeatCount = NSIntegerMax;
-    animation.duration = 1.5;
+    animation.duration = 1;
     [shapeLayer addAnimation:animation forKey:@"animate"];
 }
 
