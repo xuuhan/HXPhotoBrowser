@@ -143,7 +143,6 @@ static const CGFloat eAngle = M_PI * 2;
     _circleLayer.fillColor = [UIColor clearColor].CGColor;
     _circleLayer.path = path.CGPath;
     _circleLayer.lineWidth = lineWidth;
-    [self.layer addSublayer:_circleLayer];
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(radius, radius) radius:radius startAngle:0 endAngle:M_PI * 2 clockwise:YES];
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
@@ -199,6 +198,12 @@ static const CGFloat eAngle = M_PI * 2;
     if (_config.photoLoadType == HXPhotoLoadTypeMask) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setMaskHidden:NO];
+        });
+    }
+    
+    if (_config.photoProgressType == HXPhotoProgressTypeRing) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.layer addSublayer:self.circleLayer];
         });
     }
 }
