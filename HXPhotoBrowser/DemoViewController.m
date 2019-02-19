@@ -27,9 +27,6 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"清除缓存" style:UIBarButtonItemStyleDone target:self action:@selector(cleanMemory)];
-    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 
@@ -105,15 +102,6 @@
     label.textColor = self.view.tintColor;
     label.font = [UIFont systemFontOfSize:15];
     label.text = title;
-}
-
-/**
- 清除缓存
- */
-- (void)cleanMemory{
-    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
-    
-    [[SDImageCache sharedImageCache] clearMemory];
 }
 
 

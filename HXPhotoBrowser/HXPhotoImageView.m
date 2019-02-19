@@ -12,12 +12,14 @@
 
 static const CGFloat sAngle = - M_PI_2;
 static const CGFloat eAngle = M_PI * 2;
+static const CGFloat origin = -20;
 
-@interface HXPhotoImageView()<UIScrollViewDelegate>
+@interface HXPhotoImageView()<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) UIView *processBar;
 @property (nonatomic, strong) UIImage *blurImage;
 @property (nonatomic, strong) CAShapeLayer *circleLayer;
+@property (nonatomic, assign) CGFloat startY;
 @end
 
 @implementation HXPhotoImageView
@@ -83,7 +85,6 @@ static const CGFloat eAngle = M_PI * 2;
     _scrollView.backgroundColor = [UIColor clearColor];
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.bounces = NO;
     _scrollView.minimumZoomScale = kHXPhotoBrowserZoomMin;
     _scrollView.maximumZoomScale = kHXPhotoBrowserZoomMax;
     _scrollView.zoomScale = kHXPhotoBrowserZoomMin;
@@ -96,7 +97,6 @@ static const CGFloat eAngle = M_PI * 2;
     [_scrollView addSubview:_imageView];
     [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 }
-
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     
@@ -165,6 +165,23 @@ static const CGFloat eAngle = M_PI * 2;
     animation.repeatCount = NSIntegerMax;
     animation.duration = 1;
     [shapeLayer addAnimation:animation forKey:@"animate"];
+    
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    _startY = scrollView.contentOffset.y;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    NSLog(@"%f!!!!!%f",_startY,_scrollView.contentOffset.y);
+    if (_startY == origin && _scrollView.contentOffset.y < origin) {
+        NSLog(@"次");
+        return nil;
+    }
+    return _scrollView;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
 }
 

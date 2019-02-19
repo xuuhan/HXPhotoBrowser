@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "DemoViewController.h"
+#import "SDWebImageManager.h"
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *demoArray;
@@ -27,7 +28,17 @@
     tv.delegate = self;
     tv.dataSource = self;
     
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"清除缓存" style:UIBarButtonItemStyleDone target:self action:@selector(cleanMemory)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+}
+
+/**
+ 清除缓存
+ */
+- (void)cleanMemory{
+    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
     
+    [[SDImageCache sharedImageCache] clearMemory];
 }
 
 #pragma mark UITableViewDataSource UITableViewDelegate
