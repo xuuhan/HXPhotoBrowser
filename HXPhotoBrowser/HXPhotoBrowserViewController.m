@@ -239,7 +239,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
     
     _panMoveY += pt.y;
-    NSLog(@"-------%f",_panMoveY);
     
     [recognizer setTranslation:CGPointMake(0, 0) inView:self.currentImageView.scrollView];
     
@@ -251,7 +250,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
-        if (self.currentImageView.imageView.frame.origin.y < kHXSCREEN_HEIGHT / 2 - self.currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue) {
+        CGFloat y = self.currentImageView.imageView.frame.size.height < kHXSCREEN_HEIGHT ?
+        kHXSCREEN_HEIGHT / 2 - self.currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue :
+        kHXPhotoBrowserDisMissValue;
+
+        if (self.currentImageView.imageView.frame.origin.y < y) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
                 self.effectView.alpha = 1;
