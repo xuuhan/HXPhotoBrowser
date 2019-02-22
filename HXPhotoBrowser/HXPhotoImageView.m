@@ -22,6 +22,7 @@ static const CGFloat eAngle = M_PI * 2;
 @property (nonatomic, assign) CGFloat lastY;
 @property (nonatomic, assign) BOOL isPanDismiss;
 @property (nonatomic, assign) BOOL isOverHeight;
+@property (nonatomic, assign) BOOL isDraging;
 @end
 
 @implementation HXPhotoImageView
@@ -106,8 +107,10 @@ static const CGFloat eAngle = M_PI * 2;
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSLog(@"```````````````%f",scrollView.contentOffset.y);
     if (_startY == 0 && scrollView.contentOffset.y < 0) {
+        [self overHeightScrollView];
+        _isDraging = YES;
+    } else if (_isDraging){
         [self overHeightScrollView];
     }
 }
@@ -117,7 +120,8 @@ static const CGFloat eAngle = M_PI * 2;
         [self overHeightScrollView];
     }
     
-    self.isPanDismiss = NO;
+    _isDraging = NO;
+    _isPanDismiss = NO;
 }
 
 - (void)overHeightScrollView{

@@ -236,11 +236,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     CGPoint pt = [recognizer translationInView:self.currentImageView];
     
     if (_isOverHeight) {
-        
+
     } else{
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
     }
-    
+
     _panMoveY += pt.y;
     
     [recognizer setTranslation:CGPointMake(0, 0) inView:self.currentImageView.scrollView];
@@ -248,7 +248,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     if (recognizer.state == UIGestureRecognizerStateChanged){
         _effectView.alpha = 1 - _panMoveY / (_panEndY - _panStartY) * 1.5;
         if (pt.y > 0) {
-            self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
+        self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
         } else if (pt.y < 0 && self.currentImageView.scrollView.zoomScale < kHXPhotoBrowserZoomMin){
             self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
         }
@@ -269,8 +269,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             [self dismiss];
         }
     }
-    
-    NSLog(@"---------%f",self.currentImageView.imageView.frame.size.height);
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{
