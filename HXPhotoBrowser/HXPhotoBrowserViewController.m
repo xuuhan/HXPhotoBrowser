@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, assign) CGFloat pageWidth;
 @property (nonatomic, assign) NSInteger firstIndex;
 @property (nonatomic, strong) UILabel *indexLabel;
+@property (nonatomic, assign) BOOL isOverHeight;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -221,13 +222,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     return YES;
 }
 
-- (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer{
+- (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer isOverHeight:(BOOL)isOverHeight{
+    _isOverHeight = isOverHeight;
     [self move:recognizer];
 }
 
-- (void)scrollViewEndScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer{
-    [self move:recognizer];
-}
 
 - (void)move:(UIPanGestureRecognizer *)recognizer{
     if(_isCanPan == NO) return;
@@ -236,7 +235,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     CGPoint pt = [recognizer translationInView:self.currentImageView];
     
+    if (_isOverHeight) {
+        
+    } else{
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
+    }
     
     _panMoveY += pt.y;
     
@@ -266,6 +269,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             [self dismiss];
         }
     }
+    
+    NSLog(@"---------%f",self.currentImageView.imageView.frame.size.height);
 }
 
 - (void)zoom:(UITapGestureRecognizer *)recognizer{

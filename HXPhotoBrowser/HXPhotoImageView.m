@@ -21,6 +21,7 @@ static const CGFloat eAngle = M_PI * 2;
 @property (nonatomic, assign) CGFloat startY;
 @property (nonatomic, assign) CGFloat lastY;
 @property (nonatomic, assign) BOOL isPanDismiss;
+@property (nonatomic, assign) BOOL isOverHeight;
 @end
 
 @implementation HXPhotoImageView
@@ -105,23 +106,25 @@ static const CGFloat eAngle = M_PI * 2;
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
+    NSLog(@"```````````````%f",scrollView.contentOffset.y);
     if (_startY == 0 && scrollView.contentOffset.y < 0) {
-        if ([self.delegate respondsToSelector:@selector(scrollViewDidScrollWithRecognizer:)]) {
-            [self.delegate scrollViewDidScrollWithRecognizer:scrollView.panGestureRecognizer];
-            self.isPanDismiss = YES;
-        }
+        [self overHeightScrollView];
     }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateEnded && self.isPanDismiss) {
-        if ([self.delegate respondsToSelector:@selector(scrollViewEndScrollWithRecognizer:)]) {
-            [self.delegate scrollViewEndScrollWithRecognizer:scrollView.panGestureRecognizer];
-        }
+        [self overHeightScrollView];
     }
     
     self.isPanDismiss = NO;
+}
+
+- (void)overHeightScrollView{
+    if ([self.delegate respondsToSelector:@selector(scrollViewDidScrollWithRecognizer:isOverHeight:)]) {
+        [self.delegate scrollViewDidScrollWithRecognizer:_scrollView.panGestureRecognizer isOverHeight:_isOverHeight];
+        self.isPanDismiss = YES;
+    }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -134,6 +137,9 @@ static const CGFloat eAngle = M_PI * 2;
     if ([keyPath isEqualToString:@"frame"]) {
         CGRect rect = [[change objectForKey:@"new"] CGRectValue];
         _scrollView.contentSize = rect.size;
+        if (rect.size.height > kHXSCREEN_HEIGHT) {
+            self.isOverHeight = YES;
+        }
     }
     
     if ([keyPath isEqualToString:@"image"]) {

@@ -13,8 +13,7 @@
 @class HXPhotoImageView;
 
 @protocol HXPhotoImageViewDelegate <NSObject>
-- (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer;
-- (void)scrollViewEndScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer;
+- (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer isOverHeight:(BOOL)isOverHeight;
 
 @end
 
