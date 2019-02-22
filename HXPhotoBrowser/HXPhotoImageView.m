@@ -12,7 +12,6 @@
 
 static const CGFloat sAngle = - M_PI_2;
 static const CGFloat eAngle = M_PI * 2;
-static const CGFloat origin = -20;
 
 @interface HXPhotoImageView()<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
@@ -20,13 +19,17 @@ static const CGFloat origin = -20;
 @property (nonatomic, strong) UIImage *blurImage;
 @property (nonatomic, strong) CAShapeLayer *circleLayer;
 @property (nonatomic, assign) CGFloat startY;
+@property (nonatomic, assign) CGFloat lastY;
+@property (nonatomic, assign) BOOL isPanDismiss;
 @end
 
 @implementation HXPhotoImageView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
+        
         [self setScrollView];
+        
         self.layer.masksToBounds = YES;
     }
     return self;
@@ -46,8 +49,8 @@ static const CGFloat origin = -20;
     } else if(config.photoProgressType == HXPhotoProgressTypeRing){
         [self setProcessRing];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ringShow) name:kHXPhotoBrowserRingShow object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ringDismiss) name:kHXPhotoBrowserRingDismiss object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ringShow) name:kHXPhotoBrowserRingShow object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ringDismiss) name:kHXPhotoBrowserRingDismiss object:nil];
     }
 }
 
@@ -89,13 +92,41 @@ static const CGFloat origin = -20;
     _scrollView.maximumZoomScale = kHXPhotoBrowserZoomMax;
     _scrollView.zoomScale = kHXPhotoBrowserZoomMin;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
-    
+    if (@available(iOS 11.0, *)) {
+        _scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
     CGFloat width = kHXSCREEN_WIDTH;
     CGFloat height = width;
     
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
     [_scrollView addSubview:_imageView];
     [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    if (_startY == 0 && scrollView.contentOffset.y < 0) {
+        if ([self.delegate respondsToSelector:@selector(scrollViewDidScrollWithRecognizer:)]) {
+            [self.delegate scrollViewDidScrollWithRecognizer:scrollView.panGestureRecognizer];
+            self.isPanDismiss = YES;
+        }
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateEnded && self.isPanDismiss) {
+        if ([self.delegate respondsToSelector:@selector(scrollViewEndScrollWithRecognizer:)]) {
+            [self.delegate scrollViewEndScrollWithRecognizer:scrollView.panGestureRecognizer];
+        }
+    }
+    
+    self.isPanDismiss = NO;
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    _startY = scrollView.contentOffset.y;
+
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
@@ -165,23 +196,6 @@ static const CGFloat origin = -20;
     animation.repeatCount = NSIntegerMax;
     animation.duration = 1;
     [shapeLayer addAnimation:animation forKey:@"animate"];
-    
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    _startY = scrollView.contentOffset.y;
-}
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    NSLog(@"%f!!!!!%f",_startY,_scrollView.contentOffset.y);
-    if (_startY == origin && _scrollView.contentOffset.y < origin) {
-        NSLog(@"次");
-        return nil;
-    }
-    return _scrollView;
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
 }
 

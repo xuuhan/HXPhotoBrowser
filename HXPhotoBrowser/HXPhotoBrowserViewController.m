@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     PhotoCountMultiple
 };
 
-@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
+@interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate,HXPhotoImageViewDelegate>
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
 @property (nonatomic, strong) HXPhotoImageView *firstImageView;
@@ -95,11 +95,13 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             imageView.imageView.frame = [self getNewRectWithIndex:i];
             [arrayM addObject:imageView];
             imageView.config = self.config;
+            imageView.delegate = self;
         } else{
             HXPhotoImageView *currentImageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(self.currentIndex ? self.currentIndex * self.pageWidth : 0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
             self.currentImageView = currentImageView;
             [arrayM addObject:currentImageView];
             currentImageView.config = self.config;
+            currentImageView.delegate = self;
         }
     }
     _imageViewArray = arrayM.copy;
@@ -219,6 +221,13 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     return YES;
 }
 
+- (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer{
+    [self move:recognizer];
+}
+
+- (void)scrollViewEndScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer{
+    [self move:recognizer];
+}
 
 - (void)move:(UIPanGestureRecognizer *)recognizer{
     if(_isCanPan == NO) return;
@@ -230,6 +239,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
     
     _panMoveY += pt.y;
+    NSLog(@"-------%f",_panMoveY);
     
     [recognizer setTranslation:CGPointMake(0, 0) inView:self.currentImageView.scrollView];
     

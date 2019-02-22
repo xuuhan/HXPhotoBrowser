@@ -22,8 +22,10 @@ typedef NS_ENUM(NSUInteger, HXPhotoProgressType) {
 };
 
 @interface HXPhotoConfig : NSObject
+
 @property (nonatomic,assign) HXPhotoLoadType photoLoadType;
 @property (nonatomic,assign) HXPhotoProgressType photoProgressType;
+
 @end
 
 NS_ASSUME_NONNULL_END

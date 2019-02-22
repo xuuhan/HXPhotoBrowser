@@ -9,6 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "HXPhotoConfig.h"
 #import "HXUIImageView+SDWebImage.h"
+
+@class HXPhotoImageView;
+
+@protocol HXPhotoImageViewDelegate <NSObject>
+- (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer;
+- (void)scrollViewEndScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer;
+
+@end
+
 @interface HXPhotoImageView : UIView
 
 @property (nonatomic, assign) CGFloat receivedSize;
@@ -17,7 +26,9 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) HXPhotoConfig *config;
 @property (nonatomic, assign) BOOL isfinish;
+@property (nonatomic, weak) id <HXPhotoImageViewDelegate>delegate;
 
 - (void)beginProcess;
 - (void)finishProcess;
+
 @end
