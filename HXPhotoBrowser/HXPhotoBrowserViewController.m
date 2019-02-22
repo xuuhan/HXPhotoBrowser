@@ -235,11 +235,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     CGPoint pt = [recognizer translationInView:self.currentImageView];
     
-    if (_isOverHeight) {
-
-    } else{
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
-    }
 
     _panMoveY += pt.y;
     
