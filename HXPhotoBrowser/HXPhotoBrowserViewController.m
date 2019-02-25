@@ -238,12 +238,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
 
     _panMoveY += pt.y;
-    
     [recognizer setTranslation:CGPointMake(0, 0) inView:self.currentImageView.scrollView];
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
         _effectView.alpha = 1 - _panMoveY / (_panEndY - _panStartY) * 1.5;
         CGFloat zoomProportion = 1 -  pt.y * 2 / kHXSCREEN_HEIGHT * 0.8;
+        NSLog(@"~~~~~%f",zoomProportion);
         
         if (pt.y > 0) {
         self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);

@@ -107,6 +107,7 @@ static const CGFloat eAngle = M_PI * 2;
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSLog(@"触发```````%f``````%f",scrollView.contentOffset.y,_imageView.frame.origin.y);
     if (_startY == 0 && scrollView.contentOffset.y < 0) {
         [self overHeightScrollView];
         _isDraging = YES;
@@ -133,14 +134,15 @@ static const CGFloat eAngle = M_PI * 2;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     _startY = scrollView.contentOffset.y;
-
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     
     if ([keyPath isEqualToString:@"frame"]) {
         CGRect rect = [[change objectForKey:@"new"] CGRectValue];
-        _scrollView.contentSize = rect.size;
+        if (!_isDraging) {
+            _scrollView.contentSize = rect.size;
+        }
         if (rect.size.height > kHXSCREEN_HEIGHT) {
             self.isOverHeight = YES;
         }
