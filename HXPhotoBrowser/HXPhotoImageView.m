@@ -107,12 +107,13 @@ static const CGFloat eAngle = M_PI * 2;
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSLog(@"触发```````%f``````%f",scrollView.contentOffset.y,_imageView.frame.origin.y);
     if (_startY == 0 && scrollView.contentOffset.y < 0) {
         [self overHeightScrollView];
         _isDraging = YES;
+        
     } else if (_isDraging){
         [self overHeightScrollView];
+        
     }
 }
 
@@ -252,6 +253,8 @@ static const CGFloat eAngle = M_PI * 2;
 }
 
 - (void)finishProcess{
+    self.isfinish = YES;
+    
     if (_config.photoLoadType == HXPhotoLoadTypeMask) {
         [self maskDismiss];
     }

@@ -242,8 +242,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
         _effectView.alpha = 1 - _panMoveY / (_panEndY - _panStartY) * 1.5;
-        CGFloat zoomProportion = 1 -  pt.y * 2 / kHXSCREEN_HEIGHT * 0.8;
-        NSLog(@"~~~~~%f",zoomProportion);
+        CGFloat zoomProportion = 1 -  pt.y / kHXSCREEN_HEIGHT * 0.8;
         
         if (pt.y > 0) {
         self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);
@@ -261,7 +260,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
                 self.effectView.alpha = 1;
             } completion:^(BOOL finished) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingShow object:nil];
+                if (!self.currentImageView.isfinish) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingShow object:nil];
+                }
             }];
             _panMoveY = 0;
         } else{

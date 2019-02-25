@@ -17,7 +17,7 @@ static CGFloat const kHXPhotoBrowserZoomMid = 2.0;
 static CGFloat const kHXPhotoBrowserZoomMax = 3.0;
 
 ///transform
-static CGFloat const kHXPhotoBrowserDisMissValue = 50;
+static CGFloat const kHXPhotoBrowserDisMissValue = 60;
 
 ///process
 static CGFloat const kHXPhotoBrowserProcessHeight = 3.5;
