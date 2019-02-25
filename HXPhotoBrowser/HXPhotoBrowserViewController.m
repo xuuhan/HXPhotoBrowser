@@ -243,11 +243,14 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
         _effectView.alpha = 1 - _panMoveY / (_panEndY - _panStartY) * 1.5;
+        CGFloat zoomProportion = 1 -  pt.y * 2 / kHXSCREEN_HEIGHT * 0.8;
+        
         if (pt.y > 0) {
-        self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformShrink, kHXPhotoBrowserTransformShrink);
+        self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);
         } else if (pt.y < 0 && self.currentImageView.scrollView.zoomScale < kHXPhotoBrowserZoomMin){
-            self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, kHXPhotoBrowserTransformAmplify, kHXPhotoBrowserTransformAmplify);
+            self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);
         }
+        
     } else if (recognizer.state == UIGestureRecognizerStateEnded){
         CGFloat y = self.currentImageView.imageView.frame.size.height < kHXSCREEN_HEIGHT ?
         kHXSCREEN_HEIGHT / 2 - self.currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue :
