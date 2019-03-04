@@ -10,7 +10,6 @@
 #import "HXPhotoImageView.h"
 #import "HXUIImageView+SDWebImage.h"
 #import "HXPhotoBrowserMacro.h"
-#import "HXPhotoHelper.h"
 #import <pthread.h>
 
 typedef NS_ENUM(NSInteger,PhotoCount){

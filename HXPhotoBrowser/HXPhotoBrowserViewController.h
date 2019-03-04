@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HXPhotoConfig.h"
+#import "HXPhotoHelper.h"
 
 @interface HXPhotoBrowserViewController : UIViewController
 

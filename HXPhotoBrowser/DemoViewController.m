@@ -11,7 +11,6 @@
 #import "HXUIButton+SDWebImage.h"
 #import "HXPhotoBrowserViewController.h"
 
-
 @interface DemoViewController ()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIButton *imgBtn;
 @property (nonatomic, strong) NSArray *singleUrlImgArray;
@@ -61,7 +60,10 @@
             [self.view addSubview:btn];
             btn.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1];
             btn.tag = i;
+            
+            btn.imageView.contentMode = UIViewContentModeScaleAspectFill;
             [btn sd_setFadeImageWithURL:[NSURL URLWithString:self.thumbUrlImgArray[i]] forState:UIControlStateNormal];
+            
             [btn addTarget:self action:@selector(showMultiplePhotoBrows:) forControlEvents:UIControlEventTouchUpInside];
             [_selectedViewArray addObject:btn];
         }
