@@ -16,10 +16,12 @@ Objective-C
 
 * fade in style
 
-import "HXUIButton+SDWebImage.h" or import "HXUIImageView+SDWebImage.h"
+```
+#import "HXUIButton+SDWebImage.h" or import "HXUIImageView+SDWebImage.h"
 
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url;
+```
 
-
+![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/list.gif?raw=true)
 
 
