@@ -92,7 +92,7 @@
     pb.photoViewArray = _selectedViewArray.copy;
     pb.currentIndex = sender.tag;
     pb.urlStrArray = self.urlImgArray;
-    pb.config.photoLoadType = HXPhotoLoadTypeMask;
+    pb.config.photoLoadType = HXPhotoLoadTypeNormal;
     pb.config.photoProgressType = HXPhotoProgressTypeRing;
     [pb show];
 }

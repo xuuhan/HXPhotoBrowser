@@ -11,23 +11,25 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 typedef NS_ENUM(NSInteger,FadeType){
-    ///第一次请求图片时做动画（没有缓存时）
+    ///只在第一次请求图片时做动画（没有缓存时）
+    ///only animation after first fetch(no cache)
     FadeTypeFirstAfterFetch,
     ///每次启动后只做一次动画（磁盘缓存时）
+    ///animate once when App launch(disk cache)
     FadeTypeOnceAfterAppLaunch,
-    ///每次都会做动画
+    ///animate everyTime
     FadeTypeEveryTime,
 };
 
 @interface UIImageView (SDWebImage)
 
 /**
- 不设置则为FadeTypeFirstAfterFetch
+ Default FadeTypeFirstAfterFetch
  */
 @property (nonatomic, assign) FadeType FadeType;
 
 /**
- 与UIImageView+WebCache使用方法相同
+ The same as UIImageView+WebCache
  */
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url;
 
