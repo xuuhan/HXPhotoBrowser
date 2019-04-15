@@ -13,12 +13,12 @@
 @interface UIButton (SDWebImage)
 
 /**
- 不设置则为FadeTypeFirstAfterFetch
+ Default FadeTypeFirstAfterFetch
  */
 @property (nonatomic, assign) FadeType FadeType;
 
 /**
- 与UIButton+WebCache使用方法相同
+ The same as UIButton+WebCache
  */
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url
                   forState:(UIControlState)state;
