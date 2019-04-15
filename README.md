@@ -51,3 +51,7 @@ pb.config.photoLoadType = HXPhotoLoadTypeMask;
 pb.config.photoProgressType = HXPhotoProgressTypeRing;
 [pb show];
 ```
+
+## License
+
+`HXPhotoBrowser` is available under the MIT license. See the LICENSE file for more info.
