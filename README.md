@@ -14,7 +14,7 @@ Objective-C
 
 # Example
 
-* fade in style
+* fade in list
 
 ```
 #import "HXUIButton+SDWebImage.h" or import "HXUIImageView+SDWebImage.h"
@@ -24,4 +24,17 @@ Objective-C
 
 ![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/list.gif?raw=true)
 
+* style in photoBrowser
 
+```
+typedef NS_ENUM(NSUInteger, HXPhotoLoadType) {
+    HXPhotoLoadTypeNormal = 0,
+    HXPhotoLoadTypeMask,
+    HXPhotoLoadTypeProgressive
+};
+
+typedef NS_ENUM(NSUInteger, HXPhotoProgressType) {
+    HXPhotoProgressTypeRing = 0,
+    HXPhotoProgressTypeBar
+};
+```
