@@ -8,10 +8,6 @@
 
 Objective-C
 
-# CocoaPods
-
-
-
 # Example
 
 * fade in list
