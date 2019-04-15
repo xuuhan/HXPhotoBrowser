@@ -142,6 +142,7 @@
 		368AFE81211DA96200CC86D2 = {
 			isa = PBXGroup;
 			children = (
+				363F07E3226461AE00395126 /* HXPhotoBrowser */,
 				368AFE8C211DA96200CC86D2 /* HXPhotoBrowserDemo */,
 				368AFEA5211DA96300CC86D2 /* HXPhotoBrowserTests */,
 				368AFEB0211DA96300CC86D2 /* HXPhotoBrowserUITests */,
@@ -174,7 +175,6 @@
 				368AFE98211DA96300CC86D2 /* LaunchScreen.storyboard */,
 				368AFE9B211DA96300CC86D2 /* Info.plist */,
 				368AFE9C211DA96300CC86D2 /* main.m */,
-				363F07E3226461AE00395126 /* HXPhotoBrowser */,
 			);
 			path = HXPhotoBrowserDemo;
 			sourceTree = "<group>";
