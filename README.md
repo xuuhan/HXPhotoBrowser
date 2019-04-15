@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, HXPhotoProgressType) {
 ![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/1.gif?raw=true)
 ![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/2.gif?raw=true)
 ![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/3.gif?raw=true)
+![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/4.gif?raw=true)
 
 # Use
 
