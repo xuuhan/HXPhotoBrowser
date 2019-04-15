@@ -38,3 +38,19 @@ typedef NS_ENUM(NSUInteger, HXPhotoProgressType) {
     HXPhotoProgressTypeBar
 };
 ```
+![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/1.gif?raw=true)
+![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/2.gif?raw=true)
+![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/3.gif?raw=true)
+
+# Use
+
+```
+HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
+pb.parentVC = self;
+pb.photoViewArray = _selectedViewArray.copy;
+pb.currentIndex = sender.tag;
+pb.urlStrArray = self.urlImgArray;
+pb.config.photoLoadType = HXPhotoLoadTypeMask;
+pb.config.photoProgressType = HXPhotoProgressTypeRing;
+[pb show];
+```
