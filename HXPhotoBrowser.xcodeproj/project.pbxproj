@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3654CCAB2212BAC000B1EC4C /* HXPhotoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3654CCAA2212BAC000B1EC4C /* HXPhotoConfig.m */; };
+		363F07F2226461AE00395126 /* HXUIImageView+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 363F07E9226461AE00395126 /* HXUIImageView+SDWebImage.m */; };
+		363F07F3226461AE00395126 /* HXUIButton+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 363F07EA226461AE00395126 /* HXUIButton+SDWebImage.m */; };
+		363F07F4226461AE00395126 /* HXPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 363F07EC226461AE00395126 /* HXPhotoImageView.m */; };
+		363F07F5226461AE00395126 /* HXPhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 363F07EE226461AE00395126 /* HXPhotoBrowserViewController.m */; };
+		363F07F6226461AE00395126 /* HXPhotoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 363F07F0226461AE00395126 /* HXPhotoHelper.m */; };
+		363F07F7226461AE00395126 /* HXPhotoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 363F07F1226461AE00395126 /* HXPhotoConfig.m */; };
 		368AFE8F211DA96200CC86D2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFE8E211DA96200CC86D2 /* AppDelegate.m */; };
 		368AFE92211DA96200CC86D2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFE91211DA96200CC86D2 /* ViewController.m */; };
 		368AFE97211DA96300CC86D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 368AFE96211DA96300CC86D2 /* Assets.xcassets */; };
@@ -16,11 +21,6 @@
 		368AFEA7211DA96300CC86D2 /* HXPhotoBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEA6211DA96300CC86D2 /* HXPhotoBrowserTests.m */; };
 		368AFEB2211DA96300CC86D2 /* HXPhotoBrowserUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFEB1211DA96300CC86D2 /* HXPhotoBrowserUITests.m */; };
 		368AFF0321216CFF00CC86D2 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0221216CFF00CC86D2 /* DemoViewController.m */; };
-		368AFF0F2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF0E2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m */; };
-		368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */; };
-		368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */; };
-		368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 368AFF172125738200CC86D2 /* HXPhotoImageView.m */; };
-		36B2031A2200106B00728A0A /* HXPhotoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36B203192200106B00728A0A /* HXPhotoHelper.m */; };
 		F3E7CF4A1DDB434185F3E727 /* Pods_HXPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,9 +44,19 @@
 /* Begin PBXFileReference section */
 		1843BA7C866AF67C23D58CA6 /* Pods_HXPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HXPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A9144684B97E31192FA38E4 /* Pods-HXPhotoBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.release.xcconfig"; sourceTree = "<group>"; };
-		361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserMacro.h; sourceTree = "<group>"; };
-		3654CCA92212BAC000B1EC4C /* HXPhotoConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoConfig.h; sourceTree = "<group>"; };
-		3654CCAA2212BAC000B1EC4C /* HXPhotoConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoConfig.m; sourceTree = "<group>"; };
+		363F07E4226461AE00395126 /* HXPhotoBrowserMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserMacro.h; sourceTree = "<group>"; };
+		363F07E5226461AE00395126 /* HXPhotoBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserViewController.h; sourceTree = "<group>"; };
+		363F07E7226461AE00395126 /* HXUIImageView+SDWebImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HXUIImageView+SDWebImage.h"; sourceTree = "<group>"; };
+		363F07E8226461AE00395126 /* HXUIButton+SDWebImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HXUIButton+SDWebImage.h"; sourceTree = "<group>"; };
+		363F07E9226461AE00395126 /* HXUIImageView+SDWebImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HXUIImageView+SDWebImage.m"; sourceTree = "<group>"; };
+		363F07EA226461AE00395126 /* HXUIButton+SDWebImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HXUIButton+SDWebImage.m"; sourceTree = "<group>"; };
+		363F07EB226461AE00395126 /* HXPhotoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXPhotoHelper.h; sourceTree = "<group>"; };
+		363F07EC226461AE00395126 /* HXPhotoImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXPhotoImageView.m; sourceTree = "<group>"; };
+		363F07ED226461AE00395126 /* HXPhotoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXPhotoConfig.h; sourceTree = "<group>"; };
+		363F07EE226461AE00395126 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; };
+		363F07EF226461AE00395126 /* HXPhotoImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXPhotoImageView.h; sourceTree = "<group>"; };
+		363F07F0226461AE00395126 /* HXPhotoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXPhotoHelper.m; sourceTree = "<group>"; };
+		363F07F1226461AE00395126 /* HXPhotoConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXPhotoConfig.m; sourceTree = "<group>"; };
 		368AFE8A211DA96200CC86D2 /* HXPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HXPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		368AFE8D211DA96200CC86D2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		368AFE8E211DA96200CC86D2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -64,16 +74,6 @@
 		368AFEB3211DA96300CC86D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		368AFF0121216CFF00CC86D2 /* DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
 		368AFF0221216CFF00CC86D2 /* DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
-		368AFF0D2122CEA400CC86D2 /* HXUIImageView+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HXUIImageView+SDWebImage.h"; sourceTree = "<group>"; };
-		368AFF0E2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HXUIImageView+SDWebImage.m"; sourceTree = "<group>"; };
-		368AFF102122CEBB00CC86D2 /* HXUIButton+SDWebImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HXUIButton+SDWebImage.h"; sourceTree = "<group>"; };
-		368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HXUIButton+SDWebImage.m"; sourceTree = "<group>"; };
-		368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoBrowserViewController.h; sourceTree = "<group>"; };
-		368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoBrowserViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
-		368AFF162125738200CC86D2 /* HXPhotoImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoImageView.h; sourceTree = "<group>"; };
-		368AFF172125738200CC86D2 /* HXPhotoImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoImageView.m; sourceTree = "<group>"; };
-		36B203182200106B00728A0A /* HXPhotoHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPhotoHelper.h; sourceTree = "<group>"; };
-		36B203192200106B00728A0A /* HXPhotoHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPhotoHelper.m; sourceTree = "<group>"; };
 		FF27CD8E8EF157501C49A86C /* Pods-HXPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HXPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,10 +111,38 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		363F07E3226461AE00395126 /* HXPhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				363F07E6226461AE00395126 /* Category */,
+				363F07E5226461AE00395126 /* HXPhotoBrowserViewController.h */,
+				363F07EE226461AE00395126 /* HXPhotoBrowserViewController.m */,
+				363F07EF226461AE00395126 /* HXPhotoImageView.h */,
+				363F07EC226461AE00395126 /* HXPhotoImageView.m */,
+				363F07EB226461AE00395126 /* HXPhotoHelper.h */,
+				363F07F0226461AE00395126 /* HXPhotoHelper.m */,
+				363F07ED226461AE00395126 /* HXPhotoConfig.h */,
+				363F07F1226461AE00395126 /* HXPhotoConfig.m */,
+				363F07E4226461AE00395126 /* HXPhotoBrowserMacro.h */,
+			);
+			path = HXPhotoBrowser;
+			sourceTree = "<group>";
+		};
+		363F07E6226461AE00395126 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				363F07E7226461AE00395126 /* HXUIImageView+SDWebImage.h */,
+				363F07E9226461AE00395126 /* HXUIImageView+SDWebImage.m */,
+				363F07E8226461AE00395126 /* HXUIButton+SDWebImage.h */,
+				363F07EA226461AE00395126 /* HXUIButton+SDWebImage.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		368AFE81211DA96200CC86D2 = {
 			isa = PBXGroup;
 			children = (
-				368AFE8C211DA96200CC86D2 /* HXPhotoBrowser */,
+				368AFE8C211DA96200CC86D2 /* HXPhotoBrowserDemo */,
 				368AFEA5211DA96300CC86D2 /* HXPhotoBrowserTests */,
 				368AFEB0211DA96300CC86D2 /* HXPhotoBrowserUITests */,
 				368AFE8B211DA96200CC86D2 /* Products */,
@@ -133,7 +161,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		368AFE8C211DA96200CC86D2 /* HXPhotoBrowser */ = {
+		368AFE8C211DA96200CC86D2 /* HXPhotoBrowserDemo */ = {
 			isa = PBXGroup;
 			children = (
 				368AFE8D211DA96200CC86D2 /* AppDelegate.h */,
@@ -146,18 +174,9 @@
 				368AFE98211DA96300CC86D2 /* LaunchScreen.storyboard */,
 				368AFE9B211DA96300CC86D2 /* Info.plist */,
 				368AFE9C211DA96300CC86D2 /* main.m */,
-				368AFF0C2122CE9700CC86D2 /* Category */,
-				368AFF13212419CB00CC86D2 /* HXPhotoBrowserViewController.h */,
-				368AFF14212419CB00CC86D2 /* HXPhotoBrowserViewController.m */,
-				368AFF162125738200CC86D2 /* HXPhotoImageView.h */,
-				368AFF172125738200CC86D2 /* HXPhotoImageView.m */,
-				36B203182200106B00728A0A /* HXPhotoHelper.h */,
-				36B203192200106B00728A0A /* HXPhotoHelper.m */,
-				3654CCA92212BAC000B1EC4C /* HXPhotoConfig.h */,
-				3654CCAA2212BAC000B1EC4C /* HXPhotoConfig.m */,
-				361D726E2126E41C0045E1BB /* HXPhotoBrowserMacro.h */,
+				363F07E3226461AE00395126 /* HXPhotoBrowser */,
 			);
-			path = HXPhotoBrowser;
+			path = HXPhotoBrowserDemo;
 			sourceTree = "<group>";
 		};
 		368AFEA5211DA96300CC86D2 /* HXPhotoBrowserTests */ = {
@@ -176,17 +195,6 @@
 				368AFEB3211DA96300CC86D2 /* Info.plist */,
 			);
 			path = HXPhotoBrowserUITests;
-			sourceTree = "<group>";
-		};
-		368AFF0C2122CE9700CC86D2 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				368AFF0D2122CEA400CC86D2 /* HXUIImageView+SDWebImage.h */,
-				368AFF0E2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m */,
-				368AFF102122CEBB00CC86D2 /* HXUIButton+SDWebImage.h */,
-				368AFF112122CEBB00CC86D2 /* HXUIButton+SDWebImage.m */,
-			);
-			path = Category;
 			sourceTree = "<group>";
 		};
 		FCF7FBF677282AA0F5282854 /* Pods */ = {
@@ -369,14 +377,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				368AFE92211DA96200CC86D2 /* ViewController.m in Sources */,
-				36B2031A2200106B00728A0A /* HXPhotoHelper.m in Sources */,
-				368AFF182125738200CC86D2 /* HXPhotoImageView.m in Sources */,
-				368AFF0F2122CEA400CC86D2 /* HXUIImageView+SDWebImage.m in Sources */,
-				368AFF122122CEBB00CC86D2 /* HXUIButton+SDWebImage.m in Sources */,
+				363F07F6226461AE00395126 /* HXPhotoHelper.m in Sources */,
 				368AFE9D211DA96300CC86D2 /* main.m in Sources */,
-				3654CCAB2212BAC000B1EC4C /* HXPhotoConfig.m in Sources */,
 				368AFE8F211DA96200CC86D2 /* AppDelegate.m in Sources */,
-				368AFF15212419CB00CC86D2 /* HXPhotoBrowserViewController.m in Sources */,
+				363F07F3226461AE00395126 /* HXUIButton+SDWebImage.m in Sources */,
+				363F07F4226461AE00395126 /* HXPhotoImageView.m in Sources */,
+				363F07F7226461AE00395126 /* HXPhotoConfig.m in Sources */,
+				363F07F2226461AE00395126 /* HXUIImageView+SDWebImage.m in Sources */,
+				363F07F5226461AE00395126 /* HXPhotoBrowserViewController.m in Sources */,
 				368AFF0321216CFF00CC86D2 /* DemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -541,7 +549,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2BYUBRQZWA;
-				INFOPLIST_FILE = HXPhotoBrowser/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/HXPhotoBrowserDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -560,7 +568,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2BYUBRQZWA;
-				INFOPLIST_FILE = HXPhotoBrowser/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/HXPhotoBrowserDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
