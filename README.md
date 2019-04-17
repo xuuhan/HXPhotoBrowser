@@ -1,6 +1,6 @@
 # HXPhotoBrowser
 
-* A picture browser that simulates progressive loading
+* A photo browser that simulates progressive loading
 
 * Based on SDWebImage
 
