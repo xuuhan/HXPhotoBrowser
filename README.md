@@ -13,7 +13,7 @@ Objective-C
 * fade in list
 
 ```
-#import "HXUIButton+SDWebImage.h" or import "HXUIImageView+SDWebImage.h"
+`#import "HXUIButton+SDWebImage.h"` or `#import "HXUIImageView+SDWebImage.h"`
 
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url;
 ```
