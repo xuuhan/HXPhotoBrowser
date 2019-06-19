@@ -24,14 +24,14 @@ Objective-C
 
 ```
 typedef NS_ENUM(NSUInteger, HXPhotoLoadType) {
-    HXPhotoLoadTypeNormal = 0,
-    HXPhotoLoadTypeMask,
-    HXPhotoLoadTypeProgressive
+    HXPhotoLoadTypeNormal = 0, //正常样式
+    HXPhotoLoadTypeMask, //遮罩层样式
+    HXPhotoLoadTypeProgressive //渐进式加载样式
 };
 
 typedef NS_ENUM(NSUInteger, HXPhotoProgressType) {
-    HXPhotoProgressTypeRing = 0,
-    HXPhotoProgressTypeBar
+    HXPhotoProgressTypeRing = 0, //圆环网络加载进度
+    HXPhotoProgressTypeBar //条状网络加载进度
 };
 ```
 ![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/1.gif?raw=true)
