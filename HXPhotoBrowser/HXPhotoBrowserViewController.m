@@ -235,7 +235,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     CGPoint pt = [recognizer translationInView:self.currentImageView];
     
     self.currentImageView.imageView.frame = CGRectMake(self.currentImageView.imageView.frame.origin.x + pt.x, self.currentImageView.imageView.frame.origin.y + pt.y, self.currentImageView.imageView.frame.size.width, self.currentImageView.imageView.frame.size.height);
-
+    
     _panMoveY += pt.y;
     [recognizer setTranslation:CGPointMake(0, 0) inView:self.currentImageView.scrollView];
     
@@ -244,7 +244,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         CGFloat zoomProportion = 1 -  pt.y / kHXSCREEN_HEIGHT * 0.8;
         
         if (pt.y > 0) {
-        self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);
+            self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);
         } else if (pt.y < 0 && self.currentImageView.scrollView.zoomScale < kHXPhotoBrowserZoomMin){
             self.currentImageView.imageView.transform = CGAffineTransformScale(self.currentImageView.imageView.transform, zoomProportion, zoomProportion);
         }
@@ -253,7 +253,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
         CGFloat y = self.currentImageView.imageView.frame.size.height < kHXSCREEN_HEIGHT ?
         kHXSCREEN_HEIGHT / 2 - self.currentImageView.imageView.frame.size.height / 2 + kHXPhotoBrowserDisMissValue :
         kHXPhotoBrowserDisMissValue;
-
+        
         if (self.currentImageView.imageView.frame.origin.y < y) {
             [UIView animateWithDuration:0.2 animations:^{
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
@@ -438,13 +438,20 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     CGFloat height = currentHeight.floatValue;
     CGRect newFrame = CGRectMake(0, kHXSCREEN_HEIGHT >= height ? (kHXSCREEN_HEIGHT - height) / 2 : 0, width, height);
     
+    
     return newFrame;
 }
 
 - (void)updateRectWithIndex:(NSInteger)index withImage:(UIImage *)image{
     NSMutableArray *arrayM = self.heightArray.mutableCopy;
-    CGSize size = [[HXPhotoHelper shared] uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
-    arrayM[index] = [NSNumber numberWithFloat:size.height];
+    
+    if (image) {
+        CGSize size = [[HXPhotoHelper shared] uniformScaleWithImage:image withPhotoLevel:HXPhotoLevelWidth float:kHXSCREEN_WIDTH];
+        arrayM[index] = [NSNumber numberWithFloat:size.height];
+    } else{
+        arrayM[index] = [NSNumber numberWithFloat:kHXSCREEN_WIDTH];
+    }
+    
     self.heightArray = arrayM.copy;
     HXPhotoImageView *photoImageView = _imageViewArray[index];
     photoImageView.imageView.frame = [self getNewRectWithIndex:index];
