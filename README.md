@@ -52,7 +52,8 @@ pb.config.photoProgressType = HXPhotoProgressTypeRing;
 [pb show];
 ```
 
-* demo中使用的网图时间久了存在着url失效的可能，如果在demo中遇到不显示图片的问题可以换一个图片url，我发现了会及时更新。
+
+demo中使用的网图时间久了存在着url失效的可能，如果在demo中遇到不显示图片的问题可以换一个图片url，我发现了会及时更新。
 
 ## License
 
