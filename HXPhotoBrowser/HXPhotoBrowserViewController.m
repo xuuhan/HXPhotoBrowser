@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)setIndexLabel{
     if (!_indexLabel) {
         _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 70, kHXSCREEN_WIDTH, 20)];
-        [[[UIApplication sharedApplication].windows lastObject] addSubview:_indexLabel];
+        [[self mainWindow] addSubview:_indexLabel];
         _indexLabel.textColor = [UIColor whiteColor];
         _indexLabel.font = [UIFont systemFontOfSize:14];
         _indexLabel.textAlignment = NSTextAlignmentCenter;
@@ -467,13 +467,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 
 - (UIWindow *)mainWindow{
-    UIApplication *app = [UIApplication sharedApplication];
-    if ([app.delegate respondsToSelector:@selector(window)]){
-        return [app.delegate window];
-    } else{
-        return [app keyWindow];
+    NSArray *windows = [UIApplication sharedApplication].windows;
+    for(UIWindow *window in [windows reverseObjectEnumerator]) {
+        if ([window isKindOfClass:[UIWindow class]] &&
+            CGRectEqualToRect(window.bounds, [UIScreen mainScreen].bounds))
+            return window;
     }
+    return [UIApplication sharedApplication].keyWindow;
 }
+
 - (void)dealloc{
     [_indexLabel removeFromSuperview];
     _indexLabel = nil;
