@@ -271,7 +271,13 @@ static const CGFloat eAngle = M_PI * 2;
 - (void)setReceivedSize:(CGFloat)receivedSize{
     _receivedSize = receivedSize;
     
+    // 拿到进度
     CGFloat scale = receivedSize / _expectedSize;
+    // 初始化进度
+    if (isnan(scale)) {
+        scale = 0;
+    }
+    // 赋值进度
     CGRect frame = CGRectMake(0, 0, scale * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);
     
     dispatch_async(dispatch_get_main_queue(), ^{

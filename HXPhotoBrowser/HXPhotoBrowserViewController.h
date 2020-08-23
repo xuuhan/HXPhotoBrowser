@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSArray <UIView *>*photoViewArray;
 ///Default is 0
 @property (nonatomic, assign) NSInteger currentIndex;
-///Defalut is HXPhotoLoadTypeNormal with HXPhotoProgressTypeRing
+///Defalut is HXPhotoLoadTypeNormal with HXPhotoProgressTypeNormal
 @property (nonatomic, strong) HXPhotoConfig *config;
 
 

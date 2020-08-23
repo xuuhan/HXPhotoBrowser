@@ -17,7 +17,8 @@ typedef NS_ENUM(NSUInteger, HXPhotoLoadType) {
 };
 
 typedef NS_ENUM(NSUInteger, HXPhotoProgressType) {
-    HXPhotoProgressTypeRing = 0,
+    HXPhotoProgressTypeNormal = 0,
+    HXPhotoProgressTypeRing,
     HXPhotoProgressTypeBar
 };
 
