@@ -73,6 +73,8 @@
     {
         blur = 0.0f;
     }
+    
+    blur = 0.25 * blur;
     int boxSize = (int)(blur * 100);
     boxSize = boxSize - (boxSize % 2) + 1;
     
