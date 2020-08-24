@@ -36,9 +36,10 @@
  清除缓存
  */
 - (void)cleanMemory{
-    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
-    
-    [[SDImageCache sharedImageCache] clearMemory];
+    // 清掉磁盘缓存
+    [[SDWebImageManager sharedManager].imageCache clearWithCacheType:SDImageCacheTypeDisk completion:nil];
+    // 清掉内存缓存
+    [[SDWebImageManager sharedManager].imageCache clearWithCacheType:SDImageCacheTypeMemory completion:nil];
 }
 
 #pragma mark UITableViewDataSource UITableViewDelegate

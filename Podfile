@@ -6,6 +6,6 @@ use_frameworks!
 
 target 'HXPhotoBrowser' do
 
-pod 'SDWebImage'
+pod 'SDWebImage', '~>5.8.1'
 
 end

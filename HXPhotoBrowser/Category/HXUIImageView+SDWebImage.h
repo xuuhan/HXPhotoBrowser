@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger,FadeType){
 - (void)sd_setFadeImageWithURL:(nullable NSURL *)url
           placeholderImage:(nullable UIImage *)placeholder
                    options:(SDWebImageOptions)options
-                  progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
+                  progress:(nullable SDImageLoaderProgressBlock)progressBlock
                  completed:(nullable SDExternalCompletionBlock)completedBlock;
 
 @end

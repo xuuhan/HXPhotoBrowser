@@ -338,17 +338,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HXPhotoBrowser/Pods-HXPhotoBrowser-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F3220DE38AD3A7E090A59D6B /* [CP] Check Pods Manifest.lock */ = {
