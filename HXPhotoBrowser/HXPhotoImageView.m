@@ -103,6 +103,8 @@ static const CGFloat eAngle = M_PI * 2;
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (kHXSCREEN_HEIGHT - height) / 2, width, height)];
     [_scrollView addSubview:_imageView];
     [_imageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    _imageView.layer.masksToBounds = YES;
 }
 
 

@@ -359,7 +359,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingDismiss object:nil];
     
-    [UIView animateWithDuration:0.15 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         self.currentImageView.imageView.frame = [self getStartRect];
         self.effectView.alpha = 0;
         
@@ -375,7 +375,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)transitionAnimation{
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
     }];
 }
