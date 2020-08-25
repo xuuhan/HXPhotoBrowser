@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 @property (nonatomic, assign) NSInteger firstIndex;
 @property (nonatomic, strong) UILabel *indexLabel;
 @property (nonatomic, assign) BOOL isOverHeight;
+@property (nonatomic, assign) BOOL isHasUrl;
 @end
 
 @implementation HXPhotoBrowserViewController
@@ -90,7 +91,14 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)setImageViewArray{
     NSMutableArray *arrayM = [NSMutableArray array];
-    for (int i = 0; i < _urlArray.count; i ++) {
+    NSArray *dataArray = [NSArray array];
+    if (self.isHasUrl) {
+        dataArray = _urlArray;
+    } else{
+        dataArray = _photoImageArray;
+    }
+    
+    for (int i = 0; i < dataArray.count; i ++) {
         if (i != self.currentIndex ? : 0) {
             HXPhotoImageView *imageView = [[HXPhotoImageView alloc] initWithFrame:CGRectMake(i * self.pageWidth, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
             [self.photoScrollView addSubview:imageView];
@@ -106,6 +114,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             currentImageView.delegate = self;
         }
     }
+    
     _imageViewArray = arrayM.copy;
 }
 
@@ -118,16 +127,21 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _firstIndex = _currentIndex;
     
     @weakify(self);
-    [[SDImageCache sharedImageCache] diskImageExistsWithKey:[self.urlArray[_currentIndex] absoluteString] completion:^(BOOL isInCache) {
-        @strongify(self);
+    if (self.isHasUrl) {
+        [[SDImageCache sharedImageCache] diskImageExistsWithKey:[self.urlArray[_currentIndex] absoluteString] completion:^(BOOL isInCache) {
+            @strongify(self);
+            [self.photoScrollView addSubview:self.currentImageView];
+            if (isInCache) {
+                [self photoInCache];
+            } else{
+                [self photoNotInCache];
+            }
+        }];
+    } else{
         [self.photoScrollView addSubview:self.currentImageView];
-        if (isInCache) {
-            [self photoInCache];
-        } else{
-            [self photoNotInCache];
-        }
-    }];
-    
+        [self photoInDisk];
+    }
+
     if (_photoViewArray.count > 1) {
         [self setIndexLabel];
     }
@@ -156,8 +170,17 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     }];
 }
 
-- (void)photoInCache{
+- (void)photoInDisk{
+    self.currentImageView.isfinish = YES;
+    self.currentImageView.imageView.image = self.photoImageArray[self.currentIndex];
+    self.currentImageView.imageView.frame = [self getStartRect];
+    [self.currentImageView finishProcess];
+    [self transitionAnimation];
+    [self fetchOtherPhotos];
     
+}
+
+- (void)photoInCache{
     self.currentImageView.isfinish = YES;
     @weakify(self);
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
@@ -483,6 +506,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
             return window;
     }
     return [UIApplication sharedApplication].keyWindow;
+}
+
+- (BOOL)isHasUrl{
+    return self.urlArray.count > 0;
 }
 
 - (void)dealloc{

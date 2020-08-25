@@ -18,6 +18,8 @@
 @property (nonatomic, strong) NSArray <NSString *>*urlStrArray;
 ///UIButton or UIImageView
 @property (nonatomic, strong) NSArray <UIView *>*photoViewArray;
+///array of UIImage, when utlStrArray was nil.
+@property (nonatomic, strong) NSArray <UIImage *>*photoImageArray;
 ///Default is 0
 @property (nonatomic, assign) NSInteger currentIndex;
 ///Defalut is HXPhotoLoadTypeNormal with HXPhotoProgressTypeNormal
