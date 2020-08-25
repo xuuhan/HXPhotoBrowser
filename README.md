@@ -2,7 +2,7 @@
 
 * Photo browser that simulates progressive loading
 
-* Based on SDWebImage
+* Based on SDWebImage>5.0
 
 # Language
 
