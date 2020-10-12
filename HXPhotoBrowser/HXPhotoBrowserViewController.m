@@ -10,7 +10,6 @@
 #import "HXPhotoImageView.h"
 #import "HXUIImageView+SDWebImage.h"
 #import "HXPhotoBrowserMacro.h"
-#import <SDWebImage/SDInternalMacros.h>
 #import <SDImageCache.h>
 #import <pthread.h>
 
@@ -126,15 +125,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _currentIndex = _currentIndex ? : 0;
     _firstIndex = _currentIndex;
     
-    @weakify(self);
     if (self.isHasUrl) {
+        __weak __typeof(self)weakSelf = self;
         [[SDImageCache sharedImageCache] diskImageExistsWithKey:[self.urlArray[_currentIndex] absoluteString] completion:^(BOOL isInCache) {
-            @strongify(self);
-            [self.photoScrollView addSubview:self.currentImageView];
+            __strong __typeof(weakSelf)strongSelf = weakSelf;
+            [strongSelf.photoScrollView addSubview:strongSelf.currentImageView];
             if (isInCache) {
-                [self photoInCache];
+                [strongSelf photoInCache];
             } else{
-                [self photoNotInCache];
+                [strongSelf photoNotInCache];
             }
         }];
     } else{
@@ -158,15 +157,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [self setImageViewBackgroundColor];
     [self.firstImageView beginProcess];
     
-    @weakify(self);
+    __weak __typeof(self)weakSelf = self;
     [self.firstImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        @strongify(self);
-        [self updateProgressWithPhotoImage:self.firstImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        [strongSelf updateProgressWithPhotoImage:strongSelf.firstImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-        @strongify(self);
-        [self.firstImageView finishProcess];
-        [self fetchOtherPhotos];
-        [self updateRectWithIndex:self.firstIndex withImage:image];
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        [strongSelf.firstImageView finishProcess];
+        [strongSelf fetchOtherPhotos];
+        [strongSelf updateRectWithIndex:strongSelf.firstIndex withImage:image];
     }];
 }
 
@@ -182,16 +181,16 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)photoInCache{
     self.currentImageView.isfinish = YES;
-    @weakify(self);
+    __weak __typeof(self)weakSelf = self;
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-        @strongify(self);
-        if (self.currentImageView.imageView.image) {
-            self.currentImageView.imageView.frame = [self getStartRect];
-            [self.currentImageView finishProcess];
-            [self transitionAnimation];
-            [self fetchOtherPhotos];
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        if (strongSelf.currentImageView.imageView.image) {
+            strongSelf.currentImageView.imageView.frame = [strongSelf getStartRect];
+            [strongSelf.currentImageView finishProcess];
+            [strongSelf transitionAnimation];
+            [strongSelf fetchOtherPhotos];
         } else{
-            [self photoNotInCache];
+            [strongSelf photoNotInCache];
         }
     }];
 }
@@ -199,18 +198,18 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)fetchOtherPhotos{
     [self setImageViewBackgroundColor];
     
-    @weakify(self);
     [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
         if (idx != self.firstIndex ? : 0) {
             obj.imageView.backgroundColor = [UIColor grayColor];
+            __weak __typeof(self)weakSelf = self;
             [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getPlaceholderImageWithIndex:idx] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                __strong __typeof(weakSelf)strongSelf = weakSelf;
                 [obj beginProcess];
-                [self updateProgressWithPhotoImage:obj expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
+                [strongSelf updateProgressWithPhotoImage:obj expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                @strongify(self);
+                __strong __typeof(weakSelf)strongSelf = weakSelf;
                 [obj finishProcess];
-                [self updateRectWithIndex:idx withImage:image];
+                [strongSelf updateRectWithIndex:idx withImage:image];
             }];
         }
     }];

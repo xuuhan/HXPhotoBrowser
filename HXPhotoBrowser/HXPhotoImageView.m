@@ -23,6 +23,7 @@ static const CGFloat eAngle = M_PI * 2;
 @property (nonatomic, assign) BOOL isPanDismiss;
 @property (nonatomic, assign) BOOL isOverHeight;
 @property (nonatomic, assign) BOOL isDraging;
+@property (nonatomic, assign) BOOL isImageNotication;
 @end
 
 @implementation HXPhotoImageView
@@ -44,6 +45,7 @@ static const CGFloat eAngle = M_PI * 2;
         [self setEffectView];
     } else if (config.photoLoadType == HXPhotoLoadTypeProgressive){
         [_imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
+        self.isImageNotication = YES;
     }
     
     if (config.photoProgressType == HXPhotoProgressTypeBar) {
@@ -294,6 +296,9 @@ static const CGFloat eAngle = M_PI * 2;
 
 - (void)dealloc{
     [_imageView removeObserver:self forKeyPath:@"frame"];
+    if (self.isImageNotication) {
+        [_imageView removeObserver:self forKeyPath:@"image"];
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
