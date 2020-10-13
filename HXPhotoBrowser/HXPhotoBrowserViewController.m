@@ -502,6 +502,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     for(UIWindow *window in [windows reverseObjectEnumerator]) {
         if ([window isKindOfClass:[UIWindow class]] &&
             CGRectEqualToRect(window.bounds, [UIScreen mainScreen].bounds))
+            if (window.windowLevel >= UIWindowLevelAlert) {
+                continue;
+            }
             return window;
     }
     return [UIApplication sharedApplication].keyWindow;
