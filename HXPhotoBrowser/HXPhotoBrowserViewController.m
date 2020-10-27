@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)setIndexLabel{
     if (!_indexLabel) {
         _indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHXSCREEN_HEIGHT - 70, kHXSCREEN_WIDTH, 20)];
-        [[self mainWindow] addSubview:_indexLabel];
+        [self.view addSubview:_indexLabel];
         _indexLabel.textColor = [UIColor whiteColor];
         _indexLabel.font = [UIFont systemFontOfSize:14];
         _indexLabel.textAlignment = NSTextAlignmentCenter;
@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)setPhotoScrollView{
     _photoScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin, kHXSCREEN_HEIGHT)];
-    [[self mainWindow] addSubview:_photoScrollView];
+    [self.view addSubview:_photoScrollView];
     _photoScrollView.backgroundColor = [UIColor clearColor];
     _photoScrollView.showsVerticalScrollIndicator = NO;
     _photoScrollView.showsHorizontalScrollIndicator = NO;
@@ -412,9 +412,13 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)transitionAnimation{
-    [UIView animateWithDuration:0.3 animations:^{
-        self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
-    }];
+    __weak __typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            __strong __typeof(weakSelf)strongSelf = weakSelf;
+            strongSelf.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
+        }];
+    });
 }
 
 - (void)setPhotoViewArray:(NSArray<UIView *> *)photoViewArray{
@@ -499,20 +503,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (HXPhotoImageView *)firstImageView{
     return self.imageViewArray[self.firstIndex];
-}
-
-
-- (UIWindow *)mainWindow{
-    NSArray *windows = [UIApplication sharedApplication].windows;
-    for(UIWindow *window in [windows reverseObjectEnumerator]) {
-        if ([window isKindOfClass:[UIWindow class]] &&
-            CGRectEqualToRect(window.bounds, [UIScreen mainScreen].bounds))
-            if (window.windowLevel >= UIWindowLevelAlert) {
-                continue;
-            }
-            return window;
-    }
-    return [UIApplication sharedApplication].keyWindow;
 }
 
 - (BOOL)isHasUrl{
