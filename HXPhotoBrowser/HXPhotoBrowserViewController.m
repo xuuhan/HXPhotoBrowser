@@ -61,6 +61,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _effectView = [[UIVisualEffectView alloc]initWithEffect:blurEffect];
     _effectView.frame = CGRectMake(0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT);
     [self.view addSubview:_effectView];
+    
+    UITapGestureRecognizer *bgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+    bgTap.numberOfTapsRequired = 1;
+    bgTap.numberOfTouchesRequired = 1;
+    [_effectView addGestureRecognizer:bgTap];
 }
 
 - (void)setIndexLabel{
@@ -457,7 +462,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (CGRect)getStartRect{
-    UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
+    UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
     CGRect startRact = [_photoViewArray[_currentIndex] convertRect:_photoViewArray[_currentIndex].bounds toView:window];
     
     return startRact;
