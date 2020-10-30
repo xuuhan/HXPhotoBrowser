@@ -177,8 +177,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)photoInDisk{
     self.currentImageView.isfinish = YES;
     self.currentImageView.imageView.image = self.photoImageArray[self.currentIndex];
-    self.currentImageView.imageView.frame = [self getStartRect];
-    [self.currentImageView finishProcess];
     [self transitionAnimation];
     [self fetchOtherPhotos];
     
@@ -190,8 +188,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         if (strongSelf.currentImageView.imageView.image) {
-            strongSelf.currentImageView.imageView.frame = [strongSelf getStartRect];
-            [strongSelf.currentImageView finishProcess];
             [strongSelf transitionAnimation];
             [strongSelf fetchOtherPhotos];
         } else{
@@ -396,10 +392,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingDismiss object:nil];
     
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.currentImageView.imageView.frame = [self getStartRect];
         self.effectView.alpha = 0;
-        
     } completion:^(BOOL finished) {
         [self.photoScrollView removeFromSuperview];
         self.photoScrollView = nil;
@@ -412,15 +407,15 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)transitionAnimation{
-    __weak __typeof(self)weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.3 animations:^{
-            __strong __typeof(weakSelf)strongSelf = weakSelf;
-            strongSelf.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
-        }];
+        self.currentImageView.imageView.frame = [self getStartRect];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
+            } completion:nil];
+        });
     });
 }
-
 - (void)setPhotoViewArray:(NSArray<UIView *> *)photoViewArray{
     _photoViewArray = photoViewArray;
     
