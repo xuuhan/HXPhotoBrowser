@@ -146,7 +146,11 @@ static const CGFloat eAngle = M_PI * 2;
     if ([keyPath isEqualToString:@"frame"]) {
         CGRect rect = [[change objectForKey:@"new"] CGRectValue];
         if (!_isDraging) {
-            _scrollView.contentSize = rect.size;
+            if (rect.size.height >= kHXSCREEN_HEIGHT && rect.size.height < kHXSCREEN_HEIGHT + 1) {
+                _scrollView.contentSize = CGSizeMake(0, kHXSCREEN_HEIGHT);
+            } else{
+                _scrollView.contentSize = rect.size;
+            }
         }
         if (rect.size.height > kHXSCREEN_HEIGHT) {
             self.isOverHeight = YES;
