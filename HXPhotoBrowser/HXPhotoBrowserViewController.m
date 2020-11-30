@@ -188,6 +188,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [self.currentImageView.imageView sd_setImageWithURL:self.urlArray[self.currentIndex] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         if (strongSelf.currentImageView.imageView.image) {
+            if (image) {
+                [strongSelf updateRectWithIndex:self.currentIndex withImage:image];
+            }
             [strongSelf transitionAnimation];
             [strongSelf fetchOtherPhotos];
         } else{
