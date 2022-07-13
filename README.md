@@ -57,4 +57,4 @@ Objective-C
 
  ## License
 
- `HXPhotoBrowser` is available under the MIT license. See the LICENSE file for more info.
+ `HXPhotoBrowser` is available under the MIT license. 
