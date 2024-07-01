@@ -54,14 +54,14 @@ Objective-C
 ## SWIFT
 ```
 let pb = HXPhotoBrowserViewController.init()
- pb.parentVC = self // viewController
- pb.photoViewArray = imageViews
- pb.currentIndex = sender.tag
- pb.urlStrArray = urlStrArray // local image used pb.imageArray
- pb.config.photoLoadType = .progressive
- pb.config.photoProgressType = .ring
- pb.show()
- ```
+pb.parentVC = self // viewController
+pb.photoViewArray = imageViews
+pb.currentIndex = sender.tag
+pb.urlStrArray = urlStrArray // local image used pb.imageArray
+pb.config.photoLoadType = .progressive
+pb.config.photoProgressType = .ring
+pb.show()
+```
 
  demo中使用的网图时间久了存在着url失效的可能，如果在demo中遇到不显示图片的问题可以换一个图片url，我发现了会及时更新。
 
