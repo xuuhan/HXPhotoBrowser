@@ -40,18 +40,28 @@ Objective-C
  ![image](https://github.com/xuuhan/HXPhotoBrowser/blob/master/Example/4.gif?raw=true)
 
  # Use
-
+ ## OC
  ```
  HXPhotoBrowserViewController *pb = [HXPhotoBrowserViewController new];
- pb.parentVC = self;
+ pb.parentVC = self; // viewController
  pb.photoViewArray = _selectedViewArray.copy;
  pb.currentIndex = sender.tag;
- pb.urlStrArray = self.urlImgArray;
- pb.config.photoLoadType = HXPhotoLoadTypeMask;
+ pb.urlStrArray = self.urlImgArray; // local image used pb.imageArray
+ pb.config.photoLoadType = HXPhotoLoadTypeProgressive;
  pb.config.photoProgressType = HXPhotoProgressTypeRing;
  [pb show];
  ```
-
+## SWIFT
+```
+let pb = HXPhotoBrowserViewController.init()
+ pb.parentVC = self // viewController
+ pb.photoViewArray = imageViews
+ pb.currentIndex = sender.tag
+ pb.urlStrArray = urlStrArray // local image used pb.imageArray
+ pb.config.photoLoadType = .progressive
+ pb.config.photoProgressType = .ring
+ pb.show()
+ ```
 
  demo中使用的网图时间久了存在着url失效的可能，如果在demo中遇到不显示图片的问题可以换一个图片url，我发现了会及时更新。
 
