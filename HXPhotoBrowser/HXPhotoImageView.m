@@ -69,8 +69,7 @@ static const CGFloat eAngle = M_PI * 2;
     return _imageView;
 }
 
-- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
-{
+- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView {
     CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
     (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
     CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
@@ -279,11 +278,11 @@ static const CGFloat eAngle = M_PI * 2;
 - (void)setReceivedSize:(CGFloat)receivedSize{
     _receivedSize = receivedSize;
     
-    // 拿到进度
-    CGFloat scale = receivedSize / _expectedSize;
+    // 拿到进度比例范围从0.8到1
+    CGFloat scale = 0.8 + (1 - 0.8) * (receivedSize / _expectedSize);
     // 初始化进度
     if (isnan(scale)) {
-        scale = 0;
+        scale = 0.8; // 当计算结果为NaN时，默认为0.8
     }
     // 赋值进度
     CGRect frame = CGRectMake(0, 0, scale * kHXSCREEN_WIDTH, kHXPhotoBrowserProcessHeight);

@@ -19,9 +19,8 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 };
 
 @interface HXPhotoBrowserViewController ()<UIGestureRecognizerDelegate,UIScrollViewDelegate,HXPhotoImageViewDelegate>
-@property (nonatomic, strong) UIVisualEffectView *effectView;
+@property (nonatomic, strong) UIView *effectView;
 @property (nonatomic, strong) HXPhotoImageView *currentImageView;
-@property (nonatomic, strong) HXPhotoImageView *firstImageView;
 @property (nonatomic, strong) UIScrollView *photoScrollView;
 @property (nonatomic, strong) NSArray <NSURL *>*urlArray;
 @property (nonatomic, strong) NSArray *heightArray;
@@ -57,10 +56,9 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)setEffectView{
-    UIBlurEffect *blurEffect =[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    _effectView = [[UIVisualEffectView alloc]initWithEffect:blurEffect];
-    _effectView.frame = CGRectMake(0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT);
+    _effectView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kHXSCREEN_WIDTH, kHXSCREEN_HEIGHT)];
     [self.view addSubview:_effectView];
+    _effectView.backgroundColor = [UIColor blackColor];
     
     UITapGestureRecognizer *bgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     bgTap.numberOfTapsRequired = 1;
@@ -87,9 +85,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _photoScrollView.showsHorizontalScrollIndicator = NO;
     _photoScrollView.pagingEnabled = YES;
     _photoScrollView.delegate = self;
-    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin) * _urlArray.count : kHXSCREEN_WIDTH * _urlArray.count, kHXSCREEN_HEIGHT);
+
+    NSInteger count = self.isHasUrl ? _urlArray.count : _photoImageArray.count;
+    _photoScrollView.contentSize = CGSizeMake(self.photoCount == PhotoCountMultiple ? (kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin) * count : kHXSCREEN_WIDTH * count, kHXSCREEN_HEIGHT);
     
-    [self addGesture];
     [self creatPhotoImageView];
 }
 
@@ -158,20 +157,21 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 }
 
 - (void)photoNotInCache{
-    self.firstImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
+    self.currentImageView.imageView.frame = [self getNewRectWithIndex:_firstIndex];
     [self setImageViewBackgroundColor];
-    [self.firstImageView beginProcess];
-    
+    [self.currentImageView beginProcess];
+    [self addGesture];
     __weak __typeof(self)weakSelf = self;
-    [self.firstImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+    [self.currentImageView.imageView sd_setImageWithURL:_urlArray[_firstIndex] placeholderImage:[self getPlaceholderImageWithIndex:_firstIndex] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        [strongSelf updateProgressWithPhotoImage:strongSelf.firstImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
+        [strongSelf updateProgressWithPhotoImage:strongSelf.currentImageView expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        [strongSelf.firstImageView finishProcess];
+        [strongSelf.currentImageView finishProcess];
         [strongSelf fetchOtherPhotos];
         [strongSelf updateRectWithIndex:strongSelf.firstIndex withImage:image];
     }];
+    [self transitionAnimation];
 }
 
 - (void)photoInDisk{
@@ -202,21 +202,30 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)fetchOtherPhotos{
     [self setImageViewBackgroundColor];
     
-    [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (idx != self.firstIndex ? : 0) {
-            obj.imageView.backgroundColor = [UIColor grayColor];
-            __weak __typeof(self)weakSelf = self;
-            [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getPlaceholderImageWithIndex:idx] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                __strong __typeof(weakSelf)strongSelf = weakSelf;
-                [obj beginProcess];
-                [strongSelf updateProgressWithPhotoImage:obj expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
-            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                __strong __typeof(weakSelf)strongSelf = weakSelf;
-                [obj finishProcess];
-                [strongSelf updateRectWithIndex:idx withImage:image];
-            }];
-        }
-    }];
+    if (self.isHasUrl) {
+        [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (idx != self.firstIndex ? : 0) {
+                obj.imageView.backgroundColor = [UIColor grayColor];
+                __weak __typeof(self)weakSelf = self;
+                [obj.imageView sd_setImageWithURL:self.urlArray[idx] placeholderImage:[self getPlaceholderImageWithIndex:idx] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                    __strong __typeof(weakSelf)strongSelf = weakSelf;
+                    [obj beginProcess];
+                    [strongSelf updateProgressWithPhotoImage:obj expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize];
+                } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    __strong __typeof(weakSelf)strongSelf = weakSelf;
+                    [obj finishProcess];
+                    [strongSelf updateRectWithIndex:idx withImage:image];
+                }];
+            }
+        }];
+    } else{
+        [_imageViewArray enumerateObjectsUsingBlock:^(HXPhotoImageView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (idx != self.firstIndex ? : 0) {
+                obj.isfinish = true;
+                obj.imageView.image = self.photoImageArray[idx];
+            }
+        }];
+    }
 }
 
 - (void)updateProgressWithPhotoImage:(HXPhotoImageView *)photoImage expectedSize:(CGFloat)expectedSize receivedSize:(CGFloat)receivedSize{
@@ -240,7 +249,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     [_photoScrollView addGestureRecognizer:zoomTap];
     [bgTap requireGestureRecognizerToFail:zoomTap];
     
-    UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(move:)];
+    UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(toMove:)];
     [_photoScrollView addGestureRecognizer:recognizer];
     recognizer.delegate = self;
     _panStartY = self.currentImageView.frame.origin.y;
@@ -258,11 +267,11 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (void)scrollViewDidScrollWithRecognizer:(UIPanGestureRecognizer *)recognizer isOverHeight:(BOOL)isOverHeight{
     _isOverHeight = isOverHeight;
-    [self move:recognizer];
+    [self toMove:recognizer];
 }
 
 
-- (void)move:(UIPanGestureRecognizer *)recognizer{
+- (void)toMove:(UIPanGestureRecognizer *)recognizer{
     if(_isCanPan == NO) return;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingDismiss object:nil];
@@ -380,6 +389,12 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     _urlArray = urlArray.copy;
 }
 
+- (void)setPhotoImageArray:(NSArray<UIImage *> *)photoImageArray{
+    self.photoCount = photoImageArray.count > 1 ? PhotoCountMultiple : PhotoCountSingle;
+    self.pageWidth = self.photoCount ? kHXSCREEN_WIDTH + kHXPhotoBrowserPageMargin : kHXSCREEN_WIDTH;
+    _photoImageArray = photoImageArray;
+}
+
 
 - (void)show{
     [self setPhotoScrollView];
@@ -395,7 +410,7 @@ typedef NS_ENUM(NSInteger,PhotoCount){
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kHXPhotoBrowserRingDismiss object:nil];
     
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.currentImageView.imageView.frame = [self getStartRect];
         self.effectView.alpha = 0;
     } completion:^(BOOL finished) {
@@ -412,9 +427,10 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 - (void)transitionAnimation{
     dispatch_async(dispatch_get_main_queue(), ^{
         self.currentImageView.imageView.frame = [self getStartRect];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 self.currentImageView.imageView.frame = [self getNewRectWithIndex:self.currentIndex];
+                [self addGesture];
             } completion:nil];
         });
     });
@@ -497,10 +513,6 @@ typedef NS_ENUM(NSInteger,PhotoCount){
 
 - (HXPhotoImageView *)currentImageView{
     return self.imageViewArray[self.currentIndex];
-}
-
-- (HXPhotoImageView *)firstImageView{
-    return self.imageViewArray[self.firstIndex];
 }
 
 - (BOOL)isHasUrl{
