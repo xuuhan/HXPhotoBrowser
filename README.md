@@ -46,7 +46,7 @@ Objective-C
  pb.parentVC = self; // viewController
  pb.photoViewArray = _selectedViewArray.copy;
  pb.currentIndex = sender.tag;
- pb.urlStrArray = self.urlImgArray; // local image used pb.imageArray
+ pb.urlStrArray = self.urlImgArray; // Local images are used in pb.imageArray
  pb.config.photoLoadType = HXPhotoLoadTypeProgressive;
  pb.config.photoProgressType = HXPhotoProgressTypeRing;
  [pb show];
@@ -57,7 +57,7 @@ let pb = HXPhotoBrowserViewController.init()
 pb.parentVC = self // viewController
 pb.photoViewArray = imageViews
 pb.currentIndex = sender.tag
-pb.urlStrArray = urlStrArray // local image used pb.imageArray
+pb.urlStrArray = urlStrArray // Local images are used in pb.imageArray
 pb.config.photoLoadType = .progressive
 pb.config.photoProgressType = .ring
 pb.show()
